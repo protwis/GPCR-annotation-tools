@@ -24,7 +24,8 @@ def load_processed_log() -> dict:
         return {}
     try:
         with open(PROCESSED_LOG_FILE, encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
     except Exception as e:
         console.print(f"[bold red]Error loading processed log: {e}[/bold red]")
         return {}
@@ -98,7 +99,8 @@ def load_pdb_data(
 
     try:
         with open(main_path, encoding="utf-8") as f:
-            main_data = json.load(f)
+            data = json.load(f)
+            main_data = data if isinstance(data, dict) else None
     except Exception as e:
         console.print(f"[bold red]Error loading {pdb_id}.json: {e}[/bold red]")
         return None, {}, {}
@@ -116,7 +118,8 @@ def load_pdb_data(
     if val_path.exists():
         try:
             with open(val_path, encoding="utf-8") as f:
-                validation_data = json.load(f)
+                data = json.load(f)
+                validation_data = data if isinstance(data, dict) else validation_data
         except Exception:
             pass
 
