@@ -1,0 +1,48 @@
+{
+    "key_findings": [
+        "Structure with controversies in receptor identity and ligand role."
+    ],
+    "auxiliary_proteins": [],
+    "ligands": [
+        {
+            "pubchem_id": "5311101",
+            "type": "small molecule",
+            "chem_comp_id": "ZMA",
+            "synonyms": ["ZM241385"],
+            "role": {
+                "evidence": {
+                    "reasoning": "Identified from binding assay.",
+                    "quote_or_path": "Table 1",
+                    "source": "Paper"
+                },
+                "value": "Antagonist",
+                "confidence": "Medium"
+            },
+            "chain_id": "A",
+            "name": "ZM241385",
+            "validation_status": "MATCHED_SMALL_MOLECULE",
+            "InChIKey": "IOUVKUPQNMYXKT-UHFFFAOYSA-N",
+            "SMILES": "test-smiles"
+        }
+    ],
+    "signaling_partners": {},
+    "structure_info": {
+        "resolution": 1.8,
+        "state": {
+            "value": "inactive",
+            "evidence": {
+                "reasoning": "Antagonist-bound, no G-protein.",
+                "quote_or_path": "Abstract",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "method": "X-RAY DIFFRACTION",
+        "note": "High resolution structure",
+        "release_date": "2024-06-01"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "aa2ar_human",
+        "chain_id": "A"
+    }
+}
