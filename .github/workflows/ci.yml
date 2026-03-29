@@ -68,6 +68,7 @@ jobs:
         run: |
           WORKSPACE=$(mktemp -d)
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:smoke init-workspace
@@ -90,11 +91,13 @@ jobs:
         run: |
           WORKSPACE=$(mktemp -d)
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:smoke init-workspace
 
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:smoke curate --help
@@ -107,6 +110,7 @@ jobs:
 
           # Initialize workspace
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:smoke init-workspace
@@ -116,6 +120,7 @@ jobs:
 
           # Run auto-accept
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:smoke curate --auto-accept

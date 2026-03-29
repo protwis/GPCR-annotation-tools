@@ -22,6 +22,7 @@ jobs:
         run: |
           WORKSPACE=$(mktemp -d)
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:release init-workspace
@@ -31,10 +32,12 @@ jobs:
         run: |
           WORKSPACE=$(mktemp -d)
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:release init-workspace
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:release curate --help
@@ -43,11 +46,13 @@ jobs:
         run: |
           WORKSPACE=$(mktemp -d)
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:release init-workspace
           cp tests/fixtures/sample_pdb_simple.json "$WORKSPACE/aggregated/TEST1.json"
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$WORKSPACE:/workspace" \
             -e GPCR_WORKSPACE=/workspace \
             gpcr-tools:release curate --auto-accept
