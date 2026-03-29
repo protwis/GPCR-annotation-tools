@@ -5,6 +5,7 @@ CSV writing, and the Rich UI dashboard.
 """
 
 import copy
+import sys
 
 from rich import box
 from rich.panel import Panel
@@ -24,15 +25,21 @@ from gpcr_tools.csv_generator.review_engine import review_toplevel_blocks
 from gpcr_tools.csv_generator.ui import console, create_display_copy, display_dashboard_header
 
 
-def main(target_pdb: str | None = None) -> None:
+def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
     """Run the interactive CSV generator dashboard.
 
     Args:
         target_pdb: If provided, only process this specific PDB ID.
+        auto_accept: If True, run non-interactively with accept-all behavior.
+            Intended for CI smoke tests — fully deterministic, no prompts.
     """
-    from gpcr_tools.config import OUTPUT_DIR
+    from gpcr_tools.workspace import startup_checks
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    startup_checks()
+
+    if auto_accept:
+        _run_auto_accept(target_pdb)
+        return
 
     if target_pdb:
         target_pdb = target_pdb.upper()
@@ -41,7 +48,6 @@ def main(target_pdb: str | None = None) -> None:
     else:
         pending_pdbs, skipped_pdbs, total_count = get_pending_pdbs()
 
-        # Prompt the user to re-review previously skipped PDBs
         if skipped_pdbs:
             console.print(
                 Panel(
@@ -80,7 +86,6 @@ def main(target_pdb: str | None = None) -> None:
                 update_processed_log(pdb_id, "failed")
                 continue
 
-            # Summary
             console.print(
                 Panel(
                     Pretty(create_display_copy(main_data)),
@@ -89,7 +94,6 @@ def main(target_pdb: str | None = None) -> None:
                 )
             )
 
-            # ── Epic 3: Heteromer Resolution Panel ──────────────────
             hetero_res = main_data.get("heteromer_resolution", {})
             if hetero_res.get("is_heteromer"):
                 primary = hetero_res.get("primary_chain", "?")
@@ -119,7 +123,6 @@ def main(target_pdb: str | None = None) -> None:
                     )
                 )
 
-            # ── Epic 4: 7TM Completeness Warning ───────────────────
             tm_comp = main_data.get("tm_completeness", {})
             if tm_comp.get("status") == "INCOMPLETE_7TM":
                 val_res = tm_comp.get("resolved_tms", "?")
@@ -149,7 +152,6 @@ def main(target_pdb: str | None = None) -> None:
                     )
                 )
 
-            # ── Global Alert Check ─────────────────────────────────
             has_crit_issues = validation_data.get("critical_warnings") or validation_data.get(
                 "algo_conflicts"
             )
@@ -163,7 +165,6 @@ def main(target_pdb: str | None = None) -> None:
                     )
                 )
 
-            # ── Mode Selection ─────────────────────────────────────
             choices = ["r", "s", "f"]
             prompt_txt = "Select mode ([bold]r[/]eview, [bold]s[/]kip, [bold]f[/]ix issues only"
 
@@ -220,18 +221,57 @@ def main(target_pdb: str | None = None) -> None:
         console.print("\n[yellow]Exiting...[/yellow]")
 
 
-def cli_entry() -> None:
-    """CLI entry point for the `gpcr-csv-generator` console script.
+def _run_auto_accept(target_pdb: str | None) -> None:
+    """Non-interactive accept-all pass for CI smoke tests.
 
-    Parses sys.argv via argparse and delegates to main().
-    This is necessary because setuptools console_scripts entry points
-    do not forward sys.argv to the target function.
+    Processes all pending PDBs (or a single targeted PDB) without any
+    interactive prompts.  Previously-skipped PDBs are NOT re-included
+    unless explicitly targeted via *target_pdb*.
     """
+    if target_pdb:
+        target_pdb = target_pdb.upper()
+        pending_pdbs = [target_pdb]
+    else:
+        pending_pdbs, _skipped, _total = get_pending_pdbs()
+
+    if not pending_pdbs:
+        print("auto-accept: nothing to process", file=sys.stderr)
+        return
+
+    for pdb_id in pending_pdbs:
+        main_data, _controversies, _validation = load_pdb_data(pdb_id)
+        if not main_data:
+            update_processed_log(pdb_id, "failed")
+            continue
+
+        log_audit_trail(pdb_id, "*", "auto_accept", "N/A", "ACCEPTED")
+        append_to_csvs(transform_for_csv(pdb_id, main_data))
+        update_processed_log(pdb_id, "completed")
+        print(f"auto-accept: processed {pdb_id}", file=sys.stderr)
+
+
+def cli_entry() -> None:
+    """Deprecated CLI entry point kept for backward compatibility.
+
+    Emits a deprecation warning and delegates to the canonical ``gpcr-tools curate`` CLI.
+    """
+    import warnings
+
+    warnings.warn(
+        "gpcr-csv-generator is deprecated. Use 'gpcr-tools curate' instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+    print(
+        "WARNING: gpcr-csv-generator is deprecated. Use 'gpcr-tools curate' instead.",
+        file=sys.stderr,
+    )
+
     import argparse
 
     parser = argparse.ArgumentParser(
         prog="gpcr-csv-generator",
-        description="Interactive CSV generator for expert review of AI-generated GPCR annotations.",
+        description="(Deprecated) Use 'gpcr-tools curate' instead.",
     )
     parser.add_argument(
         "pdb_id",

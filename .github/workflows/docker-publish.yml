@@ -9,9 +9,56 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  smoke:
+    name: Docker Smoke Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t gpcr-tools:release .
+
+      - name: Smoke – init-workspace
+        run: |
+          WORKSPACE=$(mktemp -d)
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:release init-workspace
+          test -f "$WORKSPACE/contract/storage_contract.json"
+
+      - name: Smoke – curate --help
+        run: |
+          WORKSPACE=$(mktemp -d)
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:release init-workspace
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:release curate --help
+
+      - name: Smoke – curate --auto-accept
+        run: |
+          WORKSPACE=$(mktemp -d)
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:release init-workspace
+          cp tests/fixtures/sample_pdb_simple.json "$WORKSPACE/aggregated/TEST1.json"
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:release curate --auto-accept
+          test -f "$WORKSPACE/output/csv/structures.csv"
+          test -f "$WORKSPACE/output/audit/audit_trail.jsonl"
+          test -f "$WORKSPACE/state/processed_log.json"
+
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    needs: [smoke]
     permissions:
       contents: read
       packages: write

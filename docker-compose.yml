@@ -1,14 +1,9 @@
 services:
-  csv-generator:
+  gpcr-tools:
     build: .
     volumes:
-      # Map your local results_aggregated directory to /data inside the container
-      - ./sample_data:/data
-      # Map your local output directory
-      - ./output:/output
+      - ./workspace:/workspace
     environment:
-      - GPCR_DATA_DIR=/data
-      - GPCR_OUTPUT_DIR=/output
-    # Required for interactive Rich prompts
+      - GPCR_WORKSPACE=/workspace
     stdin_open: true
     tty: true

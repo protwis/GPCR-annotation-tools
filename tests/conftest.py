@@ -44,11 +44,11 @@ def sample_validation_data() -> dict:
 
 @pytest.fixture
 def tmp_data_dir(tmp_path, sample_pdb_data) -> Path:
-    """Create a temporary data directory mimicking results_aggregated/.
+    """Create a temporary aggregated data directory (v3.1 layout).
 
     Populates it with the simple PDB fixture as 'TEST1.json'.
     """
-    data_dir = tmp_path / "data"
+    data_dir = tmp_path / "aggregated"
     data_dir.mkdir()
     (data_dir / "logs").mkdir()
     (data_dir / "validation_logs").mkdir()
@@ -61,37 +61,73 @@ def tmp_data_dir(tmp_path, sample_pdb_data) -> Path:
 
 @pytest.fixture
 def tmp_output_dir(tmp_path) -> Path:
-    """Create a temporary output directory for CSVs."""
+    """Create a temporary output directory tree (v3.1 layout)."""
     out_dir = tmp_path / "output"
     out_dir.mkdir()
+    (out_dir / "csv").mkdir()
+    (out_dir / "audit").mkdir()
     return out_dir
+
+
+def _write_contract(workspace: Path) -> None:
+    """Write a valid v1 storage contract into the workspace."""
+    contract_dir = workspace / "contract"
+    contract_dir.mkdir(exist_ok=True)
+    contract_file = contract_dir / "storage_contract.json"
+    if not contract_file.exists():
+        contract_file.write_text(
+            json.dumps(
+                {
+                    "storage_contract_version": 1,
+                    "created_by": "gpcr-tools-test",
+                    "created_at_utc": "2026-01-01T00:00:00+00:00",
+                }
+            )
+        )
 
 
 @pytest.fixture
 def configure_paths(tmp_data_dir, tmp_output_dir, monkeypatch):
-    """Monkeypatch the config module to use temporary directories.
+    """Set GPCR_WORKSPACE and reset the config cache.
 
-    Use this in tests that involve data loading or CSV writing.
+    All consumers now call get_config() at function-call time, so
+    importlib.reload() is no longer necessary.
     """
-    monkeypatch.setenv("GPCR_DATA_DIR", str(tmp_data_dir))
-    monkeypatch.setenv("GPCR_OUTPUT_DIR", str(tmp_output_dir))
+    workspace = tmp_data_dir.parent  # tmp_path
+    monkeypatch.setenv("GPCR_WORKSPACE", str(workspace))
 
-    # Force reimport of config to pick up new env vars
-    import importlib
+    _write_contract(workspace)
+    (workspace / "state").mkdir(exist_ok=True)
 
-    import gpcr_tools.config
+    from gpcr_tools.config import reset_config
 
-    importlib.reload(gpcr_tools.config)
-
-    # Also reload modules that import from config at module level
-    import gpcr_tools.csv_generator.data_loader
-
-    importlib.reload(gpcr_tools.csv_generator.data_loader)
-    import gpcr_tools.csv_generator.csv_writer
-
-    importlib.reload(gpcr_tools.csv_generator.csv_writer)
-    import gpcr_tools.csv_generator.audit
-
-    importlib.reload(gpcr_tools.csv_generator.audit)
+    reset_config()
 
     return tmp_data_dir, tmp_output_dir
+
+
+@pytest.fixture
+def initialized_workspace(tmp_path, sample_pdb_data, monkeypatch):
+    """A fully initialized v3.1 workspace with one PDB fixture (TEST1).
+
+    Uses the real ``init_workspace`` to create the tree and contract,
+    then places ``sample_pdb_simple.json`` as ``aggregated/TEST1.json``.
+
+    Returns the workspace root path.
+    """
+    from gpcr_tools.config import reset_config
+    from gpcr_tools.workspace import init_workspace
+
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    monkeypatch.setenv("GPCR_WORKSPACE", str(workspace))
+    reset_config()
+
+    init_workspace(workspace)
+
+    with open(workspace / "aggregated" / "TEST1.json", "w") as f:
+        json.dump(sample_pdb_data, f)
+
+    reset_config()
+    yield workspace
+    reset_config()

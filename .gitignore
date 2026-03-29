@@ -36,8 +36,7 @@ coverage.xml
 # Docker
 .docker/
 
-# Data (never commit — mount at runtime)
-/data/
-/output/
+# Workspace data (never commit — mount at runtime)
+/workspace/
 *.json
 !tests/fixtures/*.json

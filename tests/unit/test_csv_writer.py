@@ -4,6 +4,8 @@ These tests cover the pure data transformation layer — no UI, no user interact
 """
 
 import csv
+from dataclasses import replace
+from unittest.mock import patch
 
 from gpcr_tools.csv_generator.csv_writer import (
     append_to_csvs,
@@ -65,7 +67,6 @@ class TestTransformForCSV:
         """SMILES_stereo should take priority over SMILES."""
         result = transform_for_csv("TEST1", sample_pdb_data)
         row = result["ligands.csv"][0]
-        # Both are present in fixture; SMILES_stereo should be used
         expected_smiles = sample_pdb_data["ligands"][0]["SMILES_stereo"]
         assert row["SMILES"] == expected_smiles
 
@@ -103,15 +104,29 @@ class TestTransformForCSV:
         assert result["g_proteins.csv"] == []  # no g-protein in this fixture
 
 
+def _mock_config_with_csv_dir(csv_dir):
+    """Return a patched get_config that redirects csv_output_dir to *csv_dir*."""
+    from gpcr_tools.config import get_config
+
+    real_cfg = get_config()
+    fake_cfg = replace(real_cfg, csv_output_dir=csv_dir)
+    return patch("gpcr_tools.csv_generator.csv_writer.get_config", return_value=fake_cfg)
+
+
 class TestAppendToCSVs:
     def test_creates_file_with_header(self, tmp_path, monkeypatch, sample_pdb_data):
         """Test that a new CSV file gets a header row."""
-        monkeypatch.setattr("gpcr_tools.csv_generator.csv_writer.OUTPUT_DIR", tmp_path)
+        monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+        from gpcr_tools.config import reset_config
 
-        csv_data = transform_for_csv("TEST1", sample_pdb_data)
-        append_to_csvs(csv_data)
+        reset_config()
 
-        structures_file = tmp_path / "structures.csv"
+        csv_dir = tmp_path / "csv_out"
+        with _mock_config_with_csv_dir(csv_dir):
+            csv_data = transform_for_csv("TEST1", sample_pdb_data)
+            append_to_csvs(csv_data)
+
+        structures_file = csv_dir / "structures.csv"
         assert structures_file.exists()
 
         with open(structures_file) as f:
@@ -124,20 +139,24 @@ class TestAppendToCSVs:
 
     def test_append_no_duplicate_header(self, tmp_path, monkeypatch, sample_pdb_data):
         """Test that appending to an existing file does NOT duplicate the header."""
-        monkeypatch.setattr("gpcr_tools.csv_generator.csv_writer.OUTPUT_DIR", tmp_path)
+        monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+        from gpcr_tools.config import reset_config
 
-        csv_data_1 = transform_for_csv("TEST1", sample_pdb_data)
-        csv_data_2 = transform_for_csv("TEST2", sample_pdb_data)
+        reset_config()
 
-        append_to_csvs(csv_data_1)
-        append_to_csvs(csv_data_2)
+        csv_dir = tmp_path / "csv_out"
+        with _mock_config_with_csv_dir(csv_dir):
+            csv_data_1 = transform_for_csv("TEST1", sample_pdb_data)
+            csv_data_2 = transform_for_csv("TEST2", sample_pdb_data)
 
-        structures_file = tmp_path / "structures.csv"
+            append_to_csvs(csv_data_1)
+            append_to_csvs(csv_data_2)
+
+        structures_file = csv_dir / "structures.csv"
         with open(structures_file) as f:
             reader = csv.reader(f, delimiter="\t")
             rows = list(reader)
 
-        # Should have: 1 header + 2 data rows = 3 total
         assert len(rows) == 3
         assert rows[0][0] == "PDB"  # header
         assert rows[1][0] == "TEST1"
@@ -145,12 +164,17 @@ class TestAppendToCSVs:
 
     def test_empty_csv_data_no_file_created(self, tmp_path, monkeypatch):
         """If all CSV data is empty, no files should be created."""
-        monkeypatch.setattr("gpcr_tools.csv_generator.csv_writer.OUTPUT_DIR", tmp_path)
+        monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+        from gpcr_tools.config import reset_config
 
-        from gpcr_tools.config import CSV_SCHEMA
+        reset_config()
 
-        empty_data = {fname: [] for fname in CSV_SCHEMA}
-        append_to_csvs(empty_data)
+        csv_dir = tmp_path / "csv_out"
+        with _mock_config_with_csv_dir(csv_dir):
+            from gpcr_tools.config import CSV_SCHEMA
 
-        csv_files = list(tmp_path.glob("*.csv"))
+            empty_data = {fname: [] for fname in CSV_SCHEMA}
+            append_to_csvs(empty_data)
+
+        csv_files = list(csv_dir.glob("*.csv")) if csv_dir.exists() else []
         assert len(csv_files) == 0

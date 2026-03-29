@@ -18,9 +18,11 @@ class TestGetPendingPdbs:
     def test_completed_excluded(self, configure_paths):
         """PDBs with status == 'completed' should be excluded from all queues."""
         _data_dir, output_dir = configure_paths
+        state_dir = output_dir.parent / "state"
+        state_dir.mkdir(exist_ok=True)
 
         log = {"TEST1": {"status": "completed", "timestamp": "2025-01-01T00:00:00Z"}}
-        with open(output_dir / "processed_log.json", "w") as f:
+        with open(state_dir / "processed_log.json", "w") as f:
             json.dump(log, f)
 
         from gpcr_tools.csv_generator.data_loader import get_pending_pdbs
@@ -33,9 +35,11 @@ class TestGetPendingPdbs:
     def test_skipped_returned_separately(self, configure_paths):
         """PDBs with status == 'skipped' should appear in the skipped list, not pending."""
         _data_dir, output_dir = configure_paths
+        state_dir = output_dir.parent / "state"
+        state_dir.mkdir(exist_ok=True)
 
         log = {"TEST1": {"status": "skipped", "timestamp": "2025-01-01T00:00:00Z"}}
-        with open(output_dir / "processed_log.json", "w") as f:
+        with open(state_dir / "processed_log.json", "w") as f:
             json.dump(log, f)
 
         from gpcr_tools.csv_generator.data_loader import get_pending_pdbs
@@ -48,9 +52,11 @@ class TestGetPendingPdbs:
     def test_failed_returns_to_pending(self, configure_paths):
         """PDBs with status == 'failed' should auto-retry (appear in pending)."""
         _data_dir, output_dir = configure_paths
+        state_dir = output_dir.parent / "state"
+        state_dir.mkdir(exist_ok=True)
 
         log = {"TEST1": {"status": "failed", "timestamp": "2025-01-01T00:00:00Z"}}
-        with open(output_dir / "processed_log.json", "w") as f:
+        with open(state_dir / "processed_log.json", "w") as f:
             json.dump(log, f)
 
         from gpcr_tools.csv_generator.data_loader import get_pending_pdbs
@@ -63,8 +69,9 @@ class TestGetPendingPdbs:
     def test_mixed_statuses(self, configure_paths, sample_pdb_data):
         """Test correct triage with a mix of completed, skipped, failed, and new PDBs."""
         data_dir, output_dir = configure_paths
+        state_dir = output_dir.parent / "state"
+        state_dir.mkdir(exist_ok=True)
 
-        # Add more PDB files
         for name in ["TEST2", "TEST3", "TEST4"]:
             with open(data_dir / f"{name}.json", "w") as f:
                 json.dump(sample_pdb_data, f)
@@ -73,9 +80,8 @@ class TestGetPendingPdbs:
             "TEST1": {"status": "completed", "timestamp": "2025-01-01T00:00:00Z"},
             "TEST2": {"status": "skipped", "timestamp": "2025-01-01T00:00:00Z"},
             "TEST3": {"status": "failed", "timestamp": "2025-01-01T00:00:00Z"},
-            # TEST4 has no entry — brand new
         }
-        with open(output_dir / "processed_log.json", "w") as f:
+        with open(state_dir / "processed_log.json", "w") as f:
             json.dump(log, f)
 
         from gpcr_tools.csv_generator.data_loader import get_pending_pdbs
@@ -87,19 +93,14 @@ class TestGetPendingPdbs:
 
     def test_empty_data_dir(self, tmp_path, monkeypatch):
         """Empty data directory should return nothing."""
-        empty_dir = tmp_path / "empty_data"
-        empty_dir.mkdir()
-        monkeypatch.setenv("GPCR_DATA_DIR", str(empty_dir))
-        monkeypatch.setenv("GPCR_OUTPUT_DIR", str(tmp_path / "output"))
+        workspace = tmp_path / "ws"
+        workspace.mkdir()
+        (workspace / "aggregated").mkdir()
+        monkeypatch.setenv("GPCR_WORKSPACE", str(workspace))
 
-        import importlib
+        from gpcr_tools.config import reset_config
 
-        import gpcr_tools.config
-
-        importlib.reload(gpcr_tools.config)
-        import gpcr_tools.csv_generator.data_loader
-
-        importlib.reload(gpcr_tools.csv_generator.data_loader)
+        reset_config()
 
         from gpcr_tools.csv_generator.data_loader import get_pending_pdbs
 
@@ -131,7 +132,6 @@ class TestLoadPdbData:
         """Loading a PDB with a voting log should populate controversy_map."""
         data_dir, _ = configure_paths
 
-        # Write a voting log for TEST1
         log_dir = data_dir / "logs"
         log_dir.mkdir(exist_ok=True)
         with open(log_dir / "TEST1_voting_log.json", "w") as f:
@@ -147,14 +147,15 @@ class TestLoadPdbData:
 
 class TestUpdateProcessedLog:
     def test_creates_log(self, configure_paths):
-        """Updating the log should create the file if it doesn't exist."""
+        """Updating the log should create the file under state/."""
         _, output_dir = configure_paths
+        state_dir = output_dir.parent / "state"
 
         from gpcr_tools.csv_generator.data_loader import update_processed_log
 
         update_processed_log("TEST1", "completed")
 
-        log_file = output_dir / "processed_log.json"
+        log_file = state_dir / "processed_log.json"
         assert log_file.exists()
 
         with open(log_file) as f:

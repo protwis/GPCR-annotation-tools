@@ -7,7 +7,7 @@ Converts reviewed JSON data into tabular CSV format.
 import csv
 from typing import Any
 
-from gpcr_tools.config import AUX_PROTEIN_DISPATCH, CSV_SCHEMA, OUTPUT_DIR
+from gpcr_tools.config import AUX_PROTEIN_DISPATCH, CSV_SCHEMA, get_config
 
 
 def sanitize_value(value: Any) -> str:
@@ -109,12 +109,14 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 
 def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
     """Append rows to the appropriate CSV files, creating them with headers if needed."""
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    cfg = get_config()
+    csv_dir = cfg.csv_output_dir
+    csv_dir.mkdir(parents=True, exist_ok=True)
 
     for filename, rows in csv_data_map.items():
         if not rows:
             continue
-        filepath = OUTPUT_DIR / filename
+        filepath = csv_dir / filename
         exists = filepath.exists()
         with open(filepath, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=CSV_SCHEMA[filename], delimiter="\t")

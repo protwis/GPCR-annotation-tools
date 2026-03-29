@@ -12,7 +12,7 @@ class TestLogAuditTrail:
 
         log_audit_trail("TEST1", "receptor_info.chain_id", "accept", "A", "A")
 
-        audit_file = output_dir / "audit_trail.jsonl"
+        audit_file = output_dir / "audit" / "audit_trail.jsonl"
         assert audit_file.exists()
 
         with open(audit_file) as f:
@@ -34,12 +34,11 @@ class TestLogAuditTrail:
         log_audit_trail("TEST1", "field_b", "edit", "old", "new")
         log_audit_trail("TEST2", "field_c", "skip", None, None)
 
-        audit_file = output_dir / "audit_trail.jsonl"
+        audit_file = output_dir / "audit" / "audit_trail.jsonl"
         with open(audit_file) as f:
             lines = f.readlines()
         assert len(lines) == 3
 
-        # Verify each line is valid JSON
         for line in lines:
             entry = json.loads(line)
             assert "pdb_id" in entry

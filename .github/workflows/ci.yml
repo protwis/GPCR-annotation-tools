@@ -53,3 +53,85 @@ jobs:
         with:
           name: coverage-report
           path: coverage.xml
+
+  docker-smoke:
+    name: Docker Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t gpcr-tools:smoke .
+
+      - name: Smoke – init-workspace
+        run: |
+          WORKSPACE=$(mktemp -d)
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:smoke init-workspace
+
+          # Contract file must exist on the host
+          test -f "$WORKSPACE/contract/storage_contract.json"
+
+          # Verify contract content
+          VERSION=$(python3 -c "import json; print(json.load(open('$WORKSPACE/contract/storage_contract.json'))['storage_contract_version'])")
+          test "$VERSION" = "1"
+
+          # Required directories must exist
+          for dir in raw enriched papers ai_results aggregated output output/csv output/audit cache state state/pipeline_runs tmp; do
+            test -d "$WORKSPACE/$dir" || { echo "Missing directory: $dir"; exit 1; }
+          done
+
+          echo "init-workspace smoke passed"
+
+      - name: Smoke – curate --help
+        run: |
+          WORKSPACE=$(mktemp -d)
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:smoke init-workspace
+
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:smoke curate --help
+
+          echo "curate --help smoke passed"
+
+      - name: Smoke – curate --auto-accept
+        run: |
+          WORKSPACE=$(mktemp -d)
+
+          # Initialize workspace
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:smoke init-workspace
+
+          # Place a minimal fixture
+          cp tests/fixtures/sample_pdb_simple.json "$WORKSPACE/aggregated/TEST1.json"
+
+          # Run auto-accept
+          docker run --rm \
+            -v "$WORKSPACE:/workspace" \
+            -e GPCR_WORKSPACE=/workspace \
+            gpcr-tools:smoke curate --auto-accept
+
+          # Verify host-visible outputs
+          test -f "$WORKSPACE/output/csv/structures.csv" || { echo "Missing: output/csv/structures.csv"; exit 1; }
+          test -f "$WORKSPACE/output/audit/audit_trail.jsonl" || { echo "Missing: output/audit/audit_trail.jsonl"; exit 1; }
+          test -f "$WORKSPACE/state/processed_log.json" || { echo "Missing: state/processed_log.json"; exit 1; }
+
+          # Verify processed log contains TEST1
+          python3 -c "
+          import json, sys
+          log = json.load(open('$WORKSPACE/state/processed_log.json'))
+          assert 'TEST1' in log, 'TEST1 not in processed log'
+          assert log['TEST1']['status'] == 'completed', 'TEST1 status != completed'
+          print('processed_log.json verified')
+          "
+
+          echo "curate --auto-accept smoke passed"

@@ -36,6 +36,7 @@ dev = [
 ]
 
 [project.scripts]
+gpcr-tools = "gpcr_tools.__main__:cli"
 gpcr-csv-generator = "gpcr_tools.csv_generator.app:cli_entry"
 
 [tool.hatch.build.targets.wheel]
