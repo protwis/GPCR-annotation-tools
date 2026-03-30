@@ -1,0 +1,20 @@
+[
+    {
+        "path": "receptor_info.uniprot_entry_name",
+        "best_run_value": "aa2ar_human",
+        "majority_vote_value": "adora2a_human",
+        "all_votes": {
+            "\"aa2ar_human\"": 2,
+            "\"adora2a_human\"": 3
+        }
+    },
+    {
+        "path": "ligands[ZMA].role.value",
+        "best_run_value": "Antagonist",
+        "majority_vote_value": "Inverse Agonist",
+        "all_votes": {
+            "\"Antagonist\"": 2,
+            "\"Inverse Agonist\"": 3
+        }
+    }
+]

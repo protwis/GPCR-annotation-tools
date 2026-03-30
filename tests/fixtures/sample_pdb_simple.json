@@ -1,0 +1,87 @@
+{
+    "key_findings": [
+        "This is a test structure with a simple ligand binding to a GPCR.",
+        "The receptor adopts an active conformation with G-protein coupling."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "Identified as a nanobody from PDB metadata.",
+                    "quote_or_path": "polymer_components[1].description",
+                    "source": "PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nb35"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "2519",
+            "type": "small molecule",
+            "chem_comp_id": "ADN",
+            "synonyms": ["adenosine"],
+            "role": {
+                "evidence": {
+                    "reasoning": "Identified as agonist from the paper.",
+                    "quote_or_path": "Figure 1A shows adenosine bound in the orthosteric site",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Adenosine",
+            "validation_status": "MATCHED_SMALL_MOLECULE",
+            "InChIKey": "OIRDTQYFTABQOQ-KQYNXXCUSA-N",
+            "SMILES": "c1nc(c2c(n1)n(cn2)[C@@H]3[C@@H]([C@@H]([C@H](O3)CO)O)O)N",
+            "SMILES_stereo": "c1nc(c2c(n1)n(cn2)[C@@H]3[C@@H]([C@@H]([C@H](O3)CO)O)O)N"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "G"
+            },
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "B"
+            },
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "note": "Gs heterotrimer"
+        }
+    },
+    "structure_info": {
+        "resolution": 2.5,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "G-protein coupled, active conformation.",
+                "quote_or_path": "Figure 2",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "method": "ELECTRON MICROSCOPY",
+        "note": "",
+        "release_date": "2025-01-15"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "aa2ar_human",
+        "chain_id": "R",
+        "validation_status": "RECEPTOR_MATCH",
+        "api_reality": ["aa2ar_human"]
+    },
+    "tm_completeness": {
+        "resolved_tms": 7,
+        "total_tms": 7,
+        "status": "COMPLETE"
+    }
+}

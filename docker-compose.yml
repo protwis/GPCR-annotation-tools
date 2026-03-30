@@ -1,0 +1,9 @@
+services:
+  gpcr-tools:
+    build: .
+    volumes:
+      - ./workspace:/workspace
+    environment:
+      - GPCR_WORKSPACE=/workspace
+    stdin_open: true
+    tty: true
