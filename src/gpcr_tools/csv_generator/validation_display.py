@@ -26,7 +26,8 @@ def get_relevant_validation_warnings(path: str, validation_data: dict) -> list[s
         for w in validation_data["critical_warnings"]:
             if path in w or (path == "signaling_partners" and "g_protein" in w):
                 relevant.append(w)
-    return list(set(relevant))
+    # Deduplicate while preserving insertion order for deterministic display.
+    return list(dict.fromkeys(relevant))
 
 
 def display_validation_alert(path: str, validation_data: dict) -> bool:
