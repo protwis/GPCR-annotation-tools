@@ -85,7 +85,8 @@ def load_pdb_data(
     """Load main data, controversy map, and validation data for a PDB.
 
     Returns:
-        (main_data, controversy_map, validation_data) or (None, None, None) on error.
+        (main_data, controversy_map, validation_data), where main_data is ``None``
+        on error and the other values are empty or default dictionaries.
     """
     cfg = get_config()
     results_dir = cfg.aggregated_dir
