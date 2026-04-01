@@ -209,6 +209,7 @@ AUTO_RESOLVE_KEYS: frozenset[str] = frozenset(
 VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "ghost chain",
     "ghost ligand",
+    "ghost_ligand",
     "fake uniprot",
     "does not exist in uniprot",
     "does not exist in uniprotkb",

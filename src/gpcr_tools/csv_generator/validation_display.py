@@ -110,7 +110,7 @@ def extract_validation_entries(validation_data: dict | None) -> list[dict]:
         return []
     entries: list[dict] = []
     for bucket in ("critical_warnings", "algo_conflicts"):
-        for warning in validation_data.get(bucket, []):
+        for warning in validation_data.get(bucket) or []:
             warn_str = str(warning)
             path_match = re.search(r"at ['\"]([^'\"]+)['\"]", warn_str)
             entries.append(
