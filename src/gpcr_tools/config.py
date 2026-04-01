@@ -176,31 +176,35 @@ AUX_PROTEIN_DISPATCH: dict[str, str] = {
     "Other": "other_aux_proteins.csv",
 }
 
-BLACKLISTED_KEYS: frozenset[str] = frozenset({
-    "evidence",
-    "confidence",
-    "reasoning",
-    "quote_or_path",
-    "synonyms",
-    "validation_status",
-    "UNIPROT_CLASH",
-    "api_reality",
-    "InChIKey",
-    "SMILES",
-    "SMILES_stereo",
-    "Sequence",
-    "api_pubchem_cid",
-    "oligomer_analysis",
-    "_verified_fields",
-})
+BLACKLISTED_KEYS: frozenset[str] = frozenset(
+    {
+        "evidence",
+        "confidence",
+        "reasoning",
+        "quote_or_path",
+        "synonyms",
+        "validation_status",
+        "UNIPROT_CLASH",
+        "api_reality",
+        "InChIKey",
+        "SMILES",
+        "SMILES_stereo",
+        "Sequence",
+        "api_pubchem_cid",
+        "oligomer_analysis",
+        "_verified_fields",
+    }
+)
 
-AUTO_RESOLVE_KEYS: frozenset[str] = frozenset({
-    "source",
-    "reasoning",
-    "quote_or_path",
-    "confidence",
-    "synonyms",
-})
+AUTO_RESOLVE_KEYS: frozenset[str] = frozenset(
+    {
+        "source",
+        "reasoning",
+        "quote_or_path",
+        "confidence",
+        "synonyms",
+    }
+)
 
 VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "ghost chain",

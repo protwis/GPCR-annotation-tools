@@ -15,9 +15,7 @@ class CsvSchemaMismatchError(Exception):
         self.found_fields = found_fields
 
         if len(expected_fields) != len(found_fields):
-            detail = (
-                f"Expected {len(expected_fields)} columns, found {len(found_fields)}."
-            )
+            detail = f"Expected {len(expected_fields)} columns, found {len(found_fields)}."
         else:
             missing = set(expected_fields) - set(found_fields)
             extra = set(found_fields) - set(expected_fields)

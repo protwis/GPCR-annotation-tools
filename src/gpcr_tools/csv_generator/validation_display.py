@@ -62,7 +62,9 @@ def get_relevant_validation_warnings(path: str, validation_data: dict) -> list[s
         relevant.extend(validation_data["algo_conflicts"])
     if validation_data.get("critical_warnings"):
         for w in validation_data["critical_warnings"]:
-            if path in w or (path == "signaling_partners" and ("g_protein" in w or "g-protein" in w.lower())):
+            if path in w or (
+                path == "signaling_partners" and ("g_protein" in w or "g-protein" in w.lower())
+            ):
                 relevant.append(w)
     # Deduplicate while preserving insertion order for deterministic display.
     return list(dict.fromkeys(relevant))
@@ -136,7 +138,9 @@ def warning_matches_block(entry: dict, block_path: str) -> bool:
         warn_text = entry.get("text", "").lower()
         if normalized_block in warn_text:
             return True
-        if normalized_block == "signaling_partners" and ("g-protein" in warn_text or "g_protein" in warn_text):
+        if normalized_block == "signaling_partners" and (
+            "g-protein" in warn_text or "g_protein" in warn_text
+        ):
             return True
     return False
 
@@ -194,7 +198,7 @@ def analyze_validation_impact(
             normalized_path = canonicalize_path(entry.get("path"))
             if not normalized_path or not normalized_path.startswith(block_prefix):
                 continue
-            relative = normalized_path[len(block_prefix):]
+            relative = normalized_path[len(block_prefix) :]
             idx_match = re.match(r"\[(\d+)\]", relative)
             if idx_match:
                 idx_val = int(idx_match.group(1))
