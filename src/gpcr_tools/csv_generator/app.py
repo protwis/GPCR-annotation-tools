@@ -158,7 +158,7 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                 if final_data is None:
                     raise KeyboardInterrupt
 
-            if final_data:
+            if final_data is not None:
                 console.print(
                     Panel(
                         Pretty(create_display_copy(final_data)),
@@ -167,9 +167,19 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                     )
                 )
                 if Confirm.ask("Write to CSV?"):
-                    append_to_csvs(transform_for_csv(pdb_id, final_data))
-                    update_processed_log(pdb_id, "completed")
-                    console.print("[green]Saved![/green]")
+                    try:
+                        append_to_csvs(transform_for_csv(pdb_id, final_data))
+                        update_processed_log(pdb_id, "completed")
+                        console.print("[green]Saved![/green]")
+                    except CsvSchemaMismatchError as e:
+                        console.print(
+                            Panel(
+                                f"[bold red]SCHEMA MISMATCH:[/] {e.message}",
+                                border_style="red",
+                                box=box.DOUBLE,
+                            )
+                        )
+                        update_processed_log(pdb_id, "failed")
                 else:
                     console.print(
                         f"[yellow]PDB {pdb_id} NOT saved. "

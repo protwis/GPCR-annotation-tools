@@ -45,6 +45,7 @@ def coerce_type(original: Any, new_str: str) -> Any:
             return True
         if new_str.lower() in ("false", "0", "no"):
             return False
+        return new_str
     if isinstance(original, int):
         try:
             return int(new_str)
@@ -57,9 +58,11 @@ def coerce_type(original: Any, new_str: str) -> Any:
             pass
     if isinstance(original, (list, dict)):
         try:
-            return json.loads(new_str)
+            parsed = json.loads(new_str)
         except (json.JSONDecodeError, ValueError):
-            pass
+            parsed = None
+        if isinstance(parsed, type(original)):
+            return parsed
     return new_str
 
 

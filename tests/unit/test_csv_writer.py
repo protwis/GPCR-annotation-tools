@@ -229,7 +229,7 @@ class TestAppendToCSVs:
         csv_files = list(csv_dir.glob("*.csv")) if csv_dir.exists() else []
         assert len(csv_files) == 0
 
-    def test_mismatched_headers_skipped(self, tmp_path, monkeypatch, sample_pdb_data):
+    def test_mismatched_headers_raises_error(self, tmp_path, monkeypatch, sample_pdb_data):
         """Existing CSV with outdated headers → CsvSchemaMismatchError raised."""
         import pytest
 

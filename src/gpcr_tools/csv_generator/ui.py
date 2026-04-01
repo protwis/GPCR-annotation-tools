@@ -77,7 +77,7 @@ def create_display_copy(data: Any) -> Any:
                 if len(value) > 3:
                     display_dict[key] = [*value[:3], f"... ({len(value) - 3} more)"]
                 else:
-                    display_dict[key] = value
+                    display_dict[key] = list(value)
             else:
                 display_dict[key] = create_display_copy(value)
         return display_dict
@@ -136,7 +136,7 @@ def display_ligand_validation_panel(ligands_data: list) -> None:
             status_text = Text("MATCHED (small-molecule)", style="green")
             detail = Text(detail_str, style="green")
         elif status == "MATCHED_POLYMER":
-            seq = lig.get("Sequence", "")
+            seq = lig.get("Sequence") or ""
             seq_display = f"Seq: {seq[:40]}..." if len(seq) > 40 else f"Seq: {seq}"
             status_text = Text("MATCHED (polymer)", style="green")
             detail = Text(seq_display, style="green")
@@ -172,7 +172,7 @@ def _should_highlight_oligomer(oligo: dict, receptor_chain: str) -> bool:
     """Determine if the Oligomer Analysis panel needs visual highlighting."""
     if not oligo:
         return False
-    if oligo.get("chain_id_override", {}).get("applied"):
+    if (oligo.get("chain_id_override") or {}).get("applied"):
         return True
     alert_types = {a.get("type") for a in oligo.get("alerts", [])}
     if alert_types & {"HALLUCINATION", "MISSED_PROTOMER", "CHAIN_ID_OVERRIDDEN"}:
@@ -197,7 +197,7 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
 
     receptor_chain = main_data.get("receptor_info", {}).get("chain_id", "")
     highlight = _should_highlight_oligomer(oligo, receptor_chain)
-    override = oligo.get("chain_id_override", {})
+    override = oligo.get("chain_id_override") or {}
     classification = oligo.get("classification", "UNKNOWN")
     alerts = oligo.get("alerts", [])
 
@@ -257,7 +257,7 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
         elements.append(chain_table)
 
     # ── Primary protomer suggestion ──
-    suggestion = oligo.get("primary_protomer_suggestion", {})
+    suggestion = oligo.get("primary_protomer_suggestion") or {}
     if suggestion.get("chain_id"):
         sug_text = Text()
         sug_text.append("Primary Protomer: ", style="bold")
@@ -285,7 +285,7 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
         elements.append(alert_text)
 
     # ── Assembly cross-check (informational) ──
-    asm = oligo.get("assembly_cross_check", {})
+    asm = oligo.get("assembly_cross_check") or {}
     if asm.get("oligomeric_state"):
         asm_text = Text()
         asm_text.append("Assembly: ", style="dim bold")

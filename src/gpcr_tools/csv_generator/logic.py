@@ -83,7 +83,7 @@ def apply_db_truncation(
     primary_uniprot = receptor_uniprot
     for chain_info in oligo.get("all_gpcr_chains", []):
         if chain_info.get("chain_id") == primary_chain:
-            primary_uniprot = chain_info.get("slug", receptor_uniprot)
+            primary_uniprot = chain_info.get("slug") or receptor_uniprot
             break
 
     # Orphaned ligand radar — detect ligands on soon-to-be-truncated chains.
@@ -130,7 +130,7 @@ def build_structure_note(
         parts.append(base_note)
 
     if oligo:
-        override = oligo.get("chain_id_override", {})
+        override = oligo.get("chain_id_override") or {}
         if override.get("applied"):
             parts.append(
                 f"[CHAIN CORRECTED: {override.get('original_chain_id')} -> "
@@ -139,7 +139,7 @@ def build_structure_note(
 
         classification = oligo.get("classification", "")
         if classification in ("HOMOMER", "HETEROMER"):
-            chain_ids = [c["chain_id"] for c in oligo.get("all_gpcr_chains", [])]
+            chain_ids = [c.get("chain_id", "?") for c in oligo.get("all_gpcr_chains", [])]
             parts.append(f"[{classification}: chains {', '.join(chain_ids)}]")
 
         for alert in oligo.get("alerts", []):

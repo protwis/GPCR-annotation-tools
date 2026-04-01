@@ -176,7 +176,7 @@ AUX_PROTEIN_DISPATCH: dict[str, str] = {
     "Other": "other_aux_proteins.csv",
 }
 
-BLACKLISTED_KEYS: set[str] = {
+BLACKLISTED_KEYS: frozenset[str] = frozenset({
     "evidence",
     "confidence",
     "reasoning",
@@ -192,19 +192,19 @@ BLACKLISTED_KEYS: set[str] = {
     "api_pubchem_cid",
     "oligomer_analysis",
     "_verified_fields",
-}
+})
 
-AUTO_RESOLVE_KEYS: set[str] = {
+AUTO_RESOLVE_KEYS: frozenset[str] = frozenset({
     "source",
     "reasoning",
     "quote_or_path",
     "confidence",
     "synonyms",
-}
+})
 
 VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "ghost chain",
-    "ghost_ligand",
+    "ghost ligand",
     "fake uniprot",
     "does not exist in uniprot",
     "does not exist in uniprotkb",
@@ -214,11 +214,11 @@ VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "hallucination alert",
 )
 
-TOPLEVEL_BLOCK_KEYS: list[str] = [
+TOPLEVEL_BLOCK_KEYS: tuple[str, ...] = (
     "structure_info",
     "receptor_info",
     "ligands",
     "signaling_partners",
     "auxiliary_proteins",
     "key_findings",
-]
+)

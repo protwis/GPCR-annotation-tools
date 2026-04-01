@@ -1,7 +1,7 @@
 """CSV transformation and writing logic.
 
-Pure data transformation — no UI, no user interaction.
-Converts reviewed JSON data into tabular CSV format.
+Data transformation and CSV file appending — no UI, no user interaction.
+Converts reviewed JSON data into tabular CSV rows and appends them to disk.
 """
 
 import csv
@@ -161,22 +161,28 @@ def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
     csv_dir = cfg.csv_output_dir
     csv_dir.mkdir(parents=True, exist_ok=True)
 
+    # Pre-flight: validate all schemas before writing anything to avoid
+    # partial writes (e.g. structures.csv written but ligands.csv rejected).
     for filename, rows in csv_data_map.items():
         if not rows:
             continue
         filepath = csv_dir / filename
         expected_fields = CSV_SCHEMA[filename]
-
         if filepath.exists():
             with open(filepath, encoding="utf-8") as f:
                 existing_header = f.readline().strip().split("\t")
             if existing_header != expected_fields:
                 raise CsvSchemaMismatchError(
                     filename=filename,
-                    expected_len=len(expected_fields),
-                    found_len=len(existing_header),
+                    expected_fields=expected_fields,
+                    found_fields=existing_header,
                 )
 
+    for filename, rows in csv_data_map.items():
+        if not rows:
+            continue
+        filepath = csv_dir / filename
+        expected_fields = CSV_SCHEMA[filename]
         exists = filepath.exists()
         with open(filepath, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=expected_fields, delimiter="\t")

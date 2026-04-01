@@ -30,7 +30,7 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
 
     warnings: list[str] = validation_data.setdefault("critical_warnings", [])
 
-    override = oligo.get("chain_id_override", {})
+    override = oligo.get("chain_id_override") or {}
     if override.get("applied"):
         warnings.append(
             f"CHAIN_ID CORRECTED at 'receptor_info': "
@@ -62,7 +62,7 @@ def get_relevant_validation_warnings(path: str, validation_data: dict) -> list[s
         relevant.extend(validation_data["algo_conflicts"])
     if validation_data.get("critical_warnings"):
         for w in validation_data["critical_warnings"]:
-            if path in w or (path == "signaling_partners" and "g_protein" in w):
+            if path in w or (path == "signaling_partners" and ("g_protein" in w or "g-protein" in w.lower())):
                 relevant.append(w)
     # Deduplicate while preserving insertion order for deterministic display.
     return list(dict.fromkeys(relevant))
@@ -115,7 +115,7 @@ def extract_validation_entries(validation_data: dict | None) -> list[dict]:
                     "text": warn_str,
                     "path": path_match.group(1) if path_match else None,
                     "bucket": bucket,
-                    "is_hallucination": "HALLUCINATION ALERT" in warn_str.upper(),
+                    "is_hallucination": "HALLUCINATION" in warn_str.upper(),
                 }
             )
     return entries
@@ -136,7 +136,7 @@ def warning_matches_block(entry: dict, block_path: str) -> bool:
         warn_text = entry.get("text", "").lower()
         if normalized_block in warn_text:
             return True
-        if normalized_block == "signaling_partners" and "g-protein" in warn_text:
+        if normalized_block == "signaling_partners" and ("g-protein" in warn_text or "g_protein" in warn_text):
             return True
     return False
 
@@ -189,13 +189,15 @@ def analyze_validation_impact(
         if list_length == 0:
             return None
         invalid_indices: list[int] = []
+        block_prefix = canonicalize_path(block_path)
         for entry in entries:
             normalized_path = canonicalize_path(entry.get("path"))
-            if not normalized_path:
+            if not normalized_path or not normalized_path.startswith(block_prefix):
                 continue
-            idx_matches = re.findall(r"\[(\d+)\]", normalized_path)
-            for match in idx_matches:
-                idx_val = int(match)
+            relative = normalized_path[len(block_prefix):]
+            idx_match = re.match(r"\[(\d+)\]", relative)
+            if idx_match:
+                idx_val = int(idx_match.group(1))
                 if idx_val < list_length:
                     invalid_indices.append(idx_val)
         invalid_indices = sorted(set(invalid_indices))
