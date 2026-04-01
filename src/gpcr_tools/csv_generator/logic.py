@@ -139,7 +139,7 @@ def build_structure_note(
 
         classification = oligo.get("classification", "")
         if classification in ("HOMOMER", "HETEROMER"):
-            chain_ids = [c.get("chain_id", "?") for c in oligo.get("all_gpcr_chains", [])]
+            chain_ids = [c.get("chain_id") or "?" for c in oligo.get("all_gpcr_chains", [])]
             parts.append(f"[{classification}: chains {', '.join(chain_ids)}]")
 
         for alert in oligo.get("alerts", []):
