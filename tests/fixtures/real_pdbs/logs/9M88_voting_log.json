@@ -1,0 +1,47 @@
+[
+    {
+        "path": "ligands[5YM].name",
+        "best_run_value": "(Z)-N-(2-hydroxyethyl)octadec-9-enamide",
+        "majority_vote_value": "Oleoylethanolamide",
+        "all_votes": {
+            "(Z)-N-(2-hydroxyethyl)octadec-9-enamide": 3,
+            "Oleoylethanolamide": 5,
+            "OEA": 1,
+            "oleoylethanolamide": 1
+        }
+    },
+    {
+        "path": "ligands[A1EM3].name",
+        "best_run_value": "[(2R)-3-[2-azanylethoxy(oxidanyl)phosphoryl]oxy-2-decanoyloxy-propyl] dodecanoate",
+        "majority_vote_value": "PE(12:0/10:0)",
+        "all_votes": {
+            "[(2R)-3-[2-azanylethoxy(oxidanyl)phosphoryl]oxy-2-decanoyloxy-propyl] dodecanoate": 3,
+            "PE(12:0/10:0)": 7
+        }
+    },
+    {
+        "path": "ligands[A1EM3].type",
+        "best_run_value": "small-molecule",
+        "majority_vote_value": "lipid",
+        "all_votes": {
+            "small-molecule": 4,
+            "lipid": 6
+        }
+    },
+    {
+        "path": "receptor_info.chain_id",
+        "best_run_value": "C",
+        "majority_vote_value": "A",
+        "all_votes": {
+            "A": 10
+        }
+    },
+    {
+        "path": "receptor_info.uniprot_entry_name",
+        "best_run_value": "q9v2j8_pyrab",
+        "majority_vote_value": "gpr3_human",
+        "all_votes": {
+            "gpr3_human": 10
+        }
+    }
+]

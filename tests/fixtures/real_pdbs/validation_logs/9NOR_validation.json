@@ -1,0 +1,16 @@
+{
+    "critical_warnings": [
+        "Ghost Ligand ID at '.ligands[0]': 'SUL' not found in PDB Metadata (valid: ['NAG']).",
+        "Ghost Ligand ID at '.ligands[1]': 'APM' not found in PDB Metadata (valid: ['NAG']).",
+        "Fake UniProt ID at '.signaling_partners.g_protein.gamma_subunit': 'gng2_human' does not exist in UniProtKB.",
+        "Fake UniProt ID at '.signaling_partners.g_protein.beta_subunit': 'gnb1_human' does not exist in UniProtKB.",
+        "GHOST_LIGAND at 'ligands[SUL]': 'Sucralose' (SUL) not found in API entities.",
+        "GHOST_LIGAND at 'ligands[APM]': 'Aspartame' (APM) not found in API entities."
+    ],
+    "algo_conflicts": [
+        "HALLUCINATION ALERT: AI found 'gnat3_human' but Algorithm found NO G-protein in source PDB."
+    ],
+    "algo_notes": [],
+    "chimera_score": 0,
+    "chimera_status": "no_g_protein_found"
+}

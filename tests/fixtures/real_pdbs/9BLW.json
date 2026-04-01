@@ -1,0 +1,142 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "RAMP",
+                "evidence": {
+                    "reasoning": "The paper explicitly states RAMP1 is a Receptor Activity-Modifying Protein that forms the AMY1R with CTR.",
+                    "quote_or_path": "AMYRS are heterodimers of the class B1 G protein-coupled receptor, calcitonin (CT) receptor (CTR), and receptor activity-modifying proteins (RAMPs). All three RAMPs can interact with CTR, and this gives rise to three discrete Amy receptor phenotypes, AMY1R, AMY2R and AMY3R, with RAMP1, RAMP2, and RAMP3, respectively.",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Receptor activity-modifying protein 1"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "stabilised by the addition of nanobody 35 (Nb35)",
+                    "reasoning": "The paper explicitly states that Nanobody 35 was used for stabilization and refers to it as 'nanobody'."
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "The structure of the human amylin1 receptor (CTR-RAMP1) in complex with Gs and Cagrilintide backbone reveals the receptor in an active, Gs-coupled state.",
+        "Cagrilintide backbone displays an amylin-like binding mode, inducing distinct conformational dynamics at calcitonin-family receptors compared to other peptides, predominantly through a 'bypass' conformation.",
+        "The Cagrilintide backbone-bound AMY1R-Gs complex exhibits increased conformational dynamics at the extracellular side compared to rAmy-bound complexes, linked to weaker interactions of P37Cagri with RAMP1, potentially contributing to unique pharmacological profiles."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "peptide",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "cagrilintide, a long-acting amylin and calcitonin receptor agonist.; CagriBB exhibited a reduced potency relative to Cagri in cells expressing CTR alone (Supplementary Fig. 13a, Supplementary Table 9)",
+                    "reasoning": "The paper explicitly identifies cagrilintide as an agonist, and Cagrilintide backbone (CagriBB) is a potent analogue with similar pharmacological activity, though with slightly reduced potency in some assays."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "P",
+            "name": "Cagrilintide backbone",
+            "validation_status": "MATCHED_POLYMER",
+            "Sequence": "KCNTATCATQRLAEFLRHSSNNFGPILPPTNVGSNTPX"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "G"
+            },
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "A"
+            },
+            "note": "Engineered dominant negative Gs (DNGs) protein used for stabilization.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "B"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.2,
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "Here, we determine structures of cagrilintide bound to Gs-coupled, active, amylin receptors (AMY1R, AMY2R, AMY3R) and calcitonin receptor (CTR)",
+                "reasoning": "The paper explicitly states the receptor is in the 'active' state and is Gs-coupled."
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "release_date": "2025-04-16",
+        "note": "Cagrilintide backbone is a non-acylated analogue of Cagrilintide.",
+        "method": "ELECTRON MICROSCOPY"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "calcr_human",
+        "chain_id": "R",
+        "validation_status": "RECEPTOR_MATCH",
+        "api_reality": [
+            "calcr_human"
+        ]
+    },
+    "oligomer_analysis": {
+        "classification": "MONOMER",
+        "all_gpcr_chains": [
+            {
+                "chain_id": "R",
+                "slug": "calcr_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            }
+        ],
+        "primary_protomer_suggestion": {
+            "chain_id": "R",
+            "reason": "Rank 1: G-protein bound \u2014 AI-determined active complex on Chain R",
+            "rank_used": 1
+        },
+        "assembly_cross_check": {
+            "oligomeric_state": "Hetero 7-mer",
+            "stoichiometry": [
+                "A1",
+                "B1",
+                "C1",
+                "D1",
+                "E1",
+                "F1",
+                "G1"
+            ],
+            "kind": "Global Symmetry",
+            "type": "Asymmetric"
+        },
+        "alerts": [],
+        "chain_id_override": {
+            "applied": false,
+            "reason": "AI chain matches suggestion \u2014 no override needed"
+        },
+        "label_asym_id_map": {
+            "N": "D",
+            "E": "E",
+            "R": "G",
+            "P": "F",
+            "G": "C",
+            "B": "B",
+            "A": "A"
+        }
+    }
+}
