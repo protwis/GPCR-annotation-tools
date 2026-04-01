@@ -163,3 +163,158 @@ def display_ligand_validation_panel(ligands_data: list) -> None:
     )
 
     console.print(Panel(table, title=panel_title, border_style=border_style, box=box.DOUBLE))
+
+
+# ── Oligomer Analysis Panel ────────────────────────────────────────────
+
+
+def _should_highlight_oligomer(oligo: dict, receptor_chain: str) -> bool:
+    """Determine if the Oligomer Analysis panel needs visual highlighting."""
+    if not oligo:
+        return False
+    if oligo.get("chain_id_override", {}).get("applied"):
+        return True
+    alert_types = {a.get("type") for a in oligo.get("alerts", [])}
+    if alert_types & {"HALLUCINATION", "MISSED_PROTOMER", "CHAIN_ID_OVERRIDDEN"}:
+        return True
+    if oligo.get("classification") in ("HOMOMER", "HETEROMER"):
+        return True
+    if receptor_chain and "," in receptor_chain:
+        return True
+    return any(c.get("7tm_status") == "INCOMPLETE_7TM" for c in oligo.get("all_gpcr_chains", []))
+
+
+def display_oligomer_analysis_panel(main_data: dict) -> None:
+    """Render the unified Oligomer Analysis panel.
+
+    Replaces the legacy heteromer_resolution + tm_completeness panels.
+    Shows classification, GPCR chain table, primary protomer suggestion,
+    alerts, and assembly cross-check information.
+    """
+    oligo = main_data.get("oligomer_analysis")
+    if not oligo:
+        return
+
+    receptor_chain = main_data.get("receptor_info", {}).get("chain_id", "")
+    highlight = _should_highlight_oligomer(oligo, receptor_chain)
+    override = oligo.get("chain_id_override", {})
+    classification = oligo.get("classification", "UNKNOWN")
+    alerts = oligo.get("alerts", [])
+
+    elements: list = []
+
+    # ── Override banner (highest priority) ──
+    if override.get("applied"):
+        override_text = Text()
+        override_text.append("CHAIN_ID CORRECTED  ", style="bold white on red")
+        override_text.append(
+            f"  {override.get('original_chain_id')} -> {override.get('corrected_chain_id')}"
+            f"  |  UniProt: {override.get('original_uniprot')} -> "
+            f"{override.get('corrected_uniprot')}"
+            f"\n  Trigger: {override.get('trigger')}  |  {override.get('reason', '')}",
+            style="red",
+        )
+        elements.append(
+            Panel(override_text, border_style="bold red", box=box.HEAVY, padding=(0, 1))
+        )
+        elements.append(Text())
+
+    # ── Classification line ──
+    cls_style = {
+        "HOMOMER": "bold cyan",
+        "HETEROMER": "bold magenta",
+        "MONOMER": "bold green",
+        "NO_GPCR": "dim",
+    }.get(classification, "white")
+    cls_text = Text()
+    cls_text.append("Classification: ", style="bold")
+    cls_text.append(classification, style=cls_style)
+    elements.append(cls_text)
+
+    # ── GPCR chains table ──
+    gpcr_chains = oligo.get("all_gpcr_chains", [])
+    if gpcr_chains:
+        chain_table = Table(box=box.SIMPLE_HEAVY, expand=True, show_header=True, padding=(0, 1))
+        chain_table.add_column("Chain", style="bold", width=6)
+        chain_table.add_column("Slug", width=24)
+        chain_table.add_column("7TM Status", width=16)
+        chain_table.add_column("TMs", width=8, justify="center")
+        for chain in gpcr_chains:
+            tm_status = chain.get("7tm_status", "UNKNOWN")
+            tm_style = {
+                "COMPLETE": "green",
+                "INCOMPLETE_7TM": "bold red",
+                "UNKNOWN": "dim",
+                "NOT_GPCR": "dim",
+            }.get(tm_status, "white")
+            chain_table.add_row(
+                chain.get("chain_id", "?"),
+                chain.get("slug", "?"),
+                Text(tm_status, style=tm_style),
+                f"{chain.get('resolved_tms', '?')}/{chain.get('total_tms', '?')}",
+            )
+        elements.append(Text())
+        elements.append(chain_table)
+
+    # ── Primary protomer suggestion ──
+    suggestion = oligo.get("primary_protomer_suggestion", {})
+    if suggestion.get("chain_id"):
+        sug_text = Text()
+        sug_text.append("Primary Protomer: ", style="bold")
+        sug_text.append(f"Chain {suggestion['chain_id']}", style="bold cyan")
+        sug_text.append(f"  (Rank {suggestion.get('rank_used', '?')})", style="dim")
+        sug_text.append(f"\n  {suggestion.get('reason', '')}", style="white")
+        elements.append(Text())
+        elements.append(sug_text)
+
+    # ── Alerts ──
+    if alerts:
+        alert_text = Text()
+        for alert in alerts:
+            atype = alert.get("type", "")
+            style = {
+                "HALLUCINATION": "bold red",
+                "CHAIN_ID_OVERRIDDEN": "bold red",
+                "MISSED_PROTOMER": "bold yellow",
+                "CONFIRMED_OLIGOMER": "green",
+            }.get(atype, "white")
+            alert_text.append(f"  [{atype}] ", style=style)
+            alert_text.append(f"{alert.get('message', '')}\n", style="white")
+        elements.append(Text())
+        elements.append(Text("Alerts:", style="bold underline"))
+        elements.append(alert_text)
+
+    # ── Assembly cross-check (informational) ──
+    asm = oligo.get("assembly_cross_check", {})
+    if asm.get("oligomeric_state"):
+        asm_text = Text()
+        asm_text.append("Assembly: ", style="dim bold")
+        asm_text.append(
+            f"{asm.get('oligomeric_state', '')}  "
+            f"Stoich: {asm.get('stoichiometry', '')}  "
+            f"Symmetry: {asm.get('type', '')}",
+            style="dim",
+        )
+        elements.append(Text())
+        elements.append(asm_text)
+
+    # ── Panel styling ──
+    if override.get("applied"):
+        border_style = "bold red"
+        title = "[bold white on red] OLIGOMER ANALYSIS — CHAIN CORRECTED [/]"
+    elif highlight:
+        border_style = "yellow"
+        title = "[bold yellow]OLIGOMER ANALYSIS — REVIEW RECOMMENDED[/]"
+    else:
+        border_style = "green"
+        title = "[bold green]Oligomer Analysis[/]"
+
+    console.print(
+        Panel(
+            Group(*elements),
+            title=title,
+            border_style=border_style,
+            box=box.DOUBLE,
+            padding=(1, 2),
+        )
+    )

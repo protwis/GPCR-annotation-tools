@@ -29,6 +29,40 @@ from gpcr_tools.csv_generator.validation_display import (
     get_relevant_validation_warnings,
 )
 
+# ── Type Coercion ──────────────────────────────────────────────────────
+
+
+def coerce_type(original: Any, new_str: str) -> Any:
+    """Preserve the original value's type after a Prompt.ask edit.
+
+    Attempts to parse *new_str* back to the type of *original*.
+    Falls back to returning *new_str* as-is if parsing fails.
+    """
+    if new_str == str(original):
+        return original
+    if isinstance(original, bool):
+        if new_str.lower() in ("true", "1", "yes"):
+            return True
+        if new_str.lower() in ("false", "0", "no"):
+            return False
+    if isinstance(original, int):
+        try:
+            return int(new_str)
+        except ValueError:
+            pass
+    if isinstance(original, float):
+        try:
+            return float(new_str)
+        except ValueError:
+            pass
+    if isinstance(original, (list, dict)):
+        try:
+            return json.loads(new_str)
+        except (json.JSONDecodeError, ValueError):
+            pass
+    return new_str
+
+
 # ── Controversy Detection ───────────────────────────────────────────────
 
 
@@ -138,12 +172,16 @@ def review_decision_unit(
         )
 
     action = Prompt.ask(
-        "\n[prompt]Accept block? ([bold]Y[/]es, [bold]e[/]dit, [bold]d[/]eep-dive, [bold]q[/]uit):[/]",
-        choices=["y", "e", "d", "q"],
+        "\n[prompt]Accept block? ([bold]Y[/]es, [bold]e[/]dit, "
+        "[bold]d[/]eep-dive, [bold]s[/]kip, [bold]q[/]uit):[/]",
+        choices=["y", "e", "d", "s", "q"],
         default="y",
     ).lower()
     if action == "y":
         log_audit_trail(pdb_id, path, "accept_block", d_node.get("value"), d_node.get("value"))
+        return d_node
+    if action == "s":
+        log_audit_trail(pdb_id, path, "skip_field", d_node.get("value"), d_node.get("value"))
         return d_node
     if action == "q":
         return None
@@ -160,12 +198,12 @@ def review_decision_unit(
         )
     if action == "e":
         orig_val = d_node["value"]
-        new_val = Prompt.ask(
-            f"[prompt]New value for [cyan]{path}.value[/]:[/] ", default=str(orig_val)
-        )
-        d_node["value"] = new_val
+        raw = Prompt.ask(f"[prompt]New value for [cyan]{path}.value[/]:[/] ", default=str(orig_val))
+        new_val = coerce_type(orig_val, raw)
+        new_d_node = dict(d_node)
+        new_d_node["value"] = new_val
         log_audit_trail(pdb_id, path + ".value", "edit_in_block", orig_val, new_val)
-        return d_node
+        return new_d_node
     return d_node  # fallback
 
 
@@ -277,7 +315,7 @@ def review_leaf(
         )
 
         option_choices = [str(i) for i in range(1, len(candidates) + 1)]
-        prompt_choices = [*option_choices, "e", "q"]
+        prompt_choices = [*option_choices, "s", "e", "q"]
 
         target_default_idx = None
         for idx, cand in enumerate(candidates):
@@ -300,15 +338,19 @@ def review_leaf(
         default_choice = option_choices[target_default_idx] if option_choices else "e"
 
         choice = Prompt.ask(
-            "\n[prompt]Select option, [bold]e[/]dit, or [bold]q[/]uit:[/]",
+            "\n[prompt]Select option, [bold]s[/]kip, [bold]e[/]dit, or [bold]q[/]uit:[/]",
             choices=prompt_choices,
             default=default_choice,
         ).lower()
 
         if choice == "q":
             return None
+        if choice == "s":
+            log_audit_trail(pdb_id, path, "skip_field", leaf_val, leaf_val)
+            return leaf_val
         if choice == "e":
-            new_val = Prompt.ask("[prompt]Enter value:[/] ", default=str(leaf_val))
+            raw = Prompt.ask("[prompt]Enter value:[/] ", default=str(leaf_val))
+            new_val = coerce_type(leaf_val, raw)
             log_audit_trail(pdb_id, path, "edit_controversy", leaf_val, new_val)
             return new_val
 
@@ -327,17 +369,19 @@ def review_leaf(
     else:
         console.print(Panel(f"Path: {path}\nValue: {leaf_val}", border_style="blue"))
         action = Prompt.ask(
-            "[prompt]Action ([bold]Y[/]es, [bold]e[/]dit, [bold]q[/]uit):[/]",
-            choices=["y", "e", "q"],
+            "[prompt]Action ([bold]Y[/]es, [bold]e[/]dit, [bold]s[/]kip, [bold]q[/]uit):[/]",
+            choices=["y", "e", "s", "q"],
             default="y",
         ).lower()
         if action == "q":
             return None
-        if action == "y":
-            log_audit_trail(pdb_id, path, "accept", leaf_val, leaf_val)
+        if action in ("y", "s"):
+            audit_action = "accept" if action == "y" else "skip_field"
+            log_audit_trail(pdb_id, path, audit_action, leaf_val, leaf_val)
             return leaf_val
         if action == "e":
-            new_val = Prompt.ask("[prompt]New value:[/] ", default=str(leaf_val))
+            raw = Prompt.ask("[prompt]New value:[/] ", default=str(leaf_val))
+            new_val = coerce_type(leaf_val, raw)
             log_audit_trail(pdb_id, path, "edit", leaf_val, new_val)
             return new_val
     return leaf_val  # fallback
@@ -595,6 +639,13 @@ def review_toplevel_blocks(
                 if action == "q":
                     return None
                 if action == "s":
+                    core_blocks = {"receptor_info", "ligands", "signaling_partners"}
+                    if key in core_blocks and not Confirm.ask(
+                        f"[bold red]'{key}' is a core block. "
+                        f"Skipping will leave its CSV fields empty. Continue?[/]",
+                        default=False,
+                    ):
+                        continue
                     console.print(f"[yellow]Skipping/Deleting block '{key}'[/yellow]")
                     log_audit_trail(
                         pdb_id,
@@ -654,6 +705,8 @@ def review_toplevel_blocks(
                     log_audit_trail(pdb_id, key, "accept_block_forced", "N/A", "ACCEPTED")
                     break
                 if action == "r":
+                    # P0 fix: user explicitly requested review — override fix_mode
+                    # so child nodes actually stop for input instead of auto-accepting.
                     res = review_node(
                         pdb_id,
                         current_block,
@@ -661,7 +714,7 @@ def review_toplevel_blocks(
                         key,
                         False,
                         validation_data,
-                        fix_mode,
+                        False,
                         verified_paths,
                     )
                     if res is None:

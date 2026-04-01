@@ -36,6 +36,13 @@ def sample_controversy_map(sample_voting_log) -> dict:
 
 
 @pytest.fixture
+def sample_oligomer_data() -> dict:
+    """Load the PDB test fixture with oligomer_analysis data."""
+    with open(FIXTURES_DIR / "sample_pdb_oligomer.json") as f:
+        return json.load(f)
+
+
+@pytest.fixture
 def sample_validation_data() -> dict:
     """Load the validation test fixture."""
     with open(FIXTURES_DIR / "sample_validation.json") as f:

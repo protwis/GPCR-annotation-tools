@@ -14,6 +14,44 @@ from rich.text import Text
 from gpcr_tools.config import VALIDATION_FATAL_KEYWORDS
 from gpcr_tools.csv_generator.ui import console
 
+# ── Oligomer Alert Injection ───────────────────────────────────────────
+
+
+def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
+    """Promote oligomer findings into validation_data for fix-mode gating.
+
+    Injects warnings into ``validation_data["critical_warnings"]`` so that
+    the existing fix-mode / accept-all gating logic in ``review_toplevel_blocks``
+    stops at ``receptor_info`` when chain corrections or structural issues
+    are detected.
+    """
+    if not oligo:
+        return
+
+    warnings: list[str] = validation_data.setdefault("critical_warnings", [])
+
+    override = oligo.get("chain_id_override", {})
+    if override.get("applied"):
+        warnings.append(
+            f"CHAIN_ID CORRECTED at 'receptor_info': "
+            f"{override.get('original_chain_id')} -> {override.get('corrected_chain_id')} "
+            f"({override.get('trigger')}). Human confirmation required."
+        )
+
+    for alert in oligo.get("alerts", []):
+        atype = alert.get("type", "")
+        if atype in ("HALLUCINATION", "MISSED_PROTOMER"):
+            warnings.append(
+                f"OLIGOMER ALERT at 'receptor_info': [{atype}] {alert.get('message', '')}"
+            )
+
+    if any(c.get("7tm_status") == "INCOMPLETE_7TM" for c in oligo.get("all_gpcr_chains", [])):
+        warnings.append(
+            "STRUCTURAL QUALITY at 'receptor_info': "
+            "One or more GPCR chains have INCOMPLETE 7TM domains."
+        )
+
+
 # ── Warning Helpers ─────────────────────────────────────────────────────
 
 
