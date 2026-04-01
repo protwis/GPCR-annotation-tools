@@ -39,8 +39,8 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 
     s_info = data.get("structure_info", {})
     r_info = data.get("receptor_info", {})
-    oligo = data.get("oligomer_analysis", {})
-    label_map = oligo.get("label_asym_id_map", {})
+    oligo = data.get("oligomer_analysis") or {}
+    label_map = (oligo.get("label_asym_id_map") or {})
 
     receptor_chain = sanitize_value(r_info.get("chain_id"))
     receptor_uniprot = sanitize_value(r_info.get("uniprot_entry_name"))
