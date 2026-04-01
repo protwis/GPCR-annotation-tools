@@ -28,7 +28,8 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
     if not oligo:
         return
 
-    warnings: list[str] = validation_data.setdefault("critical_warnings", [])
+    warnings: list[str] = validation_data.get("critical_warnings") or []
+    validation_data["critical_warnings"] = warnings
 
     override = oligo.get("chain_id_override") or {}
     if override.get("applied"):
