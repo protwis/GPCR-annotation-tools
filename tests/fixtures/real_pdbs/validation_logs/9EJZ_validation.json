@@ -1,0 +1,12 @@
+{
+    "critical_warnings": [
+        "Fake UniProt ID at '.receptor_info': 'chrm5_human' does not exist in UniProtKB.",
+        "UNIPROT_CLASH at 'receptor_info': 'chrm5_human' on Chain R vs API reality []."
+    ],
+    "algo_conflicts": [],
+    "algo_notes": [
+        "[TIE-BREAKER ALIGNED] Tail 'YNLV' matched 2 slugs. AI choice 'gnaq_human' retained."
+    ],
+    "chimera_score": 4,
+    "chimera_status": "success"
+}

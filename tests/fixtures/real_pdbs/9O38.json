@@ -1,0 +1,144 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "reasoning": "The PDB metadata description and the paper explicitly identify 'Nanobody 35' as a nanobody used for stabilization.",
+                    "quote_or_path": "polymer_components[2].description; purification was performed in the presence of recombinant Nb35 nanobodies to help stabilize the receptor-G protein complex.",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "The cryo-EM structure of the TAS1R2-TM-G protein complex identifies TAS1R2 as the G protein coupling subunit, with specific residues Y756 and F827 directly contacting the G\u03b1 subunit.",
+        "Analysis of the TAS1R2-TM-G protein complex suggests an inactive pre-coupled state of the receptor in this G protein-bound configuration."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "reasoning": "The paper explicitly states that for the G protein-containing class of particles (which this PDB entry represents), ligand occupancy cannot be discerned due to the lack of well-resolved receptor structure, indicating an Apo state for the primary ligand binding site.",
+                    "quote_or_path": "This G protein-containing class of particles lacks a well-resolved TAS1R3 and is missing the rest of the receptor structure (Figure 6), thus we are not able to discern the overall state of the receptor in this particle class (e.g., ligand occupancy).",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo",
+            "validation_status": "SKIPPED_APO"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "Miniature Gs alpha subunit (miniGs/gust) where the last 25 C-terminal amino acids are replaced with the corresponding sequence from human gustducin (GNAT3). It is fused to TAS1R3.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-05-14",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states that the receptor was generated in the 'agonist-bound state' and that the observed conformation 'reflects the active state' due to binding of artificial sweeteners."
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "note": "Heteromeric human sweet receptor (TAS1R2+TAS1R3) transmembrane and G protein domains, derived from Class 3 particles. The VFT and CR domains of the receptor are not well-resolved in this particle class.",
+        "method": "ELECTRON MICROSCOPY"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A",
+        "validation_status": "RECEPTOR_MATCH",
+        "api_reality": [
+            "ts1r2_human"
+        ]
+    },
+    "oligomer_analysis": {
+        "classification": "HETEROMER",
+        "all_gpcr_chains": [
+            {
+                "chain_id": "A",
+                "slug": "ts1r2_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            },
+            {
+                "chain_id": "B",
+                "slug": "ts1r3_human",
+                "7tm_status": "INCOMPLETE_7TM",
+                "resolved_tms": 0,
+                "total_tms": 7
+            },
+            {
+                "chain_id": "F",
+                "slug": "ts1r3_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            }
+        ],
+        "primary_protomer_suggestion": {
+            "chain_id": "A",
+            "reason": "Rank 1: G-protein bound \u2014 AI-determined active complex on Chain A",
+            "rank_used": 1
+        },
+        "assembly_cross_check": {
+            "oligomeric_state": "Hetero 6-mer",
+            "stoichiometry": [
+                "A1",
+                "B1",
+                "C1",
+                "D1",
+                "E1",
+                "F1"
+            ],
+            "kind": "Global Symmetry",
+            "type": "Asymmetric"
+        },
+        "alerts": [
+            {
+                "type": "MISSED_PROTOMER",
+                "message": "GPCR roster has chains ['A', 'B', 'F'] but AI only reported ['A']. Missed: ['B', 'F']."
+            }
+        ],
+        "chain_id_override": {
+            "applied": false,
+            "reason": "AI chain matches suggestion \u2014 no override needed"
+        },
+        "label_asym_id_map": {
+            "D": "C",
+            "E": "D",
+            "A": "E",
+            "C": "B",
+            "B": "A",
+            "F": "F"
+        }
+    }
+}

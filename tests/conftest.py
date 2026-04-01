@@ -1,11 +1,29 @@
 """Shared pytest fixtures for GPCR annotation tools tests."""
 
 import json
+import shutil
 from pathlib import Path
 
 import pytest
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
+REAL_PDB_DIR = FIXTURES_DIR / "real_pdbs"
+
+REAL_PDB_IDS: tuple[str, ...] = (
+    "5G53",
+    "8TII",
+    "9AS1",
+    "9BLW",
+    "9EJZ",
+    "9IQS",
+    "9M88",
+    "9NOR",
+    "9O38",
+)
+
+REAL_PDB_VOTING_LOG_IDS: frozenset[str] = frozenset({"9M88", "9O38", "9AS1", "9BLW", "9IQS"})
+
+REAL_PDB_VALIDATION_LOG_IDS: frozenset[str] = frozenset(REAL_PDB_IDS)
 
 
 @pytest.fixture
@@ -33,6 +51,13 @@ def sample_voting_log() -> list:
 def sample_controversy_map(sample_voting_log) -> dict:
     """Convert the voting log list into a path-keyed controversy map."""
     return {item["path"]: item for item in sample_voting_log}
+
+
+@pytest.fixture
+def sample_oligomer_data() -> dict:
+    """Load the PDB test fixture with oligomer_analysis data."""
+    with open(FIXTURES_DIR / "sample_pdb_oligomer.json") as f:
+        return json.load(f)
 
 
 @pytest.fixture
@@ -129,5 +154,45 @@ def initialized_workspace(tmp_path, sample_pdb_data, monkeypatch):
         json.dump(sample_pdb_data, f)
 
     reset_config()
+    yield workspace
+    reset_config()
+
+
+def _populate_real_pdb_workspace(workspace: Path) -> None:
+    """Copy committed real PDB fixtures into a temporary workspace layout."""
+    aggregated = workspace / "aggregated"
+    aggregated.mkdir(exist_ok=True)
+    (aggregated / "logs").mkdir(exist_ok=True)
+    (aggregated / "validation_logs").mkdir(exist_ok=True)
+
+    for json_file in REAL_PDB_DIR.glob("*.json"):
+        shutil.copy2(json_file, aggregated / json_file.name)
+    for json_file in (REAL_PDB_DIR / "logs").glob("*.json"):
+        shutil.copy2(json_file, aggregated / "logs" / json_file.name)
+    for json_file in (REAL_PDB_DIR / "validation_logs").glob("*.json"):
+        shutil.copy2(json_file, aggregated / "validation_logs" / json_file.name)
+
+
+@pytest.fixture
+def real_pdb_workspace(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Build a temporary workspace populated with all committed real PDB fixtures.
+
+    Sets ``GPCR_WORKSPACE``, writes a valid storage contract, and resets
+    the config cache.  Yields the workspace root.
+    """
+    from gpcr_tools.config import reset_config
+
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    _populate_real_pdb_workspace(workspace)
+
+    (workspace / "output" / "csv").mkdir(parents=True)
+    (workspace / "output" / "audit").mkdir(parents=True)
+    (workspace / "state").mkdir()
+    _write_contract(workspace)
+
+    monkeypatch.setenv("GPCR_WORKSPACE", str(workspace))
+    reset_config()
+
     yield workspace
     reset_config()

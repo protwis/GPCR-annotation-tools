@@ -1,0 +1,203 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "The study reveals common and distinct molecular interaction motifs between various psychedelic and non-psychedelic agonists and the 5-HT2AR, providing a broader mechanistic understanding of 5-HT2A activation.",
+        "Tryptamine ligands, including DMT, bind to the canonical orthosteric pocket of 5-HT2AR, making predicted contacts with residues D155 (D3.32), F339 (F6.51), and F340 (F6.52).",
+        "The structures suggest that different agonists stabilize distinct conformational states and varying conformational ensembles upon receptor activation, leading to diverse signaling behaviors."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "A1AFV",
+            "type": "small-molecule",
+            "pubchem_id": "6089",
+            "synonyms": [
+                "N,N-DIMETHYLTRYPTAMINE",
+                "DIMETHYLTRYPTAMINE",
+                "61-50-7",
+                "2-(3-Indolyl)ethyldimethylamine",
+                "3-(2-Dimethylaminoethyl)indole",
+                "1H-Indole-3-ethanamine, N,N-dimethyl-",
+                "N,N-Dimethyl-1H-indole-3-ethylamine",
+                "2-(1H-Indol-3-yl)-N,N-dimethylethanamine",
+                "DEA No. 7435",
+                "3-[2-(dimethylamino)ethyl]indole",
+                "WUB601BHAA",
+                "NSC-63795",
+                "DTXSID60110053",
+                "CHEBI:28969",
+                "[2-(1H-indol-3-yl)ethyl]dimethylamine",
+                "3-(2-(DIMETHYLAMINO)ETHYL)INDOLE",
+                "(2-(1H-indol-3-yl)ethyl)dimethylamine",
+                "N,N Dimethyltryptamine",
+                "RefChem:34942",
+                "DTXCID4065313",
+                "200-508-4",
+                "N,N-dimethyl-1H-Indole-3-ethanamine",
+                "2-(1H-INDOL-3-YL)-N,N-DIMETHYL-ETHANAMINE",
+                "CHEMBL12420",
+                "(2-Indol-3-ylethyl)dimethylamine",
+                "Indole, 3-(2-(dimethylamino)ethyl)-",
+                "Indole, 3-[2-(dimethylamino)ethyl]-",
+                "A1AFV",
+                "DMT (psychogenic)",
+                "(psychogenic)",
+                "N,N-Dimethyltryptamine (1mg/ml in Methanol)",
+                "N,N-Dimethyltryptamine (1mg/ml in Acetonitrile)",
+                "EINECS 200-508-4",
+                "UNII-WUB601BHAA",
+                "NSC 63795",
+                "BRN 0138259",
+                "HSDB 8017",
+                "NN-Dimethyltryptamine",
+                "Dimethyltryptamine(DMT)",
+                "dimethyltryptamine [INN]",
+                "(N,N)-Dimethyltryptamine",
+                "N-DIMETHYLTRYPTAMINE",
+                "VLS01",
+                "GTPL141",
+                "3-(dimethylaminoethyl)-indole",
+                "SCHEMBL335710",
+                "[2-(1H-INDOL-3-YL)-ETHYL]-DIMETHYL-AMINE",
+                "Dimethyltryptamine (USAN/INN)",
+                "SCHEMBL4035596",
+                "SCHEMBL9232580",
+                "VLS-01",
+                "METHYL-(2-(1H-INDOL-3-YL)-ETHYL)-METHYLAMINE",
+                "SCHEMBL23723328",
+                "SCHEMBL29261888",
+                "SCHEMBL29350959",
+                "DIMETHYLTRYPTAMINE [USAN]",
+                "DIMETHYLTRYPTAMINE [MART.]",
+                "N,N-Dimethyltryptamine, free base",
+                "DIMETHYLTRYPTAMINE [WHO-DD]",
+                "N,N-DIMETHYLTRYPTAMINE [MI]",
+                "NSC63795",
+                "WLN: T56 BMJ D2N1&1",
+                "3-(2-(dimethylamino)ethyl)-Indole",
+                "BDBM50026868",
+                "MFCD00055989",
+                "STK370594",
+                "3-[2- (dimethylamino)ethyl]-Indole",
+                "AKOS005446117",
+                "DB01488",
+                "MB00483",
+                "3-(2-DIMETHYLAMINOETHYL) INDOLE",
+                "2-(1H-indol-3-yl)-ethyl-dimethyl-amine",
+                "AS-47089",
+                "N,N-Dimethyltryptamine, >=97% (HPLC)",
+                "2-(1H-indol-3-yl)-N,N-dimethylethylamine",
+                "DB-308391",
+                "N,N-Dimethyltryptamine, 1mg/ml in Methanol",
+                "1H-INDOLE-3-ETHANAMINE,N,N-DIMETHYL",
+                "NS00005525",
+                "N,N-dimethyl-1H-Indole-3-ethanamine (9CI)",
+                "2-(1H-Indol-3-yl)-N,N-dimethylethanamine #",
+                "C08302",
+                "D-5500",
+                "D13141",
+                "2-(1H-Indol-3-yl)-N,N-dimethylethan-1-amine",
+                "061D507",
+                "L001288",
+                "Q407217",
+                "2-(1H-indol-3-yl)-N,N-dimethylethanamine (ACD/Name 4.0)",
+                "N-(2-(1H-indol-3-yl)ethyl)-N,N-dimethylamine (ACD/Name 4.0)",
+                "InChI=1/C12H16N2/c1-14(2)8-7-10-9-13-12-6-4-3-5-11(10)12/h3-6,9,13H,7-8H2,1-2H"
+            ],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "\"all classical psychedelics are 5-HT2A serotonin (5-hydroxytryptamine; 5-HT) receptor (5-HT2AR) agonists10,11.\" (Page 1); \"we determined seven active state cryo-EM structures of the agonist-bound 5-HT2AR in complex with heterotrimeric Gq.\" (Page 3)",
+                    "reasoning": "The paper explicitly classifies DMT as a classical psychedelic and a 5-HT2AR agonist, and the structure is described as agonist-bound."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "N,N-DIMETHYLTRYPTAMINE",
+            "validation_status": "MATCHED_SMALL_MOLECULE",
+            "InChIKey": "DMULVCHRPCFFGV-UHFFFAOYSA-N",
+            "api_pubchem_cid": "6089",
+            "SMILES_stereo": "CN(C)CCc1c[nH]c2c1cccc2",
+            "SMILES": "CN(C)CCc1c[nH]c2c1cccc2"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb2_human",
+            "note": "The chain ID for arrestin (E) is inferred from the paper's description of the typical construct used, as it is not explicitly listed in the PDB metadata for this specific entry (9AS1). The UniProt name is inferred from common arrestin constructs mentioned in previous structural work by the Roth lab, particularly \u03b2-arrestin2 (Barr2).",
+            "chain_id": "E"
+        },
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gng2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnaq_human",
+                "chain_id": "B"
+            },
+            "note": "Engineered mini-GaqiN chimera (mini-Gq) consisting of G\u03b1q (gnaq_human) and G\u03b1i1 (gnai1_human) segments, specifically the N-terminal and the \u03b15 helix from G\u03b1i1 (gnai1_human) to promote stable interaction with GPCRs. The chain IDs for this G-protein (B, C, D) are inferred from the paper's description of the typical construct used, as they are not explicitly listed in the PDB metadata for this specific entry (9AS1). The UniProt names are inferred from common mini-Gq constructs mentioned in previous structural work by the Roth lab.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gnb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.38,
+        "release_date": "2025-04-02",
+        "method": "ELECTRON MICROSCOPY",
+        "note": "None",
+        "state": {
+            "evidence": {
+                "reasoning": "The PDB title explicitly mentions a 'mini-Gq protein' complex, and the paper confirms these are 'active state cryo-EM structures' with a Gq heterotrimer, indicating an active functional state.",
+                "quote_or_path": "structure_details.title; \"we determined seven active state cryo-EM structures of the agonist-bound 5-HT2AR in complex with heterotrimeric Gq.\" (Page 3)",
+                "source": "Both Paper and PDB Metadata"
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "5ht2a_human",
+        "chain_id": "A",
+        "validation_status": "RECEPTOR_MATCH",
+        "api_reality": [
+            "5ht2a_human"
+        ]
+    },
+    "oligomer_analysis": {
+        "classification": "MONOMER",
+        "all_gpcr_chains": [
+            {
+                "chain_id": "A",
+                "slug": "5ht2a_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            }
+        ],
+        "primary_protomer_suggestion": {
+            "chain_id": "A",
+            "reason": "Rank 1: G-protein bound \u2014 AI-determined active complex on Chain A",
+            "rank_used": 1
+        },
+        "assembly_cross_check": {
+            "oligomeric_state": "Monomer",
+            "stoichiometry": [
+                "A1"
+            ],
+            "kind": "Global Symmetry",
+            "type": "Asymmetric"
+        },
+        "alerts": [],
+        "chain_id_override": {
+            "applied": false,
+            "reason": "AI chain matches suggestion \u2014 no override needed"
+        },
+        "label_asym_id_map": {
+            "A": "A"
+        }
+    }
+}

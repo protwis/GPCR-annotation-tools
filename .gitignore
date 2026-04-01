@@ -38,5 +38,8 @@ coverage.xml
 
 # Workspace data (never commit — mount at runtime)
 /workspace/
+
+# JSON defaults to ignored, except committed test fixtures
 *.json
 !tests/fixtures/*.json
+!tests/fixtures/**/*.json

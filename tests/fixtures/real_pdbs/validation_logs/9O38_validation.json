@@ -1,0 +1,9 @@
+{
+    "critical_warnings": [],
+    "algo_conflicts": [
+        "[TIE-BREAKER OVERRIDE] Tail 'CGLF' matched 5 slugs. AI 'gnas2_human' failed. Defaulted to canonical 'gnai1_human'."
+    ],
+    "algo_notes": [],
+    "chimera_score": 4,
+    "chimera_status": "success"
+}

@@ -1,0 +1,20 @@
+[
+    {
+        "path": "auxiliary_proteins[Soluble cytochrome b562].type.value",
+        "best_run_value": "Other",
+        "majority_vote_value": "Fusion protein",
+        "all_votes": {
+            "Other": 2,
+            "Fusion protein": 5
+        }
+    },
+    {
+        "path": "ligands[None].type",
+        "best_run_value": "peptide",
+        "majority_vote_value": "protein",
+        "all_votes": {
+            "peptide": 2,
+            "protein": 8
+        }
+    }
+]

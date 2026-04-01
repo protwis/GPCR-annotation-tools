@@ -1,0 +1,21 @@
+[
+    {
+        "path": "ligands[A1AFV].name",
+        "best_run_value": "N,N-DIMETHYLTRYPTAMINE",
+        "majority_vote_value": "DMT",
+        "all_votes": {
+            "N,N-DIMETHYLTRYPTAMINE": 2,
+            "DMT": 5,
+            "2-(1H-indol-3-yl)-N,N-dimethylethan-1-amine": 3
+        }
+    },
+    {
+        "path": "structure_info.state.evidence.source",
+        "best_run_value": "Both Paper and PDB Metadata",
+        "majority_vote_value": "Paper",
+        "all_votes": {
+            "Both Paper and PDB Metadata": 3,
+            "Paper": 7
+        }
+    }
+]

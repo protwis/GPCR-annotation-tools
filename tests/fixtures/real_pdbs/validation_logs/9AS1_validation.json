@@ -1,0 +1,16 @@
+{
+    "critical_warnings": [
+        "Ghost Chain at '.signaling_partners.arrestin': 'E' not in PDB Source.",
+        "Ghost Chain at '.signaling_partners.g_protein.gamma_subunit': 'D' not in PDB Source.",
+        "Fake UniProt ID at '.signaling_partners.g_protein.gamma_subunit': 'gng2_human' does not exist in UniProtKB.",
+        "Ghost Chain at '.signaling_partners.g_protein.alpha_subunit': 'B' not in PDB Source.",
+        "Ghost Chain at '.signaling_partners.g_protein.beta_subunit': 'C' not in PDB Source.",
+        "Fake UniProt ID at '.signaling_partners.g_protein.beta_subunit': 'gnb1_human' does not exist in UniProtKB."
+    ],
+    "algo_conflicts": [
+        "HALLUCINATION ALERT: AI found 'gnaq_human' but Algorithm found NO G-protein in source PDB."
+    ],
+    "algo_notes": [],
+    "chimera_score": 0,
+    "chimera_status": "no_g_protein_found"
+}

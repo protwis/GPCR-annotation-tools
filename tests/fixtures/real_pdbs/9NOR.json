@@ -1,0 +1,142 @@
+{
+    "key_findings": [
+        "The TAS1R2 subunit binds sweet ligands and couples to the G protein.",
+        "A common binding pocket within TAS1R2 recognizes both sucralose and aspartame.",
+        "3D variability analysis revealed coordinated structural changes between the TAS1R2 and TAS1R3 subunits upon ligand binding."
+    ],
+    "auxiliary_proteins": [],
+    "ligands": [
+        {
+            "chem_comp_id": "SUL",
+            "type": "small-molecule",
+            "pubchem_id": "69293",
+            "synonyms": [
+                "1',4,6'-Trichlorogalactosucrose",
+                "Trichlorosucrose",
+                "4,1',6'-Trichlorogalactosucrose",
+                "TGS"
+            ],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame.; In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; Binding of the artificial sweeteners is expected to cause conformational changes in the sweet receptor that enable activation of the signaling cascade.",
+                    "reasoning": "Sucralose is described as an artificial sweetener that binds to and activates the sweet receptor, forming an agonist-bound state."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Sucralose",
+            "validation_status": "GHOST_LIGAND"
+        },
+        {
+            "pubchem_id": "47135",
+            "type": "small-molecule",
+            "chem_comp_id": "APM",
+            "synonyms": [
+                "L-Aspartyl-L-phenylalanine methyl ester",
+                "N-L-alpha-Aspartyl-L-phenylalanine 1-methyl ester"
+            ],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame.; In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; Binding of the artificial sweeteners is expected to cause conformational changes in the sweet receptor that enable activation of the signaling cascade.",
+                    "reasoning": "Aspartame is described as an artificial sweetener that binds to and activates the sweet receptor, forming an agonist-bound state."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Aspartame",
+            "validation_status": "GHOST_LIGAND"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gng2_human",
+                "chain_id": "None"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnat3_human",
+                "chain_id": "None"
+            },
+            "note": "Engineered chimeric G protein (miniGs/gust) with the last 44 amino acids of the G\u03b1 subunit replaced by the corresponding sequence from human gustducin (GNAT3).",
+            "beta_subunit": {
+                "uniprot_entry_name": "gnb1_human",
+                "chain_id": "None"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "method": "ELECTRON MICROSCOPY",
+        "note": "Human sweet taste receptor, a heteromer composed of TAS1R2 and TAS1R3 GPCRs, bound to artificial sweeteners sucralose and aspartame.",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states the goal was to obtain the 'agonist-bound state' and suggests the observed conformation 'reflects the active state'."
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A",
+        "validation_status": "RECEPTOR_MATCH",
+        "api_reality": [
+            "ts1r2_human"
+        ]
+    },
+    "oligomer_analysis": {
+        "classification": "HETEROMER",
+        "all_gpcr_chains": [
+            {
+                "chain_id": "A",
+                "slug": "ts1r2_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            },
+            {
+                "chain_id": "B",
+                "slug": "ts1r3_human",
+                "7tm_status": "COMPLETE",
+                "resolved_tms": 7,
+                "total_tms": 7
+            }
+        ],
+        "primary_protomer_suggestion": {
+            "chain_id": "A",
+            "reason": "Rank 1: G-protein bound \u2014 AI-determined active complex on Chain A",
+            "rank_used": 1
+        },
+        "assembly_cross_check": {
+            "oligomeric_state": "Hetero 2-mer",
+            "stoichiometry": [
+                "A1",
+                "B1"
+            ],
+            "kind": "Global Symmetry",
+            "type": "Asymmetric"
+        },
+        "alerts": [
+            {
+                "type": "MISSED_PROTOMER",
+                "message": "GPCR roster has chains ['A', 'B'] but AI only reported ['A']. Missed: ['B']."
+            }
+        ],
+        "chain_id_override": {
+            "applied": false,
+            "reason": "AI chain matches suggestion \u2014 no override needed"
+        },
+        "label_asym_id_map": {
+            "B": "A",
+            "A": "B"
+        }
+    }
+}

@@ -11,7 +11,6 @@ from rich import box
 from rich.panel import Panel
 from rich.pretty import Pretty
 from rich.prompt import Confirm, Prompt
-from rich.text import Text
 from tqdm import tqdm
 
 from gpcr_tools.csv_generator.audit import log_audit_trail
@@ -21,8 +20,15 @@ from gpcr_tools.csv_generator.data_loader import (
     load_pdb_data,
     update_processed_log,
 )
+from gpcr_tools.csv_generator.exceptions import CsvSchemaMismatchError
 from gpcr_tools.csv_generator.review_engine import review_toplevel_blocks
-from gpcr_tools.csv_generator.ui import console, create_display_copy, display_dashboard_header
+from gpcr_tools.csv_generator.ui import (
+    console,
+    create_display_copy,
+    display_dashboard_header,
+    display_oligomer_analysis_panel,
+)
+from gpcr_tools.csv_generator.validation_display import inject_oligomer_alerts
 
 
 def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
@@ -94,63 +100,11 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                 )
             )
 
-            hetero_res = main_data.get("heteromer_resolution", {})
-            if hetero_res.get("is_heteromer"):
-                primary = hetero_res.get("primary_chain", "?")
-                r_slug = main_data.get("receptor_info", {}).get("uniprot_entry_name", "?")
-                reason = hetero_res.get("reason", "?")
-                ignored = ", ".join(
-                    [
-                        f"Chain {ign.get('chain_id')} ({ign.get('slug')})"
-                        for ign in hetero_res.get("ignored_chains", [])
-                    ]
-                )
+            # Unified Oligomer Analysis panel (replaces legacy heteromer + 7TM panels)
+            display_oligomer_analysis_panel(main_data)
 
-                hetero_text = Text()
-                hetero_text.append(
-                    f"PRIMARY RECEPTOR: Chain {primary} ({r_slug})\n",
-                    style="bold white",
-                )
-                hetero_text.append(f"REASON: {reason}\n", style="white")
-                hetero_text.append(f"IGNORED SECONDARY CHAINS: {ignored}", style="dim white")
-
-                console.print(
-                    Panel(
-                        hetero_text,
-                        title="[bold cyan]HETEROMER AUTOMATICALLY RESOLVED[/]",
-                        border_style="cyan",
-                        box=box.DOUBLE,
-                    )
-                )
-
-            tm_comp = main_data.get("tm_completeness", {})
-            if tm_comp.get("status") == "INCOMPLETE_7TM":
-                val_res = tm_comp.get("resolved_tms", "?")
-                val_tot = tm_comp.get("total_tms", "?")
-
-                tm_text = Text()
-                tm_text.append(
-                    "WARNING: SEVERELY TRUNCATED RECEPTOR DETECTED\n",
-                    style="bold white",
-                )
-                tm_text.append(
-                    f"Only {val_res} out of {val_tot} Transmembrane (TM) domains "
-                    f"are structurally resolved.\n",
-                    style="white",
-                )
-                tm_text.append(
-                    "This structure lacks a complete 7TM barrel and may be biologically inactive.",
-                    style="dim white",
-                )
-
-                console.print(
-                    Panel(
-                        tm_text,
-                        title="[bold red blink]⚠️ STRUCTURAL QUALITY ALERT[/]",
-                        border_style="red",
-                        box=box.DOUBLE,
-                    )
-                )
+            oligo = main_data.get("oligomer_analysis", {})
+            inject_oligomer_alerts(oligo, validation_data)
 
             has_crit_issues = validation_data.get("critical_warnings") or validation_data.get(
                 "algo_conflicts"
@@ -204,7 +158,7 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                 if final_data is None:
                     raise KeyboardInterrupt
 
-            if final_data:
+            if final_data is not None:
                 console.print(
                     Panel(
                         Pretty(create_display_copy(final_data)),
@@ -213,9 +167,25 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                     )
                 )
                 if Confirm.ask("Write to CSV?"):
-                    append_to_csvs(transform_for_csv(pdb_id, final_data))
-                    update_processed_log(pdb_id, "completed")
-                    console.print("[green]Saved![/green]")
+                    try:
+                        append_to_csvs(transform_for_csv(pdb_id, final_data))
+                        update_processed_log(pdb_id, "completed")
+                        console.print("[green]Saved![/green]")
+                    except CsvSchemaMismatchError as e:
+                        console.print(
+                            Panel(
+                                f"[bold red]SCHEMA MISMATCH:[/] {e.message}",
+                                border_style="red",
+                                box=box.DOUBLE,
+                            )
+                        )
+                        update_processed_log(pdb_id, "failed")
+                else:
+                    console.print(
+                        f"[yellow]PDB {pdb_id} NOT saved. "
+                        f"It will reappear as pending in the next session.[/yellow]"
+                    )
+                    log_audit_trail(pdb_id, "*", "csv_write_declined", "N/A", "DEFERRED")
 
     except KeyboardInterrupt:
         console.print("\n[yellow]Exiting...[/yellow]")
@@ -245,9 +215,14 @@ def _run_auto_accept(target_pdb: str | None) -> None:
             continue
 
         log_audit_trail(pdb_id, "*", "auto_accept", "N/A", "ACCEPTED")
-        append_to_csvs(transform_for_csv(pdb_id, main_data))
-        update_processed_log(pdb_id, "completed")
-        print(f"auto-accept: processed {pdb_id}", file=sys.stderr)
+        try:
+            append_to_csvs(transform_for_csv(pdb_id, main_data))
+            update_processed_log(pdb_id, "completed")
+            print(f"auto-accept: processed {pdb_id}", file=sys.stderr)
+        except CsvSchemaMismatchError as e:
+            print(f"ERROR: {e.message}", file=sys.stderr)
+            print(f"auto-accept: FAILED {pdb_id} (schema mismatch)", file=sys.stderr)
+            update_processed_log(pdb_id, "failed")
 
 
 def cli_entry() -> None:

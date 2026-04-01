@@ -1,0 +1,9 @@
+{
+    "critical_warnings": [
+        "UNIPROT_CLASH at 'receptor_info': 'gpr3_human' on Chain A vs API reality []."
+    ],
+    "algo_conflicts": [],
+    "algo_notes": [],
+    "chimera_score": 0,
+    "chimera_status": "no_g_protein_found"
+}

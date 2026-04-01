@@ -122,12 +122,14 @@ CSV_SCHEMA: dict[str, list[str]] = {
         "Resolution",
         "State",
         "ChainID",
+        "label_asym_id",
         "Note",
         "Date",
     ],
     "ligands.csv": [
         "PDB",
         "ChainID",
+        "label_asym_id",
         "Name",
         "PubChemID",
         "Role",
@@ -143,13 +145,16 @@ CSV_SCHEMA: dict[str, list[str]] = {
         "PDB",
         "Alpha_UniProt",
         "Alpha_ChainID",
+        "Alpha_label_asym_id",
         "Beta_UniProt",
         "Beta_ChainID",
+        "Beta_label_asym_id",
         "Gamma_UniProt",
         "Gamma_ChainID",
+        "Gamma_label_asym_id",
         "Note",
     ],
-    "arrestins.csv": ["PDB", "UniProt", "ChainID", "Note"],
+    "arrestins.csv": ["PDB", "UniProt", "ChainID", "label_asym_id", "Note"],
     "fusion_proteins.csv": ["PDB", "Name"],
     "nanobodies.csv": ["PDB", "Name"],
     "grk.csv": ["PDB", "Name"],
@@ -171,35 +176,39 @@ AUX_PROTEIN_DISPATCH: dict[str, str] = {
     "Other": "other_aux_proteins.csv",
 }
 
-BLACKLISTED_KEYS: set[str] = {
-    "evidence",
-    "confidence",
-    "reasoning",
-    "quote_or_path",
-    "synonyms",
-    "validation_status",
-    "UNIPROT_CLASH",
-    "api_reality",
-    "InChIKey",
-    "SMILES",
-    "SMILES_stereo",
-    "Sequence",
-    "api_pubchem_cid",
-    "heteromer_resolution",
-    "_verified_fields",
-    "tm_completeness",
-}
+BLACKLISTED_KEYS: frozenset[str] = frozenset(
+    {
+        "evidence",
+        "confidence",
+        "reasoning",
+        "quote_or_path",
+        "synonyms",
+        "validation_status",
+        "UNIPROT_CLASH",
+        "api_reality",
+        "InChIKey",
+        "SMILES",
+        "SMILES_stereo",
+        "Sequence",
+        "api_pubchem_cid",
+        "oligomer_analysis",
+        "_verified_fields",
+    }
+)
 
-AUTO_RESOLVE_KEYS: set[str] = {
-    "source",
-    "reasoning",
-    "quote_or_path",
-    "confidence",
-    "synonyms",
-}
+AUTO_RESOLVE_KEYS: frozenset[str] = frozenset(
+    {
+        "source",
+        "reasoning",
+        "quote_or_path",
+        "confidence",
+        "synonyms",
+    }
+)
 
 VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "ghost chain",
+    "ghost ligand",
     "ghost_ligand",
     "fake uniprot",
     "does not exist in uniprot",
@@ -210,11 +219,11 @@ VALIDATION_FATAL_KEYWORDS: tuple[str, ...] = (
     "hallucination alert",
 )
 
-TOPLEVEL_BLOCK_KEYS: list[str] = [
+TOPLEVEL_BLOCK_KEYS: tuple[str, ...] = (
     "structure_info",
     "receptor_info",
     "ligands",
     "signaling_partners",
     "auxiliary_proteins",
     "key_findings",
-]
+)

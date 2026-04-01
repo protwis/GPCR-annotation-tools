@@ -1,0 +1,103 @@
+{
+  "structure_info": {
+    "method": "ELECTRON MICROSCOPY",
+    "resolution": 3.2,
+    "release_date": "2025-06-15",
+    "state": {"value": "active"},
+    "note": "Homodimer complex"
+  },
+  "receptor_info": {
+    "chain_id": "A, B",
+    "uniprot_entry_name": "aa2ar_human",
+    "is_human_like": true,
+    "_verified_fields": ["chain_id", "uniprot_entry_name"]
+  },
+  "ligands": [
+    {
+      "chem_comp_id": "ZMA",
+      "name": "ZM241385",
+      "pubchem_id": "176407",
+      "chain_id": "A",
+      "role": {"value": "antagonist"},
+      "type": "small-molecule",
+      "validation_status": "MATCHED_SMALL_MOLECULE",
+      "SMILES": "c1ccc2c(c1)nc(n2)N",
+      "InChIKey": "OIPILFWXSMYKGL-UHFFFAOYSA-N"
+    },
+    {
+      "chem_comp_id": "ADN",
+      "name": "Adenosine",
+      "pubchem_id": "60961",
+      "chain_id": "B",
+      "role": {"value": "agonist"},
+      "type": "small-molecule",
+      "validation_status": "MATCHED_SMALL_MOLECULE",
+      "SMILES": "c1nc(c2c(n1)n(cn2)[C@@H]3[C@@H]([C@@H]([C@H](O3)CO)O)O)N",
+      "InChIKey": "OIRDTQYFTABQOQ-KQYNXXCUSA-N"
+    }
+  ],
+  "signaling_partners": {
+    "g_protein": {
+      "alpha_subunit": {"uniprot_entry_name": "gnas2_human", "chain_id": "D"},
+      "beta_subunit": {"uniprot_entry_name": "gnb1_human", "chain_id": "C"},
+      "gamma_subunit": {"uniprot_entry_name": "gng2_human", "chain_id": "E"},
+      "note": ""
+    }
+  },
+  "auxiliary_proteins": [
+    {"name": "Nb35", "type": {"value": "Nanobody"}}
+  ],
+  "key_findings": "Homodimer A2A receptor complex with G-protein",
+  "oligomer_analysis": {
+    "classification": "HOMOMER",
+    "all_gpcr_chains": [
+      {
+        "chain_id": "A",
+        "slug": "aa2ar_human",
+        "7tm_status": "COMPLETE",
+        "resolved_tms": 7,
+        "total_tms": 7
+      },
+      {
+        "chain_id": "B",
+        "slug": "aa2ar_human",
+        "7tm_status": "COMPLETE",
+        "resolved_tms": 7,
+        "total_tms": 7
+      }
+    ],
+    "primary_protomer_suggestion": {
+      "chain_id": "A",
+      "reason": "Homomer (2 identical GPCR chains) — Rank 1: G-protein bound — AI-determined active complex on Chain A",
+      "rank_used": 0
+    },
+    "alerts": [
+      {
+        "type": "MISSED_PROTOMER",
+        "message": "GPCR roster has chains ['A', 'B'] but AI only reported Chain A. Missed: ['B']."
+      }
+    ],
+    "chain_id_override": {
+      "applied": false,
+      "trigger": null,
+      "original_chain_id": null,
+      "corrected_chain_id": null,
+      "original_uniprot": null,
+      "corrected_uniprot": null,
+      "reason": null
+    },
+    "label_asym_id_map": {
+      "A": "A",
+      "B": "B",
+      "C": "D",
+      "D": "A",
+      "E": "B"
+    },
+    "assembly_cross_check": {
+      "oligomeric_state": "Hetero 2-mer",
+      "stoichiometry": ["A1", "B1"],
+      "kind": "Global Symmetry",
+      "type": "Asymmetric"
+    }
+  }
+}
