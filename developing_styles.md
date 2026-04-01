@@ -51,14 +51,14 @@ src/gpcr_tools/
     ├── app.py             # Orchestration. Ties modules together.
     ├── data_loader.py     # File I/O: JSON loading, PDB discovery.
     ├── review_engine.py   # Interactive review logic. No CSV, no file writes.
-    ├── csv_writer.py      # Pure data transformation. No UI, no prompts.
+    ├── csv_writer.py      # Data transformation + CSV file appending. No UI, no prompts.
     ├── audit.py           # Audit trail logging.
     ├── validation_display.py  # Validation alert rendering.
     └── ui.py              # Rich console helpers, panels, theming.
 ```
 
 **Rules:**
-- `csv_writer.py` must remain a **pure function module** — no Rich imports, no `console.print`, no `Prompt.ask`.
+- `csv_writer.py` must remain **UI-free** — no Rich imports, no `console.print`, no `Prompt.ask`. It owns both data transformation and CSV file appending.
 - `review_engine.py` must never write files directly — it returns data; callers write it.
 - `config.py` must never perform I/O — it resolves paths and defines constants.
 - New utility functions go into the module where they are used. Do not create a catch-all `utils.py` unless the function is genuinely shared across 3+ modules.
@@ -88,6 +88,135 @@ src/gpcr_tools/
 - **At system boundaries** (file I/O, user input, API calls): catch specific exceptions, log actionable messages.
 - **Internal logic:** let exceptions propagate. Do not wrap internal calls in try/except "just in case."
 - **Never silently swallow errors.** If a PDB fails to load, record it in `processed_log.json` as `"failed"` and continue to the next.
+- **Exception handling symmetry:** when a custom exception is introduced (e.g. `CsvSchemaMismatchError`), it must be handled at **every** call site that can raise it — not just the one you're currently working on. Before merging, grep the codebase for all callers.
+
+### Defensive Coding Idioms
+
+This section codifies the most common low-level bug patterns in this codebase. They arise from processing AI-generated JSON and external API data where keys may be absent, `null`, or inconsistently formatted.
+
+#### 1. None-Safety — `.get()` Does NOT Guard Against Explicit `None`
+
+`dict.get(key, default)` returns the default **only when the key is missing**. If the key exists with value `None`, it returns `None`:
+
+```python
+# BAD — returns None when key is present but null
+chain = data.get("chain_id", "?")          # {"chain_id": None} → None
+info  = data.get("chain_id_override", {})  # {"chain_id_override": None} → None
+
+# GOOD — handles both absent and null
+chain = data.get("chain_id") or "?"
+info  = data.get("chain_id_override") or {}
+```
+
+**Rule:** when processing external data (JSON from AI, API responses, user-edited fixtures), always use `x.get(key) or fallback` for strings, dicts, and lists. Use `x.get(key, default)` only when `None` is a semantically impossible value (e.g. internally constructed dicts with guaranteed schemas).
+
+**Nested chains** are especially dangerous:
+
+```python
+# BAD — crashes if "override" key exists but is None
+data.get("override", {}).get("applied")
+
+# GOOD
+(data.get("override") or {}).get("applied")
+```
+
+#### 2. Cross-Module String Constants — No Magic String Duplication
+
+If a string is **produced** in one module and **consumed** (matched against) in another, it must be defined as a **shared constant** in `config.py`. Hardcoding the same magic string in two different files is a guaranteed consistency bug.
+
+```python
+# BAD — "ghost_ligand" in config.py, "ghost ligand" in validation_display.py
+VALIDATION_FATAL_KEYWORDS = ("ghost_ligand", ...)   # config.py
+if "ghost ligand" in text:                           # validation_display.py → NEVER MATCHES
+
+# GOOD — single source of truth
+# config.py
+ALERT_TYPE_HALLUCINATION = "HALLUCINATION"
+# producer (validation_display.py)
+warnings.append(f"[{ALERT_TYPE_HALLUCINATION}] {msg}")
+# consumer (validation_display.py)
+is_hallucination = ALERT_TYPE_HALLUCINATION in warn_str
+```
+
+**Rule:** before hardcoding any identifier string (alert types, status codes, keyword tokens), search the codebase. If it already appears elsewhere, extract it to `config.py`. If you are introducing a new identifier that will be matched elsewhere, define the constant first.
+
+#### 3. Python Type-Dispatch Traps
+
+##### `bool` is a subclass of `int`
+
+`isinstance(True, int)` evaluates to `True`. In type-dispatch chains, the `bool` branch must be checked **before** `int`, and must use `elif` (not bare `if`) to prevent fall-through:
+
+```python
+# BAD — True falls through bool branch into int branch
+if isinstance(original, bool):
+    ...  # no match → falls through
+if isinstance(original, int):
+    return int(new_str)  # converts a bool original to int
+
+# GOOD — elif stops fall-through; unrecognized bool input returns string
+if isinstance(original, bool):
+    ...
+    return new_str  # explicit fallback
+elif isinstance(original, int):
+    return int(new_str)
+```
+
+##### `json.loads()` erases container type
+
+`json.loads('{"a":1}')` returns a `dict` regardless of whether the original was a `list`. Always verify the parsed type matches the original:
+
+```python
+# BAD — a list original can silently become a dict
+if isinstance(original, (list, dict)):
+    return json.loads(new_str)
+
+# GOOD — verify type after parsing
+if isinstance(original, (list, dict)):
+    parsed = json.loads(new_str)
+    if isinstance(parsed, type(original)):
+        return parsed
+```
+
+#### 4. Truthiness vs. Identity — `if x:` vs. `if x is not None:`
+
+When a variable holds a dict, list, or other container, `if x:` is `False` for both `None` and empty containers (`{}`, `[]`). If the distinction matters (e.g. "user quit" vs. "user accepted everything, resulting in `{}`"), use `is not None`:
+
+```python
+# BAD — empty dict {} from a valid review is silently skipped
+if final_data:
+    write_to_csv(final_data)
+
+# GOOD — only skip on explicit None (user quit)
+if final_data is not None:
+    write_to_csv(final_data)
+```
+
+#### 5. Immutable Module-Level Constants
+
+Module-level constants must use **immutable types** to prevent accidental cross-test contamination and runtime mutation:
+
+| Mutable | Immutable Replacement |
+|---------|----------------------|
+| `set({...})` | `frozenset({...})` |
+| `[...]` | `(...)` (tuple) |
+| `dict` (for dispatch tables) | Acceptable as-is if not mutated; consider `MappingProxyType` for critical schemas |
+
+#### 6. Multi-File Write Atomicity
+
+When a single operation writes to multiple files (e.g. `append_to_csvs` iterating over CSV files), validate **all** preconditions (schema checks, permissions) **before** writing to any file. Otherwise a failure midway leaves orphaned partial writes:
+
+```python
+# BAD — structures.csv written, then ligands.csv fails schema check → partial state
+for filename, rows in data.items():
+    check_schema(filename)  # may raise
+    write(filename, rows)
+
+# GOOD — pre-flight all checks, then write
+for filename, rows in data.items():
+    check_schema(filename)  # raises before any write happens
+for filename, rows in data.items():
+    write(filename, rows)
+```
 
 ---
 
@@ -167,6 +296,10 @@ Before opening a PR, verify:
 - [ ] New functions have tests
 - [ ] No hardcoded paths (use `get_config()`)
 - [ ] No secrets or API keys in committed files
+- [ ] **None-safety:** any `.get(key, default)` on external data uses `or` pattern (see §Defensive Coding Idioms §1)
+- [ ] **String constants:** no new magic strings duplicated across files (see §Defensive Coding Idioms §2)
+- [ ] **Exception symmetry:** any new custom exception is handled at all call sites (grep for the raising function)
+- [ ] **Truthiness:** `if x:` vs `if x is not None:` used correctly for dicts/lists (see §Defensive Coding Idioms §4)
 
 ---
 
@@ -191,6 +324,7 @@ Validation warnings flow through `validation_data` dict. To add a new alert sour
 1. Inject warnings into `validation_data["critical_warnings"]` (list of strings).
 2. Use path prefixes matching top-level block keys (e.g., `"receptor_info"`, `"ligands"`).
 3. The existing `get_relevant_validation_warnings()` will pick them up automatically.
+4. **Any new alert type string** (e.g. `"HALLUCINATION"`, `"GHOST_LIGAND"`) must be defined as a constant in `config.py` and referenced by both the producer and consumer — never hardcoded in two places independently.
 
 ### CSV Schema Changes
 
@@ -214,3 +348,10 @@ When adding or removing CSV columns:
 | `Prompt.ask()` storing raw strings | `coerce_type()` to preserve original types |
 | `q` (quit) cascading to abort entire PDB | Provide `s` (skip) at every interactive layer |
 | Backward-compat shims (`__getattr__`, re-exports) | Clean removal + deprecation warning if needed |
+| `.get(key, {})` on external JSON (None leaks through) | `.get(key) or {}` (see §Defensive Coding Idioms) |
+| Same magic string hardcoded in 2+ files | Shared constant in `config.py` |
+| `if isinstance(x, bool): ... if isinstance(x, int):` (bool⊂int fall-through) | `elif` chain with explicit fallback in bool branch |
+| `if data:` when `{}` is a valid state | `if data is not None:` |
+| Mutable module-level `set` / `list` constants | `frozenset` / `tuple` |
+| Handle custom exception in one call site only | Handle at **all** call sites (grep before merging) |
+| `re.findall(r"\[\d+\]", full_path)` extracting nested indices | Anchor to block prefix, extract only top-level index |
