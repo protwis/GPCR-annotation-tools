@@ -284,8 +284,10 @@ The test suite maintains a set of **real PDB entries** (`tests/fixtures/real_pdb
 
 The ultimate target is a **live-generated test chain** where tests execute actual pipeline stages rather than reading static fixture files. The only permanent static fixtures are:
 
-1. **A single PDB ID list** — the canonical set of test PDBs.
+1. **A single PDB ID list** — the canonical set of test PDBs (currently 9 entries).
 2. **AI annotation run outputs** (`ai_results/`) — because AI annotation is non-deterministic, slow, and requires external API keys, it is the **one permanent断点 (breakpoint)** in the chain.
+
+**Mandatory Data Density:** To ensure robust majority voting and discrepancy detection tests, every PDB in the canonical set MUST have a complete set of **10 AI annotation runs** (`run_01.json` through `run_10.json`) committed to `tests/fixtures/real_pdbs/ai_results/{PDB_ID}/`.
 
 Everything downstream of that breakpoint — `aggregate → validate → curate` — runs live during tests. Everything upstream of annotation — `download → enrich → papers` — also runs live once migrated. The AI annotation outputs are the only static fixtures that persist in the final state.
 
