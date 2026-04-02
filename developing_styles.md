@@ -232,20 +232,26 @@ for filename, rows in data.items():
 
 ```
 tests/
-├── conftest.py               # Shared fixtures (sample_pdb_data, workspace setup)
-├── fixtures/                  # Static JSON test data
-│   ├── sample_pdb_simple.json
-│   ├── sample_pdb_controversy.json
-│   └── ...
+├── conftest.py               # Shared fixtures (sample_pdb_data, workspace setup, real_pdb_workspace)
+├── fixtures/
+│   ├── sample_*.json         # Synthetic minimal fixtures for unit tests
+│   └── real_pdbs/            # Real PDB data (see §Real Data Testing Strategy)
+│       ├── {pdb_id}.json
+│       ├── logs/
+│       └── validation_logs/
 ├── unit/                      # One test file per source module
 │   ├── test_config.py
 │   ├── test_csv_writer.py
 │   ├── test_review_engine.py
 │   └── ...
-└── integration/               # End-to-end pipeline tests
+└── integration/               # End-to-end pipeline tests + real PDB tests
     ├── test_csv_pipeline.py
     ├── test_curate_cli.py
-    └── test_init_workspace.py
+    ├── test_init_workspace_cli.py
+    ├── test_real_pdb_fixtures.py
+    ├── test_real_pdb_pipeline.py
+    ├── test_real_pdb_gating.py
+    └── test_real_pdb_review_engine.py
 ```
 
 ### Test Conventions
@@ -269,6 +275,86 @@ tests/
 - Rich panel rendering aesthetics (visual, not logical)
 - Third-party library internals
 - File system existence checks that are already covered by workspace contract validation
+
+### Real Data Testing Strategy
+
+The test suite maintains a set of **real PDB entries** (`tests/fixtures/real_pdbs/`) that exercise the full spectrum of domain scenarios: clean data, controversies, critical warnings (ghost chains, hallucinated ligands, UniProt clashes), oligomer analysis, and complex multi-model disagreement.
+
+#### The Live Chain Goal
+
+The ultimate target is a **live-generated test chain** where tests execute actual pipeline stages rather than reading static fixture files. The only permanent static fixtures are:
+
+1. **A single PDB ID list** — the canonical set of test PDBs.
+2. **AI annotation run outputs** (`ai_results/`) — because AI annotation is non-deterministic, slow, and requires external API keys, it is the **one permanent断点 (breakpoint)** in the chain.
+
+Everything downstream of that breakpoint — `aggregate → validate → curate` — runs live during tests. Everything upstream of annotation — `download → enrich → papers` — also runs live once migrated. The AI annotation outputs are the only static fixtures that persist in the final state.
+
+```
+download → enrich → papers → [AI annotation] → aggregate → validate → curate
+  live       live     live     STATIC FIXTURE      live        live      live
+```
+
+#### Why Live Over Static
+
+Static fixtures carry a silent risk: **format drift**. If `aggregate` changes its output schema but the static `aggregated/*.json` fixtures are not updated, the downstream `curate` tests still pass — against stale data. A live chain eliminates this class of bug entirely, because each stage's tests consume the actual output of the previous stage.
+
+#### Migration: Progressive Fixture Retirement
+
+The pipeline is migrated **back-to-front** (curate first, then validate, then aggregate, and so on). During migration, the fixture strategy follows a **progressive retirement** model:
+
+1. **Before migrating a stage:** its output is a static fixture. Downstream tests read from that fixture.
+2. **After migrating a stage:** its output is live-generated during tests. Downstream tests switch to consuming the live output. The old static fixture is retired.
+
+**Example — migrating `aggregate + validate`:**
+
+| Phase | `aggregate` input | `aggregate` output | `curate` reads from |
+|-------|-------------------|--------------------|---------------------|
+| Before migration | N/A | Static `aggregated/*.json` | Static fixture |
+| After migration | Static `ai_results/` + `enriched/` fixtures | Live-generated | Live aggregate output |
+
+When switching a downstream test from static to live input, run a **one-time equivalence check**: confirm that the live-generated output is semantically consistent with the old static fixture (or that differences are expected and documented). This catches regressions introduced during the migration itself.
+
+#### Intermediate Fixture Rules
+
+During the migration process:
+
+- **Adding intermediate fixtures is expected.** When migrating `aggregate`, you will commit `ai_results/` and `enriched/` fixtures as the new static input. These are the "new断点" until those upstream stages are also migrated.
+- **Downstream tests must be updated in the same PR.** When `aggregate` starts producing live output, the existing `curate` tests that previously read static `aggregated/*.json` must be rewritten to consume the live output. Do not leave two parallel fixture paths.
+- **One断点 at a time moves forward.** Each migration PR should clearly shift the static/live boundary by exactly one stage. The PR description must state which fixtures are being retired and which are being introduced.
+
+#### Fixture Selection Criteria
+
+The canonical PDB set must collectively cover:
+
+- At least one **clean entry** (no controversies, no critical warnings)
+- At least one entry with **voting log controversies**
+- At least one entry with **critical validation warnings** (ghost chains, hallucinated ligands, UniProt clashes)
+- At least one entry with **oligomer analysis** data
+- At least one entry that triggers **fix-mode auto-resolution** (trivial controversies only)
+- At least one **complex entry** with multiple overlapping issues
+
+When a new pipeline stage is migrated, verify that the existing PDB set provides sufficient coverage for that stage's logic. If not, add new PDB IDs — but prefer expanding coverage of existing IDs first.
+
+#### Test Organization for Real Data
+
+```
+tests/
+├── fixtures/
+│   ├── real_pdbs/                    # Current static断点 fixtures
+│   │   ├── {pdb_id}.json            # Main aggregated data (retiring as aggregate goes live)
+│   │   ├── logs/                    # Voting logs (retiring as aggregate goes live)
+│   │   ├── validation_logs/         # Validation logs (retiring as validate goes live)
+│   │   ├── ai_results/              # AI annotation outputs (permanent static fixtures)
+│   │   └── enriched/                # Enriched metadata (retiring as enrich goes live)
+│   └── sample_*.json                # Synthetic minimal fixtures for unit tests
+└── integration/
+    ├── test_real_pdb_fixtures.py     # Fixture integrity (adapts as fixtures evolve)
+    ├── test_real_pdb_pipeline.py     # End-to-end smoke tests (progressively goes live)
+    ├── test_real_pdb_gating.py       # Mode availability per PDB
+    └── test_real_pdb_review_engine.py # Interactive flow with monkeypatched prompts
+```
+
+Unit tests continue to use **synthetic fixtures** (`sample_*.json`) for isolation and speed. Real data tests live exclusively in `integration/`.
 
 ---
 
