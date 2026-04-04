@@ -111,12 +111,22 @@ def validate_and_enrich_ligands(
 
         # 2. Polymer path: peptides/proteins validated by chain_id
         if ai_type.lower() in (LIGAND_TYPE_PEPTIDE, LIGAND_TYPE_PROTEIN) and chain_id_valid:
-            poly_match = api["poly_by_chain"].get(chain_id)
-            if poly_match:
-                lig["validation_status"] = VALIDATION_MATCHED_POLYMER
-                lig["Sequence"] = poly_match.get("sequence")
-                continue
+            chains = [c.strip() for c in chain_id.split(",")]
+            matched_sequences = []
+            found_any_chain = False
 
+            for c in chains:
+                poly_match = api["poly_by_chain"].get(c)
+                if poly_match:
+                    found_any_chain = True
+                    seq = poly_match.get("sequence")
+                    if seq:
+                        matched_sequences.append(seq)
+
+            if found_any_chain:
+                lig["validation_status"] = VALIDATION_MATCHED_POLYMER
+                lig["Sequence"] = " / ".join(matched_sequences)
+                continue
         # 3. Small-molecule path
         if comp_id_valid:
             np_match = api["np_by_comp"].get(comp_id)

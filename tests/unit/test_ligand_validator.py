@@ -102,6 +102,18 @@ class TestPolymerMatch:
         assert warnings == []
         assert data["ligands"][0]["validation_status"] == VALIDATION_MATCHED_POLYMER
 
+    def test_protein_multi_chain(self) -> None:
+        data: dict[str, Any] = {
+            "ligands": [{"chain_id": "X, Y", "name": "Follicle stimulating hormone", "type": "protein"}]
+        }
+        # Simulate a PDB where chain X and chain Y exist
+        enriched = _make_enriched(polymer=[_poly_entity("X"), _poly_entity("Y")])
+        warnings = validate_and_enrich_ligands("TEST", data, enriched)
+        assert warnings == []
+        lig = data["ligands"][0]
+        assert lig["validation_status"] == VALIDATION_MATCHED_POLYMER
+        assert lig["Sequence"] == "MDEF / MDEF"
+
 
 class TestGhostLigand:
     def test_ghost_ligand_with_comp_id(self) -> None:
