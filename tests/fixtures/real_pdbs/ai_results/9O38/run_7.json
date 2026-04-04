@@ -1,0 +1,78 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description",
+                    "reasoning": "The PDB metadata explicitly describes the protein as 'Nanobody 35 (NB35)'."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "Single-particle cryo-EM reveals the structure of the human sweet taste receptor, a heteromer composed of TAS1R2 + TAS1R3 GPCRs.",
+        "The structure reveals the human sweet taste receptor in an active state, with the TAS1R2 subunit coupling to a G protein via specific residues Y756 and F827.",
+        "The cryo-EM analysis shows the closest proximity in the TM domains of the two sweet receptor subunits is between their TM6 helices (~6 \u00c5), suggesting a conserved mechanism for Class C GPCR activation."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "none",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "reasoning": "The PDB metadata explicitly states that there are no non-polymer components, indicating an apo structure for this specific PDB entry (9O38), which focuses on the TM-G protein complex.",
+                    "quote_or_path": "non_polymer_components",
+                    "source": "PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "Engineered miniGs/gust G protein, a miniature human G protein alpha subunit (GNAS, P63092) with the C-terminal 25 amino acids replaced by the corresponding sequence from human gustducin (GNAT3).",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "state": {
+            "evidence": {
+                "reasoning": "The paper explicitly states that the receptor was generated in the agonist-bound state and that the observed structural features reflect the active state, transmitting the signal for G protein engagement.",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "source": "Paper"
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "Transmembrane domains from Class 3 particles, rigidly fitted from PDB:9NOX and 9NOR.",
+        "release_date": "2025-05-14"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

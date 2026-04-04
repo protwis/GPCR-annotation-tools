@@ -1,0 +1,60 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "mBRIL is explicitly described as an engineered insertion into the receptor's intracellular loop for stabilization, making it a fusion protein component of the receptor chain.",
+                    "quote_or_path": "receptors were engineered by inserting mBril between TM5 and TM6 to create continuous helices within the receptor. (Page 2)",
+                    "source": "Paper"
+                },
+                "value": "Fusion protein",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "mBRIL"
+        }
+    ],
+    "key_findings": [
+        "The cryo-EM structure elucidates the antagonistic binding mode of Muscarinic Toxin 3 (MT3) to the M4 muscarinic acetylcholine receptor (M4AChR).",
+        "MT3 functions as an antagonist by partially occupying the orthostatic pocket with its finger loop 2, leading to an inactive conformation of the M4AChR characterized by the close packing of TM6.",
+        "The structure reveals that MT3 engages M4AChR in a 'standing' conformation, with deeper insertion into the receptor core compared to MT7's 'lying' conformation with M1AChR."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "protein",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "MT3 exhibits...acting as an antagonist. (Page 2); In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation... (Page 2)",
+                    "reasoning": "The paper explicitly states that Muscarinic toxin 3 (MT3) acts as an antagonist, which is consistent with the receptor being in an inactive state."
+                },
+                "value": "Antagonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.6,
+        "release_date": "2025-07-23",
+        "state": {
+            "evidence": {
+                "reasoning": "The paper explicitly states that the receptor adopts an inactive conformation, supported by the observed structural characteristics.",
+                "quote_or_path": "all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intra-cellular receptor core (Fig. 1d).",
+                "source": "Paper"
+            },
+            "value": "inactive",
+            "confidence": "High"
+        },
+        "note": "M4AChR engineered with mBRIL insertion between TM5 and TM6, and a K3-ALFA helical tag at the C-terminus of H8.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

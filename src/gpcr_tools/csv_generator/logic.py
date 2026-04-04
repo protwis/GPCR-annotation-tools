@@ -7,6 +7,13 @@ receptor truncation with orphaned-ligand radar, and structure note assembly.
 
 from __future__ import annotations
 
+from gpcr_tools.config import (
+    ALERT_HALLUCINATION,
+    ALERT_MISSED_PROTOMER,
+    OLIGOMER_HETEROMER,
+    OLIGOMER_HOMOMER,
+)
+
 
 def map_label_asym_id(chain_id_raw: str, label_map: dict[str, str]) -> str:
     """Translate auth_asym_id → label_asym_id.  Handles comma-separated chains.
@@ -36,7 +43,7 @@ def collect_ligand_chains(ligands: list[dict]) -> set[str]:
     """
     chains: set[str] = set()
     for lig in ligands:
-        lc = lig.get("chain_id", "")
+        lc = lig.get("chain_id") or ""
         if isinstance(lc, str) and lc.strip() and lc.lower() not in ("none", "null", "n/a"):
             for part in lc.split(","):
                 part = part.strip()
@@ -77,11 +84,11 @@ def apply_db_truncation(
     if not primary_chain:
         return receptor_chain, receptor_uniprot, ""
 
-    reason = suggestion.get("reason", "No reason provided")
+    reason = suggestion.get("reason") or "No reason provided"
 
     # Get accurate UniProt for the primary chain from GPCR roster.
     primary_uniprot = receptor_uniprot
-    for chain_info in oligo.get("all_gpcr_chains", []):
+    for chain_info in oligo.get("all_gpcr_chains") or []:
         if chain_info.get("chain_id") == primary_chain:
             primary_uniprot = chain_info.get("slug") or receptor_uniprot
             break
@@ -121,7 +128,7 @@ def build_structure_note(
     5. DB truncation note (from :func:`apply_db_truncation`)
     """
     parts: list[str] = []
-    base_note = s_info.get("note", "")
+    base_note = s_info.get("note") or ""
     if isinstance(base_note, str):
         base_note = base_note.strip()
     else:
@@ -137,15 +144,15 @@ def build_structure_note(
                 f"{override.get('corrected_chain_id')}, reason: {override.get('trigger')}]"
             )
 
-        classification = oligo.get("classification", "")
-        if classification in ("HOMOMER", "HETEROMER"):
-            chain_ids = [c.get("chain_id") or "?" for c in oligo.get("all_gpcr_chains", [])]
+        classification = oligo.get("classification") or ""
+        if classification in (OLIGOMER_HOMOMER, OLIGOMER_HETEROMER):
+            chain_ids = [c.get("chain_id") or "?" for c in oligo.get("all_gpcr_chains") or []]
             parts.append(f"[{classification}: chains {', '.join(chain_ids)}]")
 
-        for alert in oligo.get("alerts", []):
-            atype = alert.get("type", "")
-            if atype in ("HALLUCINATION", "MISSED_PROTOMER"):
-                parts.append(f"[{atype}: {alert.get('message', '')}]")
+        for alert in oligo.get("alerts") or []:
+            atype = alert.get("type") or ""
+            if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER):
+                parts.append(f"[{atype}: {alert.get('message') or ''}]")
 
     if truncation_note:
         parts.append(truncation_note)

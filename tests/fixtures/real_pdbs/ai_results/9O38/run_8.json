@@ -1,0 +1,78 @@
+{
+    "key_findings": [
+        "The cryo-EM structure of the human sweet receptor (TAS1R2+TAS1R3 heterodimer) reveals the structural basis for sweet detection.",
+        "The TAS1R2 subunit is identified as the primary site for ligand binding and G-protein coupling.",
+        "Binding of artificial sweeteners induces conformational changes in the CR linkers of both TAS1R2 and TAS1R3, indicative of an active state that enables G protein engagement."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "reasoning": "PDB metadata identifies chain E as 'Nanobody 35 (NB35)', and the paper confirms its role in stabilizing the receptor-G protein complex during purification.",
+                    "quote_or_path": "polymer_components[2].description: Nanobody 35 (NB35); the purification was performed in the presence of recombinant Nb35 nanobodies to help stabilize the receptor-G protein complex.",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "none",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "reasoning": "For this specific PDB entry (9O38), derived from a particle class focused on the TM-G protein complex, the paper explicitly states that ligand occupancy could not be discerned.",
+                    "quote_or_path": "This G protein-containing class of particles lacks a well-resolved TAS1R3 and is missing the rest of the receptor structure (Figure 6), thus we are not able to discern the overall state of the receptor in this particle class (e.g., ligand occupancy).",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B"
+            },
+            "note": "Miniature Gs/gust chimera, with the last 25 C-terminal amino acids of GNAS (P63092) replaced with the corresponding sequence from GNAT3 (Q7RTX0, gustducin).",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-05-14",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the receptor was prepared in an agonist-bound state and that the observed conformational changes in the CR linkers reflect an active state, enabling G protein engagement.",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars.; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "This structure represents the transmembrane domains of the human sweet receptor (TAS1R2 + TAS1R3) from Class 3 particles.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

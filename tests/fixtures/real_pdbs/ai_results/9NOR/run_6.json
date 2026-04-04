@@ -1,0 +1,63 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor (TAS1R2+TAS1R3 heteromer) bound to artificial sweeteners sucralose and aspartame reveals the structural basis for sweet taste detection.",
+        "The TAS1R2 subunit is primarily responsible for ligand binding (sucralose and aspartame) and G protein coupling, with specific residues (Y756, F827) identified in TAS1R2 for G protein alpha subunit contact.",
+        "The structure highlights the coordinated structural changes between TAS1R2 (closed VFT) and TAS1R3 (open VFT) upon agonist binding, with TAS1R3's CR linker showing a unique conformation suggesting its role in transmitting the signal to the TM domains."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "69293",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detection... In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame",
+                    "reasoning": "The paper explicitly states sucralose is an artificial sweetener that activates the sweet receptor, indicating an agonist role."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "pubchem_id": "47135",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states aspartame is an artificial sweetener that activates the sweet receptor, indicating an agonist role.",
+                    "quote_or_path": "Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detection... Next, we examined the structure of the human sweet receptor bound to aspartame, one of the most common artificial sweeteners present in a wide range of consumer products; aspartame is approximately 200 times more potent than sucrose.",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "method": "Electron microscopy",
+        "note": "Human sweet taste receptor heteromer composed of TAS1R2 and TAS1R3 GPCRs.",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame... We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states that the receptor complexes were generated in the agonist-bound state and that the observed conformation reflects an active state."
+            },
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

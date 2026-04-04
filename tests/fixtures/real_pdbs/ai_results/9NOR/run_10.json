@@ -1,0 +1,89 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor (TAS1R2+TAS1R3 heteromer) reveals its agonist-bound active conformation.",
+        "The TAS1R2 subunit contains a common binding pocket for artificial sweeteners sucralose and aspartame, while the TAS1R3 subunit remains in an open, unbound conformation.",
+        "The structure shows coordinated, asymmetric conformational changes between TAS1R2 and TAS1R3 subunits upon agonist binding, including a notable kink in the TAS1R3 CR linker."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "5359702",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "reasoning": "The paper identifies sucralose as an artificial sweetener used to obtain the 'agonist-bound state' of the receptor.",
+                    "quote_or_path": "bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detection...; In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Sucralose"
+        },
+        {
+            "pubchem_id": "446",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detection...; In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame",
+                    "reasoning": "The paper identifies aspartame as an artificial sweetener used to obtain the 'agonist-bound state' of the receptor."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Aspartame"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "174",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "reasoning": "The paper explicitly states PEG400 serves as a 'sweet ligand' and that its repeating unit, ethylene glycol, functions as a ligand evoking calcium responses, indicating an agonist role.",
+                    "quote_or_path": "Finally, we generated receptor complexes without the G protein, using a different stabilizing agent (polyethylene glycol [PEG400]) that simultaneously serves as a sweet ligand.; Responses of TAS1R2+3 to ethylene glycol in cell-based calcium assays...ethylene glycol...functions as a ligand for TAS1R2+3; the diagram denotes the molecular structure of ethylene glycol. Note that starting at approximately 300 mM, ethylene glycol begins to evoke calcium responses that are no longer blocked by lactisole.",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Polyethylene glycol 400"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gai1_human",
+                "chain_id": "None"
+            },
+            "note": "A Gs/Gi chimera, specifically a miniGs/gust fusion protein with the alpha5 helix from gustducin."
+        }
+    },
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states the goal was to obtain the agonist-bound state and describes the overall architecture as 'agonist-bound', linking observed conformational changes to an active state."
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

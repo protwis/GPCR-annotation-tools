@@ -1,0 +1,80 @@
+{
+    "key_findings": [
+        "The study developed Fab7, an antigen-binding fragment, that recognizes active arrestin2/3 without interacting with receptor polypeptides, facilitating cryo-EM structure determination of GPCR-arrestin complexes.",
+        "The structure of ACKR3 phosphorylated by GRK2 in complex with Arr2* showed that ACKR3 was not fully evident in the map, suggesting a 'hanging' or 'tail-mode' complex where only the phosphopeptide region was visible.",
+        "GRK2-phosphorylated ACKR3 resulted in more heterogeneous 'tail-mode' assemblies when complexed with arrestins, contrasting with the more rigid 'ACKR3-adjacent' assemblies observed with GRK5 phosphorylation."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper clearly identifies Fab7 as an antigen-binding fragment, which is a type of antibody fab fragment.",
+                    "quote_or_path": "we developed an antigen-binding fragment (Fab7)",
+                    "source": "Paper"
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "H, L",
+            "name": "Fab7"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The PDB metadata directly describes this component as an 'anti-Fab nanobody'.",
+                    "quote_or_path": "polymer_components[2].description",
+                    "source": "PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "reasoning": "The provided PDB metadata explicitly lists no non-polymer components, indicating no resolved pharmacological ligands.",
+                    "quote_or_path": "non_polymer_components[]",
+                    "source": "PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Engineered with activating mutations (I386A, V387A, F388A) in its C-tail.",
+            "chain_id": "A"
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "method": "Electron microscopy",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The receptor is complexed with phosphorylated arrestin2 (Arr2*), which is explicitly stated to be in an 'active' conformation and is a known consequence of GPCR activation and GRK phosphorylation.",
+                "quote_or_path": "ACKR3 phosphorylated by GRK2 in complex with Arrestin2 in nanodisc; Fab7 selectively trapped Arr2 in an active conformation",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "ACKR3 phosphorylated by GRK2 in nanodisc",
+        "release_date": "2025-01-22"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

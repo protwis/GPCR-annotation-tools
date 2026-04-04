@@ -1,0 +1,78 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "Both PDB metadata and the paper explicitly identify Chain E as Nanobody 35, used for stabilization.",
+                    "quote_or_path": "polymer_components[2].description; purification was performed in the presence of recombinant Nb35 nanobodies 58 to help stabilize the receptor-G protein complex.",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "Cryo-EM reveals the high-resolution structure of the human sweet taste receptor as a TAS1R2 + TAS1R3 heteromer, providing the structural basis for sweet detection.",
+        "The TAS1R2 subunit is identified as the primary ligand-binding subunit, forming a closed VFT conformation around artificial sweeteners like sucralose and aspartame in a common binding pocket.",
+        "The structure illuminates the agonist-bound active state, with TAS1R2 coupling to the G protein and TAS1R3 displaying an open VFT conformation and a kinked CR linker crucial for signal transmission."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "none",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The 'non_polymer_components' section in the provided PDB metadata is empty, indicating no ligands are explicitly identified in this PDB entry.",
+                    "quote_or_path": "non_polymer_components",
+                    "source": "PDB Metadata"
+                },
+                "value": "Apo (no ligand)",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "F"
+            },
+            "note": "G-alpha subunit (miniGs/gust) is fused to the C-terminus of TAS1R3 (Taste receptor type 1 member 3) on chain F.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-05-14",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the observed structural features in the presence of agonists are indicative of an 'active state'.",
+                "quote_or_path": "Our results show that the two CR linkers sit in close proximity in the agonist-bound state of the receptor... We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "Transmembrane domains of the human sweet receptor (TAS1R2 + TAS1R3) from Class 3 particles rigidly fitted from PDB:9NOX and 9NOR.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

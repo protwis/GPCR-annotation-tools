@@ -1,0 +1,78 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description",
+                    "reasoning": "The PDB metadata explicitly describes the protein as 'Nanobody 35 (NB35)'."
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor (a TAS1R2 + TAS1R3 heterodimer) was determined, revealing the structural basis for sweet detection.",
+        "TAS1R2 is identified as the subunit responsible for ligand binding and G protein coupling, with specific residues (Y756, F827) shown to contact the G protein alpha subunit and be critical for coupling.",
+        "The structure, derived from 'Class 3 particles' (TAS1R2-TM-G protein complex), represents an inactive pre-coupled state of the receptor."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The PDB metadata lists no non-polymer components, and the paper explicitly states that ligand occupancy could not be discerned for this specific particle class.",
+                    "quote_or_path": "non_polymer_components: []; we are not able to discern the overall state of the receptor in this particle class (e.g., ligand occupancy).",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "value": "Apo (no ligand)",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "Engineered Gs/gustducin chimera (miniGs/gust) where the last 25 C-terminal amino acids of Gs (gnas2_human) are replaced with the corresponding sequence from human gustducin (GNAT3). This G protein alpha subunit is fused to TAS1R3 (chain B,F).",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "state": {
+            "value": "inactive",
+            "evidence": {
+                "reasoning": "The paper's supplementary figure S8 caption explicitly states that this particle class (from which PDB 9O38 is derived) represents an inactive pre-bound state.",
+                "quote_or_path": "data suggesting that this particle class may represent the inactive state of the receptor pre-bound to the G protein complex.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "release_date": "2025-05-14",
+        "note": "Transmembrane domains of the human sweet receptor, which is a heterodimer of TAS1R2 and TAS1R3. TAS1R3 is fused with a miniGs/gust chimera.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

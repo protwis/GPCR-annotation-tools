@@ -117,7 +117,7 @@ def get_verified_paths(main_data: dict) -> set:
     verified: set = set()
     for block_name, block_data in main_data.items():
         if isinstance(block_data, dict):
-            vf = block_data.get("_verified_fields", [])
+            vf = block_data.get("_verified_fields") or []
             if isinstance(vf, list):
                 for field in vf:
                     verified.add(f"{block_name}.{field}")
@@ -150,7 +150,7 @@ def review_decision_unit(
     content = Group(
         grid,
         Text("\nEvidence:", style="bold underline"),
-        Pretty(d_node.get("evidence", {})),
+        Pretty(d_node.get("evidence") or {}),
     )
     console.print(
         Panel(
@@ -225,7 +225,7 @@ def review_leaf(
         controversy = controversies[path]
         best_run_value = controversy.get("best_run_value")
         majority_value = controversy.get("majority_vote_value")
-        all_votes = controversy.get("all_votes", {}) or {}
+        all_votes = controversy.get("all_votes") or {}
 
         def parse_vote_key(raw_key):
             if isinstance(raw_key, str):
@@ -564,9 +564,9 @@ def review_toplevel_blocks(
         if key == "receptor_info" and isinstance(block_data, dict):
             status = block_data.get("validation_status")
             if status == "UNIPROT_CLASH":
-                chain_id = block_data.get("chain_id", "?")
-                api_reality = block_data.get("api_reality", [])
-                ai_uniprot = block_data.get("uniprot_entry_name", "?")
+                chain_id = block_data.get("chain_id") or "?"
+                api_reality = block_data.get("api_reality") or []
+                ai_uniprot = block_data.get("uniprot_entry_name") or "?"
                 console.print(
                     Panel(
                         f"⚠️ IDENTITY CLASH: API identifies chain {chain_id} as {api_reality}, "
@@ -602,7 +602,7 @@ def review_toplevel_blocks(
 
                 suggestion = analyze_validation_impact(key, current_block, validation_data)
                 if suggestion:
-                    suggestion_text = suggestion.get("reason", "")
+                    suggestion_text = suggestion.get("reason") or ""
                     if suggestion.get("invalid_indices") is not None:
                         suggestion_text += f"\nIndices: {suggestion['invalid_indices']}"
                     console.print(
@@ -677,7 +677,7 @@ def review_toplevel_blocks(
                         and suggestion.get("action") == "CLEAN_ENTRIES"
                         and isinstance(current_block, list)
                     ):
-                        invalid_indices = suggestion.get("invalid_indices", [])
+                        invalid_indices = suggestion.get("invalid_indices") or []
                         invalid_set = set(invalid_indices)
                         before_snapshot = {
                             "removed_indices": invalid_indices,

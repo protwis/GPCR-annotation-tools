@@ -1,0 +1,91 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "Both the PDB description and the paper clearly identify this component as a nanobody used for stabilization.",
+                    "quote_or_path": "polymer_components[3].description: Nanobody 35; Paper, Structure determination section: stabilised by the addition of nanobody 35 (Nb35)",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nanobody-35"
+        },
+        {
+            "type": {
+                "value": "RAMP",
+                "evidence": {
+                    "reasoning": "The PDB description and the paper both clearly identify this component as RAMP1, which is a type of RAMP.",
+                    "quote_or_path": "polymer_components[4].description: Receptor activity-modifying protein 1; Paper Abstract: AMYRS are heterodimers of the class B1 G protein-coupled receptor, calcitonin (CT) receptor (CTR), and receptor activity-modifying proteins (RAMPs)",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "RAMP1"
+        }
+    ],
+    "key_findings": [
+        "Cagrilintide exhibits an amylin-like binding mode but induces distinct conformational dynamics at calcitonin-family receptors compared to other peptides, potentially explaining its clinical efficacy.",
+        "Cagrilintide primarily engages the Calcitonin Receptor (CTR) in a stable bypass conformation, a mechanism distinct from other dual agonists like San45.",
+        "The R17-E14 intra-peptide ionic lock and the C-terminal P37 residue in cagrilintide are key determinants of its potency at CTR and the distinct conformational dynamics observed at AMYR subtypes."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "peptide",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states that cagrilintide is a long-acting amylin and calcitonin receptor agonist.",
+                    "quote_or_path": "cagrilintide, a long-acting amylin and calcitonin receptor agonist.",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "P",
+            "name": "Cagrilintide backbone (non-acylated)"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "G"
+            },
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "A"
+            },
+            "note": "Engineered dominant-negative Gs protein (DNGs).",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "B"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.2,
+        "release_date": "2025-04-16",
+        "state": {
+            "evidence": {
+                "reasoning": "The PDB title explicitly mentions 'complex with Gs' and 'Human amylin1 Receptor', and the paper abstract states 'Gs-coupled, active, amylin receptors', indicating an active state.",
+                "quote_or_path": "PDB Title: Human amylin1 Receptor in complex with Gs and Cagrilintide backbone (non-acylated); Paper Abstract: Here, we determine structures of cagrilintide bound to Gs-coupled, active, amylin receptors",
+                "source": "Both Paper and PDB Metadata"
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "note": "Human Calcitonin Receptor (CTR) modified with N-terminal Flag tag and C-terminal 8x histidine tag.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "calcr_human",
+        "chain_id": "R"
+    }
+}

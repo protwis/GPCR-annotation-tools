@@ -1,0 +1,50 @@
+{
+    "key_findings": [
+        "Cryo-EM structures of 5-HT2AR with various psychedelic ligands reveal common and distinct molecular interaction motifs among different chemotypes, advancing the understanding of 5-HT2A activation.",
+        "A remarkable global structural homology was observed across tryptamines, ergolines, and phenethylamines at the 5-HT2AR receptor level, despite their chemical diversity.",
+        "Distinct ligand-stabilized conformational transitions were identified, including a novel non-canonical (NC) state stabilized by the \u03b2-arrestin-biased agonist RS130-180, providing insights into mechanisms of arrestin bias."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "A1AFV",
+            "type": "small-molecule",
+            "pubchem_id": "6089",
+            "synonyms": [
+                "N,N-DIMETHYLTRYPTAMINE",
+                "DIMETHYLTRYPTAMINE",
+                "DMT (psychogenic)",
+                "3-(2-(dimethylamino)ethyl)indole"
+            ],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "FULL PAPER.Page 1: \"all classical psychedelics are 5-HT2A serotonin (5-hydroxytryptamine; 5-HT) receptor (5-HT2AR) agonists\"; FULL PAPER.Page 2: \"we obtained seven cryo-EM structures of the 5-HT2AR with representative compounds from each chemical class, including 5-HT, psilocin, DMT, mescaline, BOL, LSD, and a \u03b2-arrestin 2 (\u03b2-arr2) biased compound RS130-180 (Fig. 1).\"",
+                    "reasoning": "The paper explicitly states classical psychedelics like DMT are 5-HT2AR agonists and includes DMT in the list of agonists studied in this work."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "2-(1H-indol-3-yl)-N,N-dimethylethan-1-amine"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.38,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The PDB title indicates a complex from which this structure was refined, and the paper explicitly states this structure is one of seven 'active state' cryo-EM structures.",
+                "quote_or_path": "PDB METADATA.structure_details.title: Local refinement of 5-HT2AR bound to DMT in complex with a mini-Gq protein and scFv16 obtained by cryo-electron microscopy (cryoEM); FULL PAPER.Page 3.Results.Structural elucidation of psychedelic drug interactions: \"we determined seven active state cryo-EM structures of the agonist-bound 5-HT2AR in complex with heterotrimeric Gq.\"",
+                "source": "Both Paper and PDB Metadata"
+            },
+            "confidence": "High"
+        },
+        "release_date": "2025-04-02",
+        "note": "Local refinement of receptor portion.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "5ht2a_human",
+        "chain_id": "A"
+    }
+}

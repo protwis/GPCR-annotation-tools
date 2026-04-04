@@ -1,0 +1,129 @@
+{
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor, a TAS1R2 + TAS1R3 heteromer, was determined, revealing the overall architecture of this Class C GPCR.",
+        "Structural analysis identified that the TAS1R2 subunit is primarily responsible for binding artificial sweeteners like sucralose and aspartame within a common binding pocket and couples to the G protein.",
+        "The structure reveals coordinated structural changes, including a specific kink in the TAS1R3 CR linker, consistent with an active state and facilitating G protein engagement."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "reasoning": "Both PDB metadata and the paper explicitly identify the component as Nanobody 35 and describe its role as a stabilizing agent.",
+                    "quote_or_path": "polymer_components[2].description; purification was performed in the presence of recombinant Nb35 nanobodies 58 to help stabilize the receptor-G protein complex.",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "5362970",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper identifies sucralose as an artificial sweetener and an agonist bound to the receptor, forming an 'agonist-bound state'.",
+                    "quote_or_path": "Our results reveal the structural basis for sweet detection, provide insights into how a single receptor mediates all our responses to such a wide range of sweet-tasting compounds... We describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame.",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Sucralose"
+        },
+        {
+            "pubchem_id": "134601",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Next, we examined the structure of the human sweet receptor bound to aspartame, one of the most common artificial sweeteners present in a wide range of consumer products.",
+                    "reasoning": "The paper identifies aspartame as an artificial sweetener and an agonist bound to the receptor."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Aspartame"
+        },
+        {
+            "pubchem_id": "24869894",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states PEG400 serves as a sweet ligand, although its binding was not well resolved in the structure.",
+                    "quote_or_path": "Finally, we generated receptor complexes without the G protein, using a different stabilizing agent (polyethylene glycol [PEG400]) that simultaneously serves as a sweet ligand.",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "Medium"
+            },
+            "chain_id": "None",
+            "name": "PEG400"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "174",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Instead, we used ethylene glycol, as this the smallest repeating unit of the PEG400 polymer and functions as a ligand for TAS1R2+3",
+                    "reasoning": "The paper explicitly states ethylene glycol functions as a ligand, representing the smallest unit of PEG400."
+                },
+                "confidence": "Medium"
+            },
+            "chain_id": "None",
+            "name": "Ethylene Glycol"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "The miniGs/gust alpha subunit is an engineered chimera of GNAS (main body) and GNAT3 (gustducin C-terminus, P49704), and this miniGs/gust is fused to the C-terminus of the TAS1R3 receptor subunit.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "method": "Electron microscopy",
+        "release_date": "2025-05-14",
+        "note": "Structure represents the transmembrane (TM) and G-protein complex from Class 3 particles, derived from fitting into 9NOR and 9NOX structures.",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states the structure reflects an active state engaged with G protein signaling, facilitated by conformational changes upon agonist binding."
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

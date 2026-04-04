@@ -54,6 +54,22 @@ class TestFixtureFilesExist:
         assert REAL_PDB_DIR.is_dir()
         assert (REAL_PDB_DIR / "logs").is_dir()
         assert (REAL_PDB_DIR / "validation_logs").is_dir()
+        assert (REAL_PDB_DIR / "ai_results").is_dir()
+        assert (REAL_PDB_DIR / "enriched").is_dir()
+        assert (REAL_PDB_DIR / "cache").is_dir()
+
+    @pytest.mark.parametrize("pdb_id", REAL_PDB_IDS)
+    def test_ai_results_exist(self, pdb_id: str) -> None:
+        ai_dir = REAL_PDB_DIR / "ai_results" / pdb_id
+        assert ai_dir.is_dir(), f"Missing AI results dir: {ai_dir}"
+        runs = list(ai_dir.glob("run_*.json"))
+        assert len(runs) >= 1, f"No run files for {pdb_id}"
+
+    @pytest.mark.parametrize("pdb_id", REAL_PDB_IDS)
+    def test_enriched_exists(self, pdb_id: str) -> None:
+        path = REAL_PDB_DIR / "enriched" / f"{pdb_id}.json"
+        assert path.exists(), f"Missing enriched fixture: {path}"
+        assert path.stat().st_size > 0, f"Empty enriched fixture: {path}"
 
 
 class TestWorkspaceFixtureLoading:

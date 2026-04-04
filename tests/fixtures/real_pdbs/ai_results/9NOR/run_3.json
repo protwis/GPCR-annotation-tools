@@ -1,0 +1,80 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor, a heterodimer of TAS1R2 and TAS1R3, was determined at high resolution, providing the structural basis for sweet perception.",
+        "Agonist binding, exemplified by the artificial sweeteners sucralose and aspartame, occurs in a common binding pocket exclusively within the TAS1R2 subunit.",
+        "Ligand binding induces coordinated conformational changes between the two subunits, with TAS1R2 adopting a closed state and TAS1R3 maintaining an open conformation."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "5362557",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame\"; \"The TAS1R2 subunit binds the ligands and couples to the G protein",
+                    "reasoning": "The paper explicitly identifies sucralose as an artificial sweetener used to achieve an agonist-bound, active state, and states it binds to TAS1R2."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "pubchem_id": "134631",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame.\"; \"Aspartame also binds to the TAS1R2 subunit in the same binding pocket as sucralose",
+                    "reasoning": "The paper explicitly identifies aspartame as an artificial sweetener that binds to the receptor, acting as an agonist."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        },
+        {
+            "pubchem_id": "174",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Instead, we used ethylene glycol, as this the smallest repeating unit of the PEG400 polymer and functions as a ligand for TAS1R2+3; the diagram denotes the molecular structure of ethylene glycol. Note that starting at approximately 300 mM, ethylene glycol begins to evoke calcium responses that are no longer blocked by lactisole.",
+                    "reasoning": "The paper states ethylene glycol acts as a ligand and evokes calcium responses, indicating agonistic activity, though its resolution was limited."
+                },
+                "value": "Agonist",
+                "confidence": "Medium"
+            },
+            "chain_id": "A",
+            "name": "Ethylene Glycol"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "method": "Electron microscopy",
+        "note": "",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the structure was obtained in the agonist-bound state and provides a clear defense for inferring an active state from conformational changes.",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame\"; \"We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

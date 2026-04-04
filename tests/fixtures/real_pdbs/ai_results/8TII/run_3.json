@@ -1,0 +1,80 @@
+{
+    "key_findings": [
+        "The structure reveals that arrestin finger loops engage the micelle surface rather than the receptor's cytoplasmic cleft, a distinct mode of interaction compared to most reported GPCR-arrestin complexes.",
+        "ACKR3 phosphorylation barcodes (GRK2 vs GRK5) differentially regulate how strongly arrestins interact with the receptor and influence the structural and dynamic properties of the resulting receptor-arrestin assemblies.",
+        "Distinct conformational and dynamic differences exist between Arr2 and Arr3 in complex with ACKR3, notably Arr3's C-lobe does not anchor to the micelle, granting it greater flexibility."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly identifies Fab7 as an antigen-binding fragment.",
+                    "quote_or_path": "we developed an antigen-binding fragment (Fab7)",
+                    "source": "Paper"
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "H, L",
+            "name": "Fab7"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description; An anti-Fab nanobody was included to further rigidify the hinge of Fab7.",
+                    "reasoning": "PDB metadata describes it as an 'anti-Fab nanobody' and the paper confirms its role and nature."
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "none",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "non_polymer_components",
+                    "reasoning": "The PDB metadata explicitly lists no non-polymer components, indicating an apo structure in terms of binding pocket ligands."
+                },
+                "value": "Apo (no ligand)",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Engineered beta-arrestin-1 (Arr2*) with I386A, V387A, F388A mutations in its C-tail.",
+            "chain_id": "A"
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "method": "Electron microscopy",
+        "release_date": "2025-01-22",
+        "note": "Reconstituted in POPC/POPS nanodiscs.",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "Fab7 selectively trapped Arr2 in an active conformation; ACKR3 ... robustly recruits arrestins following activation by CXCL12",
+                "reasoning": "The paper explicitly states that Fab7 traps arrestin in an active conformation, and ACKR3 recruits arrestins upon activation, indicating an active state."
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

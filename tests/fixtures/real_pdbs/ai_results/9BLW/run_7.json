@@ -1,0 +1,91 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[3].description; nanobody 35 (Nb35)",
+                    "reasoning": "Both the PDB metadata and the paper explicitly identify this component as a Nanobody."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nanobody-35"
+        },
+        {
+            "type": {
+                "value": "RAMP",
+                "evidence": {
+                    "reasoning": "Both the PDB metadata and the paper explicitly identify this component as a RAMP.",
+                    "quote_or_path": "polymer_components[4].description; Receptor activity-modifying protein 1",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Receptor activity-modifying protein 1"
+        }
+    ],
+    "key_findings": [
+        "Cagrilintide has an amylin-like binding mode but, compared to other peptides, induces distinct conformational dynamics at calcitonin-family receptors that could contribute to its clinical efficacy.",
+        "The introduction of the R17Cagri-E14Cagri intra-peptide ionic lock energetically favours the formation of a predominant bypass conformation at the CTR.",
+        "Cagri primarily engages the CTR in a bypass conformation, equivalent to that observed when bound to AMYRs, with 85% of particles in the final particle stack stabilised in this conformation, distinct from the CT-like conformation observed with sCT."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "peptide",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "cagrilintide, a long-acting amylin and calcitonin receptor agonist.",
+                    "reasoning": "The paper explicitly states Cagrilintide is an agonist for both amylin and calcitonin receptors."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "P",
+            "name": "Cagrilintide"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "G"
+            },
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "A"
+            },
+            "note": "Engineered dominant-negative Gs (DNGs) protein.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "B"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.2,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "Gs-coupled, active, amylin receptors",
+                "reasoning": "The paper explicitly states the receptor is in an 'active' state due to Gs-coupling."
+            },
+            "confidence": "High"
+        },
+        "release_date": "2025-04-16",
+        "note": "Cagrilintide backbone (non-acylated), engineered dominant-negative Gs protein.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "calcr_human",
+        "chain_id": "R"
+    }
+}

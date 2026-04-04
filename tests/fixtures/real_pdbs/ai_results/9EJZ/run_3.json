@@ -1,0 +1,222 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper describes scFv16 as a single-chain construct of Fab16, used for stabilization, which clearly classifies it as an scFv type.",
+                    "quote_or_path": "A single-chain construct of Fab16 (scFv16)41; stabilization with scFv16",
+                    "source": "Paper"
+                },
+                "value": "scFv",
+                "confidence": "High"
+            },
+            "chain_id": "H",
+            "name": "scFv16"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[5].description; Nb35 expression and purification",
+                    "reasoning": "Both the PDB metadata and the paper explicitly identify this as a nanobody."
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "The high-resolution cryo-EM structure revealed a novel extrahelical allosteric binding site at the interface between transmembrane domains 3 and 4 of the M5 mAChR, which binds selective positive allosteric modulators (PAMs) like VU6007678.",
+        "VU6007678's binding at this site stabilizes the active state of the M5 mAChR, positioned near the DRY activation motif, thus demonstrating a mechanism for positive allosteric modulation distinct from previously characterized sites.",
+        "The study clarifies the structural basis for M5-selective allosteric modulation, providing a foundation for rational structure-based drug design targeting this therapeutically important receptor."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "154731959",
+            "type": "small-molecule",
+            "chem_comp_id": "A1BKS",
+            "synonyms": [
+                "VU6007678",
+                "2222737-15-5",
+                "N-[(1R)-4-fluoro-2,3-dihydro-1H-inden-1-yl]-1-(1H-indazol-5-ylsulfonyl)-N-propylpiperidine-4-carboxamide",
+                "A1BKS",
+                "GTPL14058"
+            ],
+            "role": {
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "structure_details.title; positive allosteric modulator VU6007678; VU6007678 demonstrated robust positive functional cooperativity with ACh signalling and exhibited significant allosteric agonism.",
+                    "reasoning": "The PDB title and the paper explicitly state VU6007678 is a positive allosteric modulator and exhibits allosteric agonism."
+                },
+                "value": "Ago-PAM",
+                "confidence": "High"
+            },
+            "chain_id": "R",
+            "name": "VU6007678"
+        },
+        {
+            "chem_comp_id": "ACH",
+            "type": "small-molecule",
+            "pubchem_id": "187",
+            "synonyms": [
+                "acetylcholine",
+                "O-Acetylcholine",
+                "51-84-3",
+                "Choline acetate (ester)",
+                "2-acetyloxyethyl(trimethyl)azanium",
+                "2-(Acetyloxy)-N,N,N-trimethylethanaminium",
+                "ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl-",
+                "N9YNS0M02X",
+                "CHEBI:15355",
+                "[2-(acetyloxy)ethyl]trimethylazanium",
+                "2-acetyloxyethyl-trimethylazanium",
+                "DTXSID8075334",
+                "(2-(acetyloxy)ethyl)trimethylazanium",
+                "Cusi, Acetilcolina",
+                "Fluoride, Acetylcholine",
+                "RefChem:5512",
+                "Hydroxide, Acetylcholine",
+                "Acetylcholine L Tartrate",
+                "L-Tartrate, Acetylcholine",
+                "DTXCID6040951",
+                "200-128-9",
+                "Acetylcholine Picrate",
+                "Choline acetate",
+                "(2-Acetoxyethyl)trimethylammonium",
+                "Acetyl choline ion",
+                "Acetylcholinum",
+                "Acetyl choline cation",
+                "Ach",
+                "Azetylcholin",
+                "COL Acetate",
+                "Acetylcholine cation",
+                "BRN 1764436",
+                "(2-Acetoxyethyl)trimetilammonium",
+                "CHEMBL667",
+                "[3H]acetylcholine",
+                "14047-05-3",
+                "2-acetoxyethyl(trimethyl)ammonium;bromide",
+                "NCGC00018123-05",
+                "EINECS 200-128-9",
+                "UNII-N9YNS0M02X",
+                "2rin",
+                "3rqw",
+                "(14C)Acetylcholine",
+                "(14C)-Acetylcholine",
+                "Spectrum_000022",
+                "2ha4",
+                "2xz5",
+                "starbld0009701",
+                "Spectrum2_001258",
+                "Spectrum3_000286",
+                "Spectrum4_000136",
+                "Spectrum5_000762",
+                "Epitope ID:176773",
+                "cid_6060",
+                "SCHEMBL3216",
+                "ACETYLCHOLINE [VANDF]",
+                "BSPBio_001792",
+                "GTPL294",
+                "KBioGR_000552",
+                "KBioSS_000382",
+                "4-04-00-01446 (Beilstein Handbook Reference)",
+                "DivK1c_000686",
+                "SPBio_001196",
+                "ACETYLCHOLINE [WHO-DD]",
+                "Acetylcholinium: acetyl-Choline",
+                "GTPL8593",
+                "orb1991950",
+                "orb2279699",
+                "BDBM10759",
+                "KBio1_000686",
+                "KBio2_000382",
+                "KBio2_002950",
+                "KBio2_005518",
+                "KBio3_001292",
+                "NINDS_000686",
+                "HMS2089A14",
+                "ACETYLCHOLINE [USP IMPURITY]",
+                "NSC800293",
+                "AKOS040734806",
+                "DB03128",
+                "NSC-800293",
+                "2-acetyloxy-N,N,N-trimethylethanaminium",
+                "IDI1_000686",
+                "NCGC00018123-01",
+                "NCGC00018123-02",
+                "NCGC00018123-03",
+                "NCGC00018123-04",
+                "NCGC00021161-03",
+                "NCGC00021161-04",
+                "NCGC00163215-01",
+                "2-Acetoxy-N,N,N-trimethylethan-1-aminium",
+                "SBI-0051271.P003",
+                "CS-0453239",
+                "NS00002053",
+                "ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl",
+                "C01996",
+                "AB00053790-25",
+                "AB00053790_26",
+                "AB00053790_27",
+                "L000783",
+                "Q180623",
+                "BRD-K82381502-003-23-1",
+                "BRD-K82381502-003-24-9",
+                "Ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl- (9CI)",
+                "2-(Acetyloxy)-N,N,N-trimethylethanaminium labeled with carbon-14",
+                "Ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl-, labeled with carbon-14",
+                "InChI=1/C7H16NO2/c1-7(9)10-6-5-8(2,3)4/h5-6H2,1-4H3/q+"
+            ],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "structure_details.title; agonist acetylcholine; used the endogenous agonist ACh.",
+                    "reasoning": "The PDB title and the paper explicitly state acetylcholine is an agonist."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "R",
+            "name": "ACETYLCHOLINE"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "G"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnap_human",
+                "chain_id": "A"
+            },
+            "note": "Engineered mGaq chimeric G-protein with a mini-Gas backbone substituted with Gaq residues at the receptor interface and the aN of Gai.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_rat",
+                "chain_id": "B"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 2.06,
+        "method": "Electron microscopy",
+        "release_date": "2025-08-13",
+        "note": "Modified M5 mAChR construct with residues 237-421 of ICL3 removed, and HA signal sequence and anti-Flag epitope tag added to the N terminus.",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states that the structure represents the active state of the receptor.",
+                "quote_or_path": "The active state M5 mAChR displays all the hallmarks of an active state class A GPCR.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "machr5_human",
+        "chain_id": "R"
+    }
+}

@@ -1,0 +1,112 @@
+{
+    "key_findings": [
+        "Cryo-EM reveals the structure of the human sweet taste receptor, a heteromer composed of TAS1R2 and TAS1R3 GPCRs.",
+        "The TAS1R2 subunit binds sweet ligands and couples to the G protein, while TAS1R3 maintains an open conformation and coordinates structural changes between subunits.",
+        "The study identifies a common binding pocket on TAS1R2 that recognizes diverse artificial sweeteners like sucralose and aspartame, providing a structural basis for sweet detection."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description; The cells also co-expressed G\u1e9e and Gy, and the purification was performed in the presence of recombinant Nb35 nanobodies to help stabilize the receptor-G protein complex.",
+                    "reasoning": "PDB metadata identifies the protein as 'Nanobody 35 (NB35)', and the paper confirms its role as a nanobody used for stabilization."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody 35 (NB35)"
+        }
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "71490",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars.",
+                    "reasoning": "The paper identifies sucralose as an artificial sweetener used to achieve the 'agonist-bound state' of the receptor."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "134901",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars.",
+                    "reasoning": "The paper identifies aspartame as an artificial sweetener used to achieve the 'agonist-bound state' of the receptor."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        },
+        {
+            "pubchem_id": "24750",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Finally, we generated receptor complexes without the G protein, using a different stabilizing agent (polyethylene glycol [PEG400]) that simultaneously serves as a sweet ligand.",
+                    "reasoning": "The paper explicitly states that PEG400 'simultaneously serves as a sweet ligand' for the receptor."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "PEG400"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "G\u03b1 chimera; miniGs/gust is a modified G\u03b1s (GNAS) with the last 25 C-terminal amino acids replaced with the corresponding sequence from human gustducin (GNAT3), as described in Figure S1E legend, Page 21.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the receptor was generated in the 'agonist-bound state' and describes structural features consistent with an 'active state' receptor conformation due to agonist binding and G protein coupling.",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; Our results show that the two CR linkers sit in close proximity in the agonist-bound state of the receptor, with a notable kink in the CR linker of TAS1R3 that intercalates into the TAS1R2-TAS1R3 interface at the base of the VFT dimer",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "The structure is of the human sweet taste receptor, a heteromer composed of TAS1R2 + TAS1R3 GPCRs.",
+        "release_date": "2025-05-14"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

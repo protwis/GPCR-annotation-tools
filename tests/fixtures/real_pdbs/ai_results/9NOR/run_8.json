@@ -1,0 +1,77 @@
+{
+    "key_findings": [
+        "The cryo-EM structure of the human sweet taste receptor (TAS1R2+TAS1R3 heterodimer) was determined in an agonist-bound state, revealing the structural basis for sweet detection.",
+        "A common binding pocket within the TAS1R2 subunit was identified for artificial sweeteners sucralose and aspartame.",
+        "Coordinated conformational changes between TAS1R2 and TAS1R3 subunits upon ligand binding were demonstrated, highlighting TAS1R3's role as an obligatory partner for receptor function."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "The human sweet receptor is a heterodimer composed of TAS1R2 and TAS1R3 subunits.; TAS1R2 in the sweet receptor binds the sweetener ligand and couples to the G protein. What does TAS1R3 do? This subunit is an obligatory partner of TAS1R2 for sweet receptor function.",
+                    "reasoning": "TAS1R3 is a GPCR subunit forming a heteromer with TAS1R2 but does not bind agonists directly, acting as an obligatory functional partner for the sweet taste receptor."
+                },
+                "value": "Other",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "TAS1R3"
+        }
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "Unknown",
+            "type": "small-molecule",
+            "pubchem_id": "69293",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to the artificial sweeteners\u2014sucralose and aspartame.; The TAS1R2 subunit binds the ligands and couples to the G protein; Our results showed that Y103A, D142A, and S165A each dramatically impacted responses to sucralose (Figure 2E).",
+                    "reasoning": "The paper explicitly states sucralose is an artificial sweetener functioning as an agonist, binding to TAS1R2, and mutations in its binding pocket affect responses."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "pubchem_id": "47135",
+            "type": "small-molecule",
+            "chem_comp_id": "Unknown",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to the artificial sweeteners\u2014sucralose and aspartame.; Aspartame also binds to the TAS1R2 subunit in the same binding pocket as sucralose",
+                    "reasoning": "The paper explicitly states aspartame is an artificial sweetener functioning as an agonist, binding to TAS1R2, and binding in the same pocket as sucralose."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.4,
+        "state": {
+            "evidence": {
+                "reasoning": "The paper explicitly states the structure is of the receptor bound to artificial sweeteners (agonists) and discusses features indicative of an 'active' state, including signaling and G protein engagement.",
+                "quote_or_path": "the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to the artificial sweeteners\u2014sucralose and aspartame. Our results reveal the structural basis for sweet detection, provide insights into how a single receptor mediates all our responses to such a wide range of sweet-tasting compounds, and open up unique possibilities for designing a generation of taste modulators informed by the structure of the human receptor.; We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "source": "Paper"
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "Structure of the human sweet taste receptor composed of TAS1R2 and TAS1R3 heterodimer from combined datasets.",
+        "release_date": "2025-05-14"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

@@ -1,0 +1,78 @@
+{
+    "key_findings": [
+        "The cryo-EM structure reveals that muscarinic toxin 3 (MT3) antagonistically modulates M4AChR by partially occupying the orthostatic site with its finger loop 2, preventing the binding of other ligands.",
+        "The structure shows M4AChR in an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core, in line with MT3's antagonistic activity.",
+        "This study demonstrates a structure-guided approach for engineering MT3 variants that achieve subtype-selective modulation of adrenergic and muscarinic receptors, holding therapeutic potential."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Briefly, receptors were engineered by inserting mBril between TM5 and TM6 to create continuous helices within the receptor.",
+                    "reasoning": "The paper explicitly states mBril was inserted into the receptor to enhance stability, indicating its role as a fusion protein."
+                },
+                "value": "Fusion protein",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "Soluble cytochrome b562"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "protein",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states MT3's role as an antagonist.",
+                    "quote_or_path": "MT3 elucidates its role as an antagonist rather than an allosteric modulator like MT7",
+                    "source": "Paper"
+                },
+                "value": "Antagonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "g_gamma_subunit_human",
+                "chain_id": "I"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas_human",
+                "chain_id": "G"
+            },
+            "note": "Engineered G protein with G\u03b1 chimera from gnas_human and gna15_human, where the \u03b15 helix was from gna15_human to confer Gi-specificity.",
+            "beta_subunit": {
+                "uniprot_entry_name": "g_beta_subunit_human",
+                "chain_id": "H"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.6,
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).",
+                "reasoning": "The paper explicitly states that the receptor is in an inactive conformation due to MT3's antagonistic activity."
+            },
+            "value": "inactive",
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "mBril fusion protein inserted between TM5 and TM6; K3-ALFA helical tag at C-terminus of H8 for stability.",
+        "release_date": "2025-07-23"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

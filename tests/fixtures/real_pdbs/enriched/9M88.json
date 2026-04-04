@@ -1,0 +1,1809 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "9M88",
+      "entry": {
+        "id": "9M88"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00009m88"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8"
+        ],
+        "pubmed_id": 40866348,
+        "emdb_ids": [
+          "EMD-63702"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "assembly mmCIF",
+            "validation slider image",
+            "validation report",
+            "validation data mmCIF"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "N"
+      },
+      "struct": {
+        "title": "PGS fused GPR3 dimer with antagonist AF64394"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1038/s41467-025-63422-1"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 40866348
+        },
+        "rcsb_pubmed_central_id": "PMC12391488",
+        "rcsb_pubmed_doi": "10.1038/s41467-025-63422-1",
+        "rcsb_pubmed_abstract_text": "Allosteric modulators have gained substantial interest in current GPCR drug discovery. Here, we present a mechanism of allosteric modulation involving the dimerization of GPR3, a promising drug target for metabolic diseases and central nervous system disorders. We show that GPR3 forms constitutive homodimers in live cells and reveal that the inhibitor AF64394 functions as a negative allosteric modulator (NAM) specifically targeting dimeric GPR3. Using cryogenic electron microscopy (cryo-EM), we determine the structures of the AF64394-bound GPR3 dimer and its dimer-Gs signaling complex. These high-resolution structures reveal that AF64394 binds to the transmembrane dimer interface. AF64394 binding prevents the dissociation of the GPR3 dimer upon engagement with Gs and restrains transmembrane helix 5 in an inactive-like intermediate conformation, leading to reduced coupling with Gs. Our studies unveil a mechanism of dimer-specific inhibition of signaling with significant implications for the discovery of drugs targeting GPCRs capable of dimerization.",
+        "rcsb_pubmed_affiliation_info": [
+          "School of Medicine, Shenzhen Campus of Sun Yat-sen University, Sun Yat-sen University, Shenzhen, China.",
+          "Kobilka Institute of Innovative Drug Discovery, The Second Affiliated Hospital, Shenzhen Futian Biomedical Innovation R&D Center, School of Medicine, Chinese University of Hong Kong, Shenzhen, China.",
+          "Department of Medical Neuroscience, School of Medicine, Southern University of Science and Technology, Shenzhen, Guangdong, China.",
+          "Department of Chemistry and Pharmacy, Medicinal Chemistry, Friedrich-Alexander-Universit\u00e4t Erlangen-N\u00fcrnberg, Erlangen, Germany.",
+          "Department of Chemistry and Pharmacy, Medicinal Chemistry, Friedrich-Alexander-Universit\u00e4t Erlangen-N\u00fcrnberg, Erlangen, Germany. peter.gmeiner@fau.de.",
+          "FAU NeW - Research Center New Bioactive Compounds, Friedrich-Alexander-Universit\u00e4t Erlangen-N\u00fcrnberg, Erlangen, Germany. peter.gmeiner@fau.de.",
+          "Department of Chemistry and Pharmacy, Medicinal Chemistry, Friedrich-Alexander-Universit\u00e4t Erlangen-N\u00fcrnberg, Erlangen, Germany. dorothee.weikert@fau.de.",
+          "FAU NeW - Research Center New Bioactive Compounds, Friedrich-Alexander-Universit\u00e4t Erlangen-N\u00fcrnberg, Erlangen, Germany. dorothee.weikert@fau.de.",
+          "Kobilka Institute of Innovative Drug Discovery, The Second Affiliated Hospital, Shenzhen Futian Biomedical Innovation R&D Center, School of Medicine, Chinese University of Hong Kong, Shenzhen, China. yangdu@cuhk.edu.cn.",
+          "Department of Endocrinology, Peking Union Medical College Hospital, Beijing, China. yangdu@cuhk.edu.cn.",
+          "Department of Medical Neuroscience, School of Medicine, Southern University of Science and Technology, Shenzhen, Guangdong, China. xuj8@sustech.edu.cn.",
+          "SUSTech Homeostatic Medicine Institute, School of Medicine, Southern University of Science and Technology, Shenzhen, Guangdong, China. xuj8@sustech.edu.cn.",
+          "Institute for Biology Electron Microscopy, Southern University of Science and Technology, Shenzhen, Guangdong, China. xuj8@sustech.edu.cn."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-63702",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-63702"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "GPCR, dimer, antagonist, MEMBRANE PROTEIN"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2025-03-11T00:00:00Z",
+        "initial_release_date": "2025-09-24T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 1
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2025-09-24T00:00:00Z"
+        },
+        {
+          "ordinal": 9,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2025-10-01T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 9,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 2,
+          "revision_ordinal": 9,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-63702",
+          "details": "PGS fused GPR3 dimer with antagonist AF64394",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Geng, C."
+        },
+        {
+          "name": "Jun, X."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "National Natural Science Foundation of China (NSFC)",
+          "country": "China",
+          "grant_number": null,
+          "ordinal": 1
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "PARTICLE",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 3.1
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "Mechanism and function of GPR3 regulated by a negative allosteric modulator.",
+          "rcsb_journal_abbrev": "Nat Commun",
+          "rcsb_authors": [
+            "Chen, G.",
+            "Blahova, J.",
+            "Staffen, N.",
+            "Hubner, H.",
+            "Nunhofer, N.",
+            "Qiu, C.",
+            "Gmeiner, P.",
+            "Weikert, D.",
+            "Du, Y.",
+            "Xu, J."
+          ],
+          "year": 2025,
+          "journal_volume": "16",
+          "page_first": "7988",
+          "page_last": "7988",
+          "pdbx_database_id_PubMed": 40866348,
+          "pdbx_database_id_DOI": "10.1038/s41467-025-63422-1"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 190.25,
+        "deposited_atom_count": 7137,
+        "deposited_polymer_monomer_count": 1672,
+        "deposited_modeled_polymer_monomer_count": 899,
+        "deposited_unmodeled_polymer_monomer_count": 773,
+        "polymer_entity_count_protein": 2,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "A",
+                "entry_id": "9M88",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            },
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "B",
+                "asym_id": "B",
+                "entry_id": "9M88",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "1",
+            "asym_ids": [
+              "A",
+              "B"
+            ],
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "GPR3",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "6517_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "462573_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "778240_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "714976_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "6937_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "931555_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "DYKDDDDKLEVLFQGPGSADLEDNWETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTRNAYIQKYLMMWGAGSPLAWLSAGSGNVNVSSVGPAEGPTGPAAPLPSPKAWDVVLCISGTLVSCENALVVAIIVGTPAFRAPMFLLVGSLAVADLLAGLGLVLHFAAVFCIGSAEMSLVLVGVLAMAFTASIGSLLAITVDRYLSLYNALTYYSETTVTRTYVMLALVWGGALGLGLLPVLAWNCLDGLTTCGVVYPLSKNHLVVLAIAFFMVFGIMLQLYAQICRIVCGIDCSFWNESYLTGSRDERKKSLLSKFGMDEGVTFMFIGRFDRGQKGVDVLLKAIEILSSKKEFQEMRFIIIGKGDPELEGWARSLEEKHGNVKVITEMLSREFVRELYGSVDFVIIPSYFEPFGLVALEAMCLGAIPIASAVGGLRDIITNETGILVKAGDPGELANAILKALELSRSDLSKFRENCKKRAMSFSRKGIATLAVVLGAFAACWLPFTVYCLLGDAHSPPLYTYLTLLPATYNSMINPIIYAFRNQDVQKVLWAVCCCCSSSKIPFRSRSPSDVLEHHHHHHHHH",
+            "rcsb_sample_sequence_length": 640,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Spodoptera aff. frugiperda 1 BOLD-2017"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "C",
+                "asym_id": "C",
+                "entry_id": "9M88",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8038006"
+                }
+              ],
+              "rcsb_polymer_struct_conn": null
+            },
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "D",
+                "asym_id": "D",
+                "entry_id": "9M88",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8038006"
+                }
+              ],
+              "rcsb_polymer_struct_conn": null
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "2",
+            "asym_ids": [
+              "C",
+              "D"
+            ],
+            "auth_asym_ids": [
+              "C",
+              "D"
+            ],
+            "uniprot_ids": [
+              "Q9V2J8"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q9V2J8"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q9V2J8",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Pyrococcus abyssi (strain GE5 / Orsay)"
+                }
+              },
+              "rcsb_uniprot_external_reference": null,
+              "gpcrdb_entry_name_slug": "q9v2j8_pyrab"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Glycogen synthase",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Bacterial/plant glycogen synthase",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "UDP-glycosyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "alpha-1,4-glucan glucosyltransferase (NDP-glucose donor) activity",
+                  "depth": null
+                },
+                {
+                  "name": "glycosyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "alpha-1,4-glucan glucosyltransferase (UDP-glucose donor) activity",
+                  "depth": null
+                },
+                {
+                  "name": "transferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "glucosyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "hexosyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "UDP-glucosyltransferase activity",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Starch synthase, catalytic domain",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "9644_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "47349_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "2828_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "32189_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "42798_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "Q9V2J8",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "53764_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "GIDCSFWNESYLTGSRDERKKSLLSKFGMDEGVTFMFIGRFDRGQKGVDVLLKAIEILSSKKEFQEMRFIIIGKGDPELEGWARSLEEKHGNVKVITEMLSREFVRELYGSVDFVIIPSYFEPFGLVALEAMCLGAIPIASAVGGLRDIITNETGILVKAGDPGELANAILKALELSRSDLSKFRENCKKRAMSFS",
+            "rcsb_sample_sequence_length": 196,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Pyrococcus abyssi",
+              "ncbi_scientific_name": "Pyrococcus abyssi",
+              "rcsb_gene_name": [
+                {
+                  "value": "PAB2292",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Spodoptera aff. frugiperda 1 BOLD-2017"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": [
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "3",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "E",
+              "Q"
+            ],
+            "nonpolymer_comp_id": "5YM"
+          },
+          "rcsb_nonpolymer_entity_annotation": [
+            {
+              "type": "SUBJECT_OF_INVESTIGATION"
+            }
+          ],
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "401",
+                "auth_asym_id": "A",
+                "asym_id": "E",
+                "entry_id": "9M88",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2096,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "403",
+                "auth_asym_id": "B",
+                "asym_id": "Q",
+                "entry_id": "9M88",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2096,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "(Z)-N-(2-hydroxyethyl)octadec-9-enamide"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "5YM",
+              "formula_weight": 325.529,
+              "name": "(Z)-N-(2-hydroxyethyl)octadec-9-enamide",
+              "formula": "C20 H39 N O2"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "BOWVQLFMWHZBEF-KTKRTIGZSA-N",
+              "SMILES": "CCCCCCCCC=CCCCCCCCC(=O)NCCO",
+              "SMILES_stereo": "CCCCCCCC/C=C\\CCCCCCCC(=O)NCCO"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "5283454",
+            "gpcrdb_pubchem_synonyms": [
+              "oleoylethanolamide",
+              "111-58-0",
+              "N-(2-Hydroxyethyl)oleamide",
+              "Oleoyl Ethanolamide",
+              "(Z)-N-(2-hydroxyethyl)octadec-9-enamide",
+              "Oleoyl monoethanolamide",
+              "OLEIC MONOETHANOLAMIDE",
+              "N-(9Z-octadecenoyl)-ethanolamine",
+              "N-(cis-9-octadecenoyl) ethanolamine",
+              "1HI5J9N8E6",
+              "9-Octadecenamide, N-(2-hydroxyethyl)-",
+              "DTXSID1044516",
+              "9-Octadecenamide, N-(2-hydroxyethyl)-, (9Z)-",
+              "CHEBI:71466",
+              "RefChem:856533",
+              "DTXCID9024516",
+              "203-884-8",
+              "Oleoylethanolamine",
+              "n-oleoylethanolamine",
+              "Oleylethanolamide",
+              "Oleamide MEA",
+              "N-oleoyl ethanolamine",
+              "N-oleoylethanolamide",
+              "(9Z)-N-(2-hydroxyethyl)octadec-9-enamide",
+              "N-oleoyl ethanolamide",
+              "MFCD00045972",
+              "N-(2-Hydroxyethyl)-9-octadecenamide",
+              "Oleic acid ethanolamide",
+              "N-(Hydroxyethyl)oleamide",
+              "N-(hydroxyethyl) oleamide",
+              "OEA",
+              "CHEMBL280065",
+              "N-?Oleoylethanolamide",
+              "(9Z)-N-(2-Hydroxyethyl)-9-octadecenamide",
+              "SR-01000076041",
+              "EINECS 203-884-8",
+              "UNII-1HI5J9N8E6",
+              "Monoethanolamine oleic acid amide",
+              "9-Octadecenamide, N-(2-hydroxyethyl)-, (Z)-",
+              "5YM",
+              "Olemsartan Medoximil",
+              "C18:1 Anandamide",
+              "oleoyl 1-ethanolamide",
+              "Tocris-1484",
+              "N-Oleoyl-2-aminoethanol",
+              "Oleoylethanolamide (OEA)",
+              "Spectrum5_002037",
+              "Lopac-O-0383",
+              "Oleic acid monoethanolamide",
+              "Lopac0_000942",
+              "MLS002153155",
+              "SCHEMBL177713",
+              "GTPL2661",
+              "orb1309303",
+              "orb3025241",
+              "BDBM29080",
+              "N-(9Z-octadecenoyl) ethanolamine",
+              "GLXC-22224",
+              "HMS2233E21",
+              "HMS3262N06",
+              "HMS3412D21",
+              "HMS3649J05",
+              "HMS3676D21",
+              "OLEYLETHANOLAMIDE [WHO-DD]",
+              "NAE 18:1",
+              "Tox21_500942",
+              "LMFA08040015",
+              "MSK159624",
+              "N-Oleoylethanolamine, ~98% (TLC)",
+              "NAE(18:1)",
+              "AKOS015839895",
+              "N-(2-Hydroxyethyl)-9Z-octadecenamide",
+              "CCG-205023",
+              "EBC-615639",
+              "LP00942",
+              "MSK159624-100M",
+              "SDCCGSBI-0050916.P002",
+              "MSK159624-1000M",
+              "NCGC00015761-01",
+              "NCGC00015761-02",
+              "NCGC00015761-03",
+              "NCGC00015761-04",
+              "NCGC00015761-05",
+              "NCGC00015761-06",
+              "NCGC00015761-07",
+              "NCGC00015761-12",
+              "NCGC00025182-01",
+              "NCGC00025182-02",
+              "NCGC00025182-04",
+              "NCGC00025182-05",
+              "NCGC00025182-06",
+              "NCGC00261627-01",
+              "AS-15152",
+              "BP-43134",
+              "FO180525",
+              "SMR001230650",
+              "SY102076",
+              "Oleic Acid Ethanolamide; Oleoylethanolamide",
+              "HY-107542",
+              "CS-0028847",
+              "EU-0100942",
+              "NS00013916",
+              "O0345",
+              "C20792",
+              "D82195",
+              "O 0383",
+              "9-OCTADECENAMIDE, N-(2-HYDROXYETHYL)-, Z",
+              "Q7086404",
+              "SR-01000076041-1",
+              "SR-01000076041-3",
+              "SR-01000076041-8",
+              "BRD-K66956375-001-11-3",
+              "C18:1 anandamide, 9Z-octadecenoylethanolamide, powder",
+              "N-Oleoylethanolamine Solution in Methanol, 1000ug/mL",
+              "N-Oleoylethanolamine Solution in Methanol, 100ug/mL",
+              "N-Oleoylethanolamide; Oleamide MEA; Oleic acid monoethanolamide",
+              "N-oleoyl ethanolamine, Oleoyl monoethanolamide, Oleoylethanolamide"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "5",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "G",
+              "H",
+              "K",
+              "L",
+              "S",
+              "T",
+              "U",
+              "V"
+            ],
+            "nonpolymer_comp_id": "1DO"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "403",
+                "auth_asym_id": "A",
+                "asym_id": "G",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8657,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "404",
+                "auth_asym_id": "A",
+                "asym_id": "H",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8956,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "407",
+                "auth_asym_id": "A",
+                "asym_id": "K",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8324,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "408",
+                "auth_asym_id": "A",
+                "asym_id": "L",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8612,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "405",
+                "auth_asym_id": "B",
+                "asym_id": "S",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8857,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "406",
+                "auth_asym_id": "B",
+                "asym_id": "T",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8721,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "407",
+                "auth_asym_id": "B",
+                "asym_id": "U",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.857,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "408",
+                "auth_asym_id": "B",
+                "asym_id": "V",
+                "entry_id": "9M88",
+                "entity_id": "5"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8384,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "1-DODECANOL"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "1DO",
+              "formula_weight": 186.334,
+              "name": "1-DODECANOL",
+              "formula": "C12 H26 O"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "LQZZUXJYWNFBMV-UHFFFAOYSA-N",
+              "SMILES": "CCCCCCCCCCCCO",
+              "SMILES_stereo": "CCCCCCCCCCCCO"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "8193",
+            "gpcrdb_pubchem_synonyms": [
+              "1-DODECANOL",
+              "Dodecan-1-ol",
+              "Dodecyl alcohol",
+              "Dodecanol",
+              "112-53-8",
+              "Lauryl alcohol",
+              "n-Dodecyl alcohol",
+              "Lauric alcohol",
+              "Laurinic alcohol",
+              "Undecyl carbinol",
+              "Dodecylalcohol",
+              "n-Dodecanol",
+              "1-Dodecyl alcohol",
+              "Pisol",
+              "Dodecyl alcoho",
+              "n-Dodecan-1-ol",
+              "Lorol 5",
+              "Lorol 7",
+              "Duodecyl alcohol",
+              "Lauryl 24",
+              "Alcohol C-12",
+              "Alfol 12",
+              "Lorol 11",
+              "1-Hydroxydodecane",
+              "Siponol L5",
+              "Dytol J-68",
+              "Karukoru 20",
+              "Lauroyl alcohol",
+              "Siponol 25",
+              "Cachalot L-50",
+              "Cachalot L-90",
+              "n-Lauryl alcohol",
+              "Sipol L12",
+              "Siponol L2",
+              "Lorol",
+              "EPAL 12",
+              "C12 alcohol",
+              "Hainol 12SS",
+              "Hydroxydodecane",
+              "Conol 20P",
+              "Conol 20PP",
+              "Adol 10",
+              "Adol 12",
+              "Dodecanol-1",
+              "n-Lauryl alcohol, primary",
+              "Nacol 12-96",
+              "CO-1214",
+              "Alcohol C12",
+              "CO-1214N",
+              "CO-1214S",
+              "MFCD00004753",
+              "FEMA No. 2617",
+              "NAA 42",
+              "MA-1214",
+              "Lipocol L",
+              "27342-88-7",
+              "S 1298",
+              "Lorol C12",
+              "DTXSID5026918",
+              "Co-1214S1-dodecanol",
+              "178A96NLP2",
+              "NSC-3724",
+              "Lauryl Alcohol; 1-Dodecanol",
+              "DTXCID906918",
+              "Adol 11",
+              "Lorol C 12",
+              "FEMA Number 2617",
+              "Dytol J-68 (VAN)",
+              "Lorol C 12/98",
+              "1DO",
+              "CAS-112-53-8",
+              "CCRIS 662",
+              "Dodecanol, 1-",
+              "HSDB 1075",
+              "NSC 3724",
+              "EINECS 203-982-0",
+              "BRN 1738860",
+              "laurylalcohol",
+              "Lorol special",
+              "UNII-178A96NLP2",
+              "AI3-00309",
+              "Domiphen Impurity 3",
+              "Philcohol 1200",
+              "LAUREX NC",
+              "1-Dodecanol (Standard)",
+              "LAUREX L1",
+              "1-Dodecanol 100 microg/mL in Acetonitrile",
+              "1-DODECANOL [MI]",
+              "1-Dodecanol, 98.0%",
+              "EC 203-982-0",
+              "SCHEMBL6844",
+              "1-DODECANOL [HSDB]",
+              "SCHEMBL79575",
+              "SCHEMBL93237",
+              "LAURYL ALCOHOL [FCC]",
+              "4-01-00-01844 (Beilstein Handbook Reference)",
+              "CHEMBL24722",
+              "LAURYL ALCOHOL [FHFI]",
+              "SCHEMBL168859",
+              "SCHEMBL991227",
+              "C12H25OH",
+              "orb1298051",
+              "SCHEMBL8433774",
+              "SCHEMBL9191327",
+              "WLN: Q12",
+              "Lauryl alcohol, >=98%, FG",
+              "NACOL 12-99 ALCOHOL",
+              "LAURYL ALCOHOL [USP-RS]",
+              "SCHEMBL11744779",
+              "SCHEMBL16012697",
+              "SCHEMBL19681410",
+              "SCHEMBL26697594",
+              "SCHEMBL28251564",
+              "1-dodecanol (ACD/Name 4.0)",
+              "1-Dodecanol, analytical standard",
+              "ALFOL 1216 CO ALCOHOL",
+              "CHEBI:28878",
+              "HY-Y0289R",
+              "NSC3724",
+              "12 OH",
+              "1-Dodecanol, reagent grade, 98%",
+              "CS-D1360",
+              "HY-Y0289",
+              "Tox21_202124",
+              "Tox21_300120",
+              "EBC-47485",
+              "LMFA05000001",
+              "MSK160827",
+              "SBB008734",
+              "STL301829",
+              "CACHALOT L-90 LAURYL ALCOHOL",
+              "Co 12Co-1214Co-1214N",
+              "AKOS009031450",
+              "DB06894",
+              "FD54786",
+              "MSK160827-100M",
+              "1-Dodecanol, ACS reagent, >=98.0%",
+              "NCGC00164341-01",
+              "NCGC00164341-02",
+              "NCGC00164341-03",
+              "NCGC00253987-01",
+              "NCGC00259673-01",
+              "BP-31213",
+              "CS-16955",
+              "DB-003637",
+              "DB-312102",
+              "1-Dodecanol, SAJ special grade, >=97.0%",
+              "1-Dodecanol, Selectophore(TM), >=98.0%",
+              "1-dodecanol; dodecyl alcohol; lauryl alcohol",
+              "D0978",
+              "NS00002080",
+              "ST51046177",
+              "1-Dodecanol Solution in Methanol, 100ug/mL",
+              "EN300-20043",
+              "C02277",
+              "F358252",
+              "Q161617",
+              "Z104476554",
+              "Lauryl alcohol, United States Pharmacopeia (USP) Reference Standard"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "6",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "I",
+              "J",
+              "W",
+              "X"
+            ],
+            "nonpolymer_comp_id": "A1EM3"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "406",
+                "auth_asym_id": "A",
+                "asym_id": "J",
+                "entry_id": "9M88",
+                "entity_id": "6"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4387,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "409",
+                "auth_asym_id": "B",
+                "asym_id": "W",
+                "entry_id": "9M88",
+                "entity_id": "6"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2443,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "410",
+                "auth_asym_id": "B",
+                "asym_id": "X",
+                "entry_id": "9M88",
+                "entity_id": "6"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.399,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "405",
+                "auth_asym_id": "A",
+                "asym_id": "I",
+                "entry_id": "9M88",
+                "entity_id": "6"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.3527,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "[(2R)-3-[2-azanylethoxy(oxidanyl)phosphoryl]oxy-2-decanoyloxy-propyl] dodecanoate"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1EM3",
+              "formula_weight": 551.693,
+              "name": "[(2R)-3-[2-azanylethoxy(oxidanyl)phosphoryl]oxy-2-decanoyloxy-propyl] dodecanoate",
+              "formula": "C27 H54 N O8 P"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "GFVZVLNRUBXMQX-RUZDIDTESA-N",
+              "SMILES": "CCCCCCCCCCCC(=O)OCC(COP(=O)(O)OCCN)OC(=O)CCCCCCCCC",
+              "SMILES_stereo": "CCCCCCCCCCCC(=O)OC[C@H](COP(=O)(O)OCCN)OC(=O)CCCCCCCCC"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "134732242",
+            "gpcrdb_pubchem_synonyms": [
+              "A1EM3",
+              "DTXSID901344107",
+              "PE(12:0/10:0)"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "7",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "M",
+              "P",
+              "Y",
+              "Z"
+            ],
+            "nonpolymer_comp_id": "A1EQ8"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "409",
+                "auth_asym_id": "A",
+                "asym_id": "M",
+                "entry_id": "9M88",
+                "entity_id": "7"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.7097,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "402",
+                "auth_asym_id": "B",
+                "asym_id": "P",
+                "entry_id": "9M88",
+                "entity_id": "7"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.7243,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "411",
+                "auth_asym_id": "B",
+                "asym_id": "Y",
+                "entry_id": "9M88",
+                "entity_id": "7"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8598,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "412",
+                "auth_asym_id": "B",
+                "asym_id": "Z",
+                "entry_id": "9M88",
+                "entity_id": "7"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.7499,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "icosan-1-ol"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1EQ8",
+              "formula_weight": 298.547,
+              "name": "icosan-1-ol",
+              "formula": "C20 H42 O"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "BTFJIXJJCSYFAL-UHFFFAOYSA-N",
+              "SMILES": "CCCCCCCCCCCCCCCCCCCCO",
+              "SMILES_stereo": "CCCCCCCCCCCCCCCCCCCCO"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "12404",
+            "gpcrdb_pubchem_synonyms": [
+              "1-EICOSANOL",
+              "Icosan-1-ol",
+              "629-96-9",
+              "Arachidyl alcohol",
+              "Arachidic alcohol",
+              "Arachic alcohol",
+              "Eicosyl alcohol",
+              "N-Eicosanol",
+              "1-Icosanol",
+              "N-1-Eicosanol",
+              "Pri-N-eicosyl alcohol",
+              "NSC 120887",
+              "HSDB 5731",
+              "1QR1QRA9BU",
+              "EINECS 211-119-4",
+              "AI3-36485",
+              "NSC-120887",
+              "1-EICOSANOL [HSDB]",
+              "DTXSID0027272",
+              "CHEBI:75627",
+              "EC 211-119-4",
+              "ARACHIDYL ALCOHOL [USP-RS]",
+              "ARACHIDYL ALCOHOL (USP-RS)",
+              "nEicosanol",
+              "arachyl alcohol",
+              "n1Eicosanol",
+              "Icosan1ol",
+              "prinEicosyl alcohol",
+              "RefChem:432161",
+              "DTXCID007272",
+              "ARACHIDYL ALCOHOL [INCI]",
+              "211-119-4",
+              "InChI=1/C20H42O/c1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21/h21H,2-20H2,1H",
+              "EICOSANOL",
+              "eicosan-1-ol",
+              "MFCD00002938",
+              "icosanol",
+              "28679-05-2",
+              "Arachinyl alcohol",
+              "Eicosanol-(1)",
+              "UNII-1QR1QRA9BU",
+              "a-eicosanol",
+              "1-Ecosanol",
+              "1-Prydroxyeicosane",
+              "n-eicosan-1-ol",
+              "N-Eicosanol (d41)",
+              "1-Eicosanol, 98%",
+              "1-Eicosanol (Standard)",
+              "A1EQ8",
+              "SCHEMBL108302",
+              "SCHEMBL158754",
+              "SCHEMBL630625",
+              "CHEMBL451717",
+              "orb1296988",
+              "orb3026102",
+              "QSPL 202",
+              "SCHEMBL1435928",
+              "SCHEMBL2069657",
+              "SCHEMBL3394049",
+              "SCHEMBL5820037",
+              "SCHEMBL9871388",
+              "1-icosanol (ACD/Name 4.0)",
+              "SCHEMBL18315999",
+              "SCHEMBL28257054",
+              "HY-W004263R",
+              "ZNA55389",
+              "LMFA05000221",
+              "NSC120887",
+              "SBB060169",
+              "AKOS015839826",
+              "CS-W004263",
+              "EBC-389249",
+              "FA68034",
+              "HY-W004263",
+              "MSK159776-100T",
+              "1-Eicosanol, technical, >=90% (GC)",
+              "1-Eicosanol, purum, >=97.0% (GC)",
+              "BP-41333",
+              "BS-51501",
+              "Eicosanol Solution in Toluene, 100ug/mL",
+              "SY049846",
+              "DB-250389",
+              "E0004",
+              "NS00004340",
+              "ST51046403",
+              "H10676",
+              "Q4783532",
+              "ABA1F4B5-39FD-4206-A0A7-70D182257EEE",
+              "Arachidyl alcohol, United States Pharmacopeia (USP) Reference Standard"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "8",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "N",
+              "O"
+            ],
+            "nonpolymer_comp_id": "A1EM2"
+          },
+          "rcsb_nonpolymer_entity_annotation": [
+            {
+              "type": "SUBJECT_OF_INVESTIGATION"
+            }
+          ],
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "410",
+                "auth_asym_id": "A",
+                "asym_id": "N",
+                "entry_id": "9M88",
+                "entity_id": "8"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2282,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "401",
+                "auth_asym_id": "B",
+                "asym_id": "O",
+                "entry_id": "9M88",
+                "entity_id": "8"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2313,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "N-[(4-chloranyl-2-propan-2-yloxy-phenyl)methyl]-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1EM2",
+              "formula_weight": 393.869,
+              "name": "N-[(4-chloranyl-2-propan-2-yloxy-phenyl)methyl]-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine",
+              "formula": "C21 H20 Cl N5 O"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "WBYNZQXAAWPAGR-UHFFFAOYSA-N",
+              "SMILES": "CC(C)Oc1cc(ccc1CNc2cc(nc3n2ncn3)c4ccccc4)Cl",
+              "SMILES_stereo": "CC(C)Oc1cc(ccc1CNc2cc(nc3n2ncn3)c4ccccc4)Cl"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "125286314",
+            "gpcrdb_pubchem_synonyms": [
+              "AF64394",
+              "1637300-25-4",
+              "N-(4-chloro-2-isopropoxybenzyl)-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine",
+              "AF 64394",
+              "(4-Chloro-2-isopropoxy-benzyl)-(5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-yl)-amine",
+              "N-[(4-chloro-2-propan-2-yloxyphenyl)methyl]-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine",
+              "N-{[4-chloro-2-(propan-2-yloxy)phenyl]methyl}-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine",
+              "C21H20ClN5O",
+              "orb1298960",
+              "CHEMBL5415991",
+              "GLXC-05442",
+              "EX-A2781",
+              "MQC30025",
+              "AKOS037648940",
+              "AC-35695",
+              "AF-64394",
+              "AF64394?",
+              "BS-16081",
+              "DA-50253",
+              "HY-12664",
+              "CS-0012165",
+              "D80558",
+              "Z2327235714",
+              "N-[(4-chloro-2-isopropoxy-phenyl)methyl]-5-phenyl-[1,2,4]triazolo[1,5-a]pyrimidin-7-amine"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9M88",
+            "entity_id": "4",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "F",
+              "R"
+            ],
+            "nonpolymer_comp_id": "A1EM1"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "402",
+                "auth_asym_id": "A",
+                "asym_id": "F",
+                "entry_id": "9M88",
+                "entity_id": "4"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.857,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "404",
+                "auth_asym_id": "B",
+                "asym_id": "R",
+                "entry_id": "9M88",
+                "entity_id": "4"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.8731,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "tetracosan-1-ol"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1EM1",
+              "formula_weight": 354.653,
+              "name": "tetracosan-1-ol",
+              "formula": "C24 H50 O"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "TYWMIZZBOVGFOV-UHFFFAOYSA-N",
+              "SMILES": "CCCCCCCCCCCCCCCCCCCCCCCCO",
+              "SMILES_stereo": "CCCCCCCCCCCCCCCCCCCCCCCCO"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "10472",
+            "gpcrdb_pubchem_synonyms": [
+              "1-Tetracosanol",
+              "506-51-4",
+              "Tetracosan-1-ol",
+              "LIGNOCERYL ALCOHOL",
+              "Lignocerol",
+              "n-Tetracosanol",
+              "Tetracosyl alcohol",
+              "Lignoceric alcohol",
+              "n-Tetracosanol-1",
+              "HSDB 5674",
+              "UNII-2N0PI37IOC",
+              "EINECS 208-043-9",
+              "2N0PI37IOC",
+              "NSC 93768",
+              "NSC-93768",
+              "DTXSID8027161",
+              "CHEBI:77413",
+              "EC 208-043-9",
+              "RefChem:25873",
+              "DTXCID107161",
+              "TETRACOSANOL (CONSTITUENT OF SAW PALMETTO)",
+              "208-043-9",
+              "Tetracosanol",
+              "MFCD00042662",
+              "1-Tetracosanol 10 microg/mL in Methyl-tert-butyl ether",
+              "A1EM1",
+              "SCHEMBL17228",
+              "orb1296995",
+              "SCHEMBL1610834",
+              "SCHEMBL4756477",
+              "SCHEMBL4756480",
+              "LIGNOCERYL ALCOHOL [HSDB]",
+              "NSC93768",
+              "LMFA05000222",
+              "AKOS015839851",
+              "EBC-617702",
+              "HY-W127492",
+              "AS-56560",
+              "BP-41337",
+              "SY052177",
+              "Lignoceryl alcohol, >=99% (capillary GC)",
+              "CS-0185720",
+              "NS00007752",
+              "T0593",
+              "T72542",
+              "Q2806593",
+              "TETRACOSANOL (CONSTITUENT OF SAW PALMETTO) [DSC]"
+            ]
+          }
+        }
+      ],
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_and_software_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": [
+            {
+              "experimental_support": "electron microscopy"
+            }
+          ],
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Cyclic",
+              "symbol": "C2",
+              "oligomeric_state": "Hetero 4-mer",
+              "stoichiometry": [
+                "A2",
+                "B2"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 899
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "9M8P",
+        "9M8V"
+      ]
+    }
+  }
+}

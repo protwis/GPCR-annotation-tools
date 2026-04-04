@@ -1,0 +1,60 @@
+{
+    "key_findings": [
+        "The structure reveals that Muscarinic Toxin 3 (MT3) acts as an antagonist of the M4 muscarinic acetylcholine receptor by partially occupying the orthosteric pocket and stabilizing an inactive receptor conformation.",
+        "The study successfully engineered MT3 variants with improved subtype selectivity for \u03b12A and M4AChR through computational design and directed evolution, identifying distinct interaction interfaces.",
+        "MT3 engages its target receptors through a relatively conserved set of interaction residues, but variability in the receptor-side amino acids leads to different conformational states and interactions across receptor complexes."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper describes mBril (Soluble cytochrome b562 RIL) as being inserted into the receptor construct for stabilization, which fits the definition of a fusion protein.",
+                    "quote_or_path": "receptors were engineered by inserting mBril between TM5 and TM6 to create continuous helices within the receptor.",
+                    "source": "Paper"
+                },
+                "value": "Fusion protein",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "Soluble cytochrome b562"
+        }
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "protein",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states that MT3 acts as an antagonist.",
+                    "quote_or_path": "MT3 elucidates its role as an antagonist",
+                    "source": "Paper"
+                },
+                "value": "Antagonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.6,
+        "release_date": "2025-07-23",
+        "state": {
+            "evidence": {
+                "reasoning": "The paper explicitly states that the receptor is in an inactive conformation.",
+                "quote_or_path": "all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).",
+                "source": "Paper"
+            },
+            "value": "inactive",
+            "confidence": "High"
+        },
+        "note": "Receptor is engineered with an mBril fusion (Soluble cytochrome b562 RIL) inserted between TM5 and TM6, a K3-ALFA helical tag at the C-terminus of H8, and MT3 fused directly to the N-terminus of the receptor.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

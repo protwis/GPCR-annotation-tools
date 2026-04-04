@@ -1,0 +1,78 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description: 'Nanobody 35 (NB35)'; 'The purification was performed in the presence of recombinant Nb35 nanobodies 58 to help stabilize the receptor-G protein complex.' (Page 3)",
+                    "reasoning": "The PDB metadata identifies it as a nanobody, and the paper confirms its role as a stabilizing nanobody used for complex stabilization."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "Cryo-EM reveals the structure of the human sweet taste receptor as a TAS1R2+TAS1R3 heteromer.",
+        "The TAS1R2 subunit is identified as the primary coupling partner for the G protein.",
+        "Analysis of the TM-G protein complex (PDB 9O38) suggests an inactive pre-coupled state of the receptor."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "non_polymer_components (empty list); PDB:9O38 title: 'Transmembrane domains of the human sweet receptor (TAS1R2 + TAS1R3) from Class 3 particles (rigidly fitted from PDB:9NOX and 9NOR)'; 'sucralose not resolved in this specific structure'",
+                    "reasoning": "The PDB metadata shows no non-polymer components, and the paper indicates this specific PDB (9O38) represents a TM-G protein complex where the ligand is not resolved."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B,F"
+            },
+            "note": "G\u03b1 chimera from Gs (GNAS2_HUMAN) and gustducin (GNAT3_HUMAN), where the C-terminal 25 amino acids are from gustducin.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-05-14",
+        "state": {
+            "value": "inactive",
+            "evidence": {
+                "reasoning": "The supplemental figure S8 legend explicitly states that this specific particle class, which PDB 9O38 represents, is in an inactive state pre-bound to the G protein complex.",
+                "quote_or_path": "Shown below are the data suggesting that this particle class may represent the inactive state of the receptor pre-bound to the G protein complex. 28",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "TM-G protein complex; derived from sucralose-bound full receptor dataset, but no ligand density resolved in this specific structure.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Antibody fab fragment",
+                "evidence": {
+                    "reasoning": "The paper explicitly refers to Fab7 as an antigen-binding fragment.",
+                    "quote_or_path": "\"we developed an antigen-binding fragment (Fab7)\"",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "L",
+            "name": "Fab7 light chain"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly refers to Fab7 as an antigen-binding fragment.",
+                    "quote_or_path": "\"we developed an antigen-binding fragment (Fab7)\"",
+                    "source": "Paper"
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "H",
+            "name": "Fab7 heavy chain"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "Both the PDB metadata and the paper explicitly describe this component as an anti-Fab nanobody.",
+                    "quote_or_path": "polymer_components[2].description; \"An anti-Fab nanobody was included to further rigidify the hinge of Fab7.\"",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "key_findings": [
+        "ACKR3 phosphorylation by GRK2 or GRK5 results in distinct structural and dynamic properties of receptor-arrestin assemblies, leading to heterogeneous 'tail-mode' vs. rigid 'ACKR3-adjacent' complexes.",
+        "The arrestin finger loop engages the micelle surface instead of the receptor cytoplasmic cleft, a departure from most other reported GPCR-arrestin complex structures.",
+        "The specific ACKR3 phosphorylation barcode influences the contribution of the arrestin finger loop to overall binding affinity, with GRK2-phosphorylated ACKR3 showing weaker finger loop engagement with micelles compared to GRK5."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "none",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "reasoning": "The PDB metadata explicitly shows no non-polymer components, indicating no small molecule ligands are present.",
+                    "quote_or_path": "non_polymer_components",
+                    "source": "PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Beta-arrestin-1 (Arr2*) contains I386A, V387A, and F388A mutations in its C-tail, making it a preactivated form.",
+            "chain_id": "A"
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The PDB title states the receptor is phosphorylated and in complex with Arrestin2, and the paper explicitly states that GRK phosphorylation activates ACKR3 to recruit arrestins, and Fab7 selectively traps arrestin in an active conformation.",
+                "quote_or_path": "PDB Metadata: structure_details.title; Paper: \"Unphosphorylated ACKR3 failed to pull down Arr2* or Arr3* (Fig. 1b,c), indicating that GRK phosphorylation, regardless of isoform, is required for efficient arrestin binding to activated ACKR3 (ref. 2).\" and \"Fab7 selectively trapped Arr2 in an active conformation (Extended Data Fig. 5d)\"",
+                "source": "Both Paper and PDB Metadata"
+            },
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "Human ACKR3 is in a nanodisc environment and phosphorylated by GRK2.",
+        "release_date": "2025-01-22"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

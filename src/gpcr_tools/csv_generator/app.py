@@ -103,7 +103,7 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
             # Unified Oligomer Analysis panel (replaces legacy heteromer + 7TM panels)
             display_oligomer_analysis_panel(main_data)
 
-            oligo = main_data.get("oligomer_analysis", {})
+            oligo = main_data.get("oligomer_analysis") or {}
             inject_oligomer_alerts(oligo, validation_data)
 
             has_crit_issues = validation_data.get("critical_warnings") or validation_data.get(
