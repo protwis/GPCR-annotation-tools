@@ -64,24 +64,24 @@ The tool runs completely inside a container. You only need to mount a single wor
 docker pull ghcr.io/protwis/gpcr-annotation-tools:latest
 
 # Initialize a workspace (creates directory structure and contract file)
-mkdir -p /path/to/gpcr_workspace
+mkdir -p ~/gpcr_workspace
 docker run --rm \
-  -v /path/to/gpcr_workspace:/workspace \
+  -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools init-workspace
 
 # Aggregate AI runs and validate against PDB/UniProt
 docker run --rm \
-  -v /path/to/gpcr_workspace:/workspace \
+  -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools aggregate
 
 # Run the interactive curation dashboard
 docker run -it --rm \
-  -v /path/to/gpcr_workspace:/workspace \
+  -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools curate
 
 # Target a specific PDB entry directly
 docker run -it --rm \
-  -v /path/to/gpcr_workspace:/workspace \
+  -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools curate 8TII
 ```
 
@@ -102,7 +102,7 @@ cd GPCR-annotation-tools
 pip install -e ".[dev]"
 
 # Point to your workspace directory
-export GPCR_WORKSPACE=/path/to/gpcr_workspace
+export GPCR_WORKSPACE=~/gpcr_workspace
 
 # Initialize the workspace (creates directory tree and contract file)
 gpcr-tools init-workspace
