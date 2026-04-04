@@ -19,6 +19,7 @@ from gpcr_tools.config import (
     ALERT_CONFIRMED_OLIGOMER,
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
+    ALERT_SUSPICIOUS_7TM,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
     OLIGOMER_MONOMER,
@@ -747,3 +748,36 @@ class TestWarningFormat:
         override_alerts = [a for a in alerts if a["type"] == ALERT_CHAIN_ID_OVERRIDDEN]
         assert len(override_alerts) == 1
         assert _BL3_REGEX.search(override_alerts[0]["message"])
+
+    def test_suspicious_7tm_format(self) -> None:
+        from gpcr_tools.validator.oligomer import analyze_oligomer
+
+        # Mock enriched entry that produces an UNKNOWN tm_status
+        enriched = {
+            "polymer_entities": [
+                {
+                    "uniprots": [{"gpcrdb_entry_name_slug": "test_human"}],
+                    "polymer_entity_instances": [
+                        {"rcsb_polymer_entity_instance_container_identifiers": {"auth_asym_id": "A"}}
+                    ],
+                }
+            ]
+        }
+        best_run_data: dict[str, Any] = {
+            "receptor_info": {"chain_id": "A", "uniprot_entry_name": "test_human"}
+        }
+
+        # We need a quick mock to let the analysis run and reach alert injection
+        with patch("gpcr_tools.validator.oligomer.scan_all_chains_7tm") as mock_scan:
+            mock_scan.return_value = (
+                {"A": {"status": TM_STATUS_UNKNOWN, "resolved_tms": 0, "total_tms": 0}},
+                {},
+            )
+            with patch("gpcr_tools.validator.oligomer.is_gpcr_slug", return_value=True):
+                analyze_oligomer("1XYZ", best_run_data, enriched)
+
+        alerts: list[dict[str, str]] = best_run_data.get("oligomer_analysis", {}).get("alerts", [])
+        suspicious_alerts = [a for a in alerts if a["type"] == ALERT_SUSPICIOUS_7TM]
+
+        assert len(suspicious_alerts) == 1
+        assert _BL3_REGEX.search(suspicious_alerts[0]["message"])
