@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gpcr-annotation-tools"
-version = "0.1.1"
+version = "0.1.2"
 description = "Human-in-the-loop curation suite for GPCR structure annotations"
 readme = "README.md"
 license = "Apache-2.0"
