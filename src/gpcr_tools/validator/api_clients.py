@@ -8,10 +8,12 @@ timeout/connection failure.  Callers translate ``None`` into an
 from __future__ import annotations
 
 import logging
+import time
 from typing import Any
 
 import requests
 
+from gpcr_tools.config import API_MAX_RETRIES
 from gpcr_tools.validator.cache import ValidationCache
 
 logger = logging.getLogger(__name__)
@@ -32,15 +34,19 @@ def check_uniprot_existence(
     if cached is not None:
         return cached
 
-    try:
-        url = f"https://rest.uniprot.org/uniprotkb/{clean_name}.txt"
-        resp = requests.head(url, timeout=5, allow_redirects=True)
-        is_valid = resp.status_code == 200
-        cache.set(key, is_valid)
-        return is_valid
-    except (requests.RequestException, OSError) as exc:
-        logger.warning("UniProt API error for '%s': %s", entry_name, exc)
-        return None
+    url = f"https://rest.uniprot.org/uniprotkb/{clean_name}.txt"
+    for attempt in range(API_MAX_RETRIES):
+        try:
+            resp = requests.head(url, timeout=5, allow_redirects=True)
+            is_valid = resp.status_code == 200
+            cache.set(key, is_valid)
+            return is_valid
+        except (requests.RequestException, OSError) as exc:
+            if attempt == API_MAX_RETRIES - 1:
+                logger.warning("UniProt API error for '%s': %s", entry_name, exc)
+                return None
+            time.sleep(1)
+    return None
 
 
 def check_pubchem_existence(

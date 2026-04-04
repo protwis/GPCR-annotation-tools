@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 import requests
 
 from gpcr_tools.config import (
+    API_MAX_RETRIES,
     CHIMERA_STATUS_NO_G_PROTEIN,
     CHIMERA_STATUS_NO_VALID_COMPARISONS,
     CHIMERA_STATUS_SUCCESS,
@@ -97,19 +99,22 @@ def get_sequence_from_uniprot(
     if cached is not None:
         return cached
 
-    try:
-        resp = requests.get(
-            f"https://rest.uniprot.org/uniprotkb/{accession}.fasta",
-            timeout=10,
-        )
-        if resp.status_code == 200:
-            lines = resp.text.strip().split("\n")
-            if len(lines) > 1:
-                seq = "".join(lines[1:])
-                cache.set(accession, seq)
-                return seq
-    except (requests.RequestException, OSError) as exc:
-        logger.warning("UniProt FASTA fetch error for '%s': %s", accession, exc)
+    url = f"https://rest.uniprot.org/uniprotkb/{accession}.fasta"
+    for attempt in range(API_MAX_RETRIES):
+        try:
+            resp = requests.get(url, timeout=10)
+            if resp.status_code == 200:
+                lines = resp.text.strip().split("\n")
+                if len(lines) > 1:
+                    seq = "".join(lines[1:])
+                    cache.set(accession, seq)
+                    return seq
+            break
+        except (requests.RequestException, OSError) as exc:
+            if attempt == API_MAX_RETRIES - 1:
+                logger.warning("UniProt FASTA fetch error for '%s': %s", accession, exc)
+            else:
+                time.sleep(1)
 
     return None
 

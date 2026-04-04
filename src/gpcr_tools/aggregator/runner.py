@@ -425,8 +425,10 @@ def aggregate_all(
     else:
         pending = get_pending_pdb_ids()
 
+    from tqdm import tqdm
+
     results: list[AggregateResult] = []
-    for pdb_id in pending:
+    for pdb_id in tqdm(pending, desc="Progress"):
         try:
             result = aggregate_pdb(
                 pdb_id,

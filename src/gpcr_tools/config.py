@@ -145,6 +145,8 @@ LIST_ITEM_KEY_FIELDS: MappingProxyType[str, str] = MappingProxyType(
 # Sentinel values
 # ---------------------------------------------------------------------------
 
+API_MAX_RETRIES: int = 3
+
 EMPTY_VALUES: frozenset[str] = frozenset({"none", "n/a", "null", "", "-"})
 
 APO_SENTINEL: str = "apo"
