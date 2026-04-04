@@ -14,6 +14,7 @@ from rich.text import Text
 from gpcr_tools.config import (
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
+    ALERT_SUSPICIOUS_7TM,
     TM_STATUS_INCOMPLETE,
     VALIDATION_FATAL_KEYWORDS,
 )
@@ -46,7 +47,7 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
 
     for alert in oligo.get("alerts") or []:
         atype = alert.get("type") or ""
-        if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER):
+        if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER, ALERT_SUSPICIOUS_7TM):
             warnings.append(
                 f"OLIGOMER ALERT at 'receptor_info': [{atype}] {alert.get('message') or ''}"
             )

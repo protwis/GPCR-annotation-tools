@@ -23,6 +23,7 @@ from gpcr_tools.config import (
     ALERT_CONFIRMED_OLIGOMER,
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
+    ALERT_SUSPICIOUS_7TM,
     EMPTY_VALUES,
     GPCR_SLUG_NEGATIVE_PREFIXES,
     OLIGOMER_HETEROMER,
@@ -716,6 +717,21 @@ def analyze_oligomer(
         ai_chain,
         best_run_data,
     )
+
+    unknown_chains = [c for c in all_gpcr_chains if c["7tm_status"] == TM_STATUS_UNKNOWN]
+    if unknown_chains:
+        slugs = [f"Chain {c['chain_id']} ({c['slug']})" for c in unknown_chains]
+        alerts.append(
+            {
+                "type": ALERT_SUSPICIOUS_7TM,
+                "message": (
+                    f"[{ALERT_SUSPICIOUS_7TM}] at 'oligomer_analysis': "
+                    f"{', '.join(slugs)}: NO transmembrane helices detected. "
+                    "Are you sure these are GPCRs? (e.g. they might be large soluble ligands, antibodies). "
+                    "If NOT, notify authors to add their prefixes to GPCR_SLUG_NEGATIVE_PREFIXES in config.py."
+                ),
+            }
+        )
 
     # 7. Smart override: correct chain_id when AI is objectively wrong
     override_info = _apply_chain_override(

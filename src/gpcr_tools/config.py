@@ -294,6 +294,7 @@ ALERT_MISSED_PROTOMER: str = "MISSED_PROTOMER"
 ALERT_CONFIRMED_OLIGOMER: str = "CONFIRMED_OLIGOMER"
 ALERT_CHAIN_ID_OVERRIDDEN: str = "CHAIN_ID_OVERRIDDEN"
 ALERT_7TM_UPGRADE: str = "7TM_UPGRADE"
+ALERT_SUSPICIOUS_7TM: str = "SUSPICIOUS_7TM"
 
 # ---------------------------------------------------------------------------
 # 7TM statuses & detection constants
@@ -348,6 +349,12 @@ GPCR_SLUG_NEGATIVE_PREFIXES: tuple[str, ...] = (
     "arr",
     "grk",
     "ramp",
+    # Glycoprotein hormones (ligands)
+    "glha",
+    "fshb",
+    "lhb",
+    "tshb",
+    "cgb",
     # Non-GPCR fusion partners and other proteins
     "enlys",
     "c562",

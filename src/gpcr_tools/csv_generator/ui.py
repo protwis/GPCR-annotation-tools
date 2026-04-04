@@ -19,6 +19,7 @@ from gpcr_tools.config import (
     ALERT_CONFIRMED_OLIGOMER,
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
+    ALERT_SUSPICIOUS_7TM,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
     OLIGOMER_MONOMER,
@@ -194,7 +195,12 @@ def _should_highlight_oligomer(oligo: dict, receptor_chain: str) -> bool:
     if (oligo.get("chain_id_override") or {}).get("applied"):
         return True
     alert_types = {a.get("type") for a in oligo.get("alerts") or []}
-    if alert_types & {ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER, ALERT_CHAIN_ID_OVERRIDDEN}:
+    if alert_types & {
+        ALERT_HALLUCINATION,
+        ALERT_MISSED_PROTOMER,
+        ALERT_CHAIN_ID_OVERRIDDEN,
+        ALERT_SUSPICIOUS_7TM,
+    }:
         return True
     if oligo.get("classification") in (OLIGOMER_HOMOMER, OLIGOMER_HETEROMER):
         return True
@@ -298,6 +304,7 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
                 ALERT_CHAIN_ID_OVERRIDDEN: "bold red",
                 ALERT_MISSED_PROTOMER: "bold yellow",
                 ALERT_CONFIRMED_OLIGOMER: "green",
+                ALERT_SUSPICIOUS_7TM: "bold yellow on red",
             }.get(atype) or "white"
             alert_text.append(f"  [{atype}] ", style=style)
             alert_text.append(f"{alert.get('message') or ''}\n", style="white")
