@@ -758,7 +758,11 @@ class TestWarningFormat:
                 {
                     "uniprots": [{"gpcrdb_entry_name_slug": "test_human"}],
                     "polymer_entity_instances": [
-                        {"rcsb_polymer_entity_instance_container_identifiers": {"auth_asym_id": "A"}}
+                        {
+                            "rcsb_polymer_entity_instance_container_identifiers": {
+                                "auth_asym_id": "A"
+                            }
+                        }
                     ],
                 }
             ]

@@ -104,7 +104,9 @@ class TestPolymerMatch:
 
     def test_protein_multi_chain(self) -> None:
         data: dict[str, Any] = {
-            "ligands": [{"chain_id": "X, Y", "name": "Follicle stimulating hormone", "type": "protein"}]
+            "ligands": [
+                {"chain_id": "X, Y", "name": "Follicle stimulating hormone", "type": "protein"}
+            ]
         }
         # Simulate a PDB where chain X and chain Y exist
         enriched = _make_enriched(polymer=[_poly_entity("X"), _poly_entity("Y")])
