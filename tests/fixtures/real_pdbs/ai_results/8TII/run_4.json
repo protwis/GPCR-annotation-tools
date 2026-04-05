@@ -1,0 +1,80 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly describes Fab7 as an antigen-binding fragment, which is a type of antibody fab fragment.",
+                    "quote_or_path": "Here, to address this, we developed an antigen-binding fragment (Fab7) that recognizes both active arrestin2 (\u03b2-arrestin1) and arrestin3 (\u03b2-arrestin2)...",
+                    "source": "Paper"
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "H, L",
+            "name": "Fab7"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "source": "Both Paper and PDB Metadata",
+                    "quote_or_path": "polymer_components[2].description; Fab7 was further stabilized with a variable heavy-chain (VH) domain that binds to the hinge of the Fab light chain37.",
+                    "reasoning": "Both the PDB metadata description and the paper refer to this protein as an 'anti-Fab nanobody' or a 'variable heavy-chain (VH) domain' used for stabilization, which unequivocally classifies it as a nanobody."
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "key_findings": [
+        "The GRK2-phosphorylated ACKR3 resulted in more heterogeneous \u2018tail-mode' assemblies, whereas phosphorylation by GRK5 resulted in more rigid \u02bbACKR3-adjacent' assemblies, revealing differential arrestin binding modes.",
+        "The finger loops of both arrestins unexpectedly engaged the micelle surface rather than the receptor intracellular pocket, with arrestin3 being more dynamic due to its lack of a membrane-anchoring motif.",
+        "The contribution of the Arr2 finger loop to overall binding affinity depends on the ACKR3 phosphorylation barcode and is greater for PACKR3GRK2 than for PACKR3GRK5."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "non_polymer_components",
+                    "reasoning": "The PDB metadata's non_polymer_components list is empty, indicating no ligand is directly bound to the receptor in this structure."
+                },
+                "value": "Apo (no ligand)",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Engineered \u03b2-arrestin-1 (Arr2*) with I386A, V387A and F388A mutations in its C-tail for preactivation.",
+            "chain_id": "A"
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "The Fab7 interface was not compatible with the basal conformation of Arr2 (Extended Data Fig. 5b), indicating that it was selective for the activated states of arrestins.; Further characterization revealed that Fab7 selectively trapped Arr2 in an active conformation (Extended Data Fig. 5d)",
+                "reasoning": "The Fab7 used in the complex specifically binds to the active conformation of arrestin, which itself binds to the active, phosphorylated receptor ACKR3."
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "release_date": "2025-01-22",
+        "note": "ACKR3 phosphorylated by GRK2. Complex reconstituted in POPC/POPS nanodisc.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "The structure reveals the human sweet taste receptor as a TAS1R2-TAS1R3 heterodimer, providing a structural basis for broad sweet detection.",
+        "The TAS1R2 subunit is identified as the primary functional unit, binding ligands and coupling to G-proteins, while TAS1R3 acts as an obligatory partner.",
+        "Agonist binding induces coordinated structural changes, with the TAS1R2's ligand-binding domain clamping down and a unique conformation in the TAS1R3 CR linker, suggesting a mechanism for activation signal transmission."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Apo (no ligand)",
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "non_polymer_components",
+                    "reasoning": "The PDB metadata explicitly lists an empty 'non_polymer_components' section, indicating no ligands are defined within this specific deposited structure (9NOR)."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas_human",
+                "chain_id": "None"
+            },
+            "note": "miniGs/gust is an engineered chimeric G protein, with the last 25 C-terminal amino acids of G\u03b1s replaced by the corresponding sequence from human gustducin (GNAT3). It was used for experimental purposes but is not explicitly modeled with chains in this PDB entry (9NOR)."
+        }
+    },
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the receptor was captured and analyzed in an 'agonist-bound state' with artificial sweeteners.",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; The overall architecture of the agonist-bound sweet receptor consists of TAS1R2 and TAS1R3 subunits",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "Structure derived from combined datasets of sucralose-bound, aspartame-bound, and PEG400-bound sweet receptor.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

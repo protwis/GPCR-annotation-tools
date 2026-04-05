@@ -1,0 +1,79 @@
+{
+    "key_findings": [
+        "High-resolution cryo-EM reveals the overall architecture of the human sweet taste receptor as an agonist-bound TAS1R2/TAS1R3 heterodimer.",
+        "TAS1R2 specifically binds sweet ligands like sucralose and aspartame in a common pocket, while TAS1R3 maintains an open conformation, demonstrating ligand binding asymmetry.",
+        "The structure highlights distinct conformational changes in the TAS1R2 VFT domain and unique interactions at the TAS1R3 CR linker, consistent with an active receptor state and potential signal transduction."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "",
+            "type": "small-molecule",
+            "pubchem_id": "596895",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame;",
+                    "reasoning": "The paper explicitly states sucralose was used to obtain the 'agonist-bound state' of the sweet receptor."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "chem_comp_id": "",
+            "type": "small-molecule",
+            "pubchem_id": "311",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Aspartame also binds to the TAS1R2 subunit in the same binding pocket as sucralose",
+                    "reasoning": "Aspartame is described as an artificial sweetener binding to the same pocket as sucralose, an explicit agonist."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        },
+        {
+            "pubchem_id": "5361664",
+            "type": "small-molecule",
+            "chem_comp_id": "",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Finally, we generated receptor complexes without the G protein, using a different stabilizing agent (polyethylene glycol [PEG400]) that simultaneously serves as a sweet ligand.",
+                    "reasoning": "The paper explicitly states PEG400 'simultaneously serves as a sweet ligand' for the sweet receptor."
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Polyethylene glycol"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.4,
+        "method": "Electron microscopy",
+        "release_date": "2025-05-14",
+        "note": "Structure resolved from combined datasets of sucralose, aspartame, and polyethylene glycol (PEG400).",
+        "state": {
+            "evidence": {
+                "reasoning": "The paper describes the structure as 'agonist-bound' and explicitly states that the results 'reflects the active state' in several sections.",
+                "quote_or_path": "Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame. [...] We suggest that this reflects the active state",
+                "source": "Paper"
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

@@ -37,8 +37,8 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 
     rows_map: dict[str, list[dict[str, str]]] = {fname: [] for fname in CSV_SCHEMA}
 
-    s_info = data.get("structure_info", {})
-    r_info = data.get("receptor_info", {})
+    s_info = data.get("structure_info") or {}
+    r_info = data.get("receptor_info") or {}
     oligo = data.get("oligomer_analysis") or {}
     label_map = oligo.get("label_asym_id_map") or {}
 
@@ -46,7 +46,7 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
     receptor_uniprot = sanitize_value(r_info.get("uniprot_entry_name"))
 
     # ── Truncation + orphaned-ligand radar ─────────────────────────
-    ligand_chains = collect_ligand_chains(data.get("ligands", []))
+    ligand_chains = collect_ligand_chains(data.get("ligands") or [])
     receptor_chain, receptor_uniprot, truncation_note = apply_db_truncation(
         receptor_chain,
         receptor_uniprot,
@@ -64,7 +64,7 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
             "Receptor_UniProt": receptor_uniprot,
             "Method": sanitize_value(s_info.get("method")),
             "Resolution": sanitize_value(s_info.get("resolution")),
-            "State": sanitize_value(s_info.get("state", {}).get("value", "")).capitalize(),
+            "State": sanitize_value((s_info.get("state") or {}).get("value") or "").capitalize(),
             "ChainID": receptor_chain,
             "label_asym_id": map_label_asym_id(receptor_chain, label_map),
             "Note": s_note,
@@ -73,8 +73,8 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
     )
 
     # ── ligands.csv ────────────────────────────────────────────────
-    for lig in data.get("ligands", []):
-        smiles = lig.get("SMILES_stereo") or lig.get("SMILES", "")
+    for lig in data.get("ligands") or []:
+        smiles = lig.get("SMILES_stereo") or lig.get("SMILES") or ""
         lig_chain = sanitize_value(lig.get("chain_id"))
         rows_map["ligands.csv"].append(
             {
@@ -83,7 +83,7 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
                 "label_asym_id": map_label_asym_id(lig_chain, label_map),
                 "Name": sanitize_value(lig.get("name")),
                 "PubChemID": sanitize_value(lig.get("pubchem_id")),
-                "Role": sanitize_value(lig.get("role", {}).get("value")),
+                "Role": sanitize_value((lig.get("role") or {}).get("value")),
                 "Title": sanitize_value(lig.get("name")),
                 "Type": sanitize_value(lig.get("type")),
                 "Date": sanitize_value(s_info.get("release_date")),
@@ -95,27 +95,27 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
         )
 
     # ── g_proteins.csv ─────────────────────────────────────────────
-    partners = data.get("signaling_partners", {})
+    partners = data.get("signaling_partners") or {}
     if partners.get("g_protein"):
         gp = partners["g_protein"]
-        alpha_chain = sanitize_value(gp.get("alpha_subunit", {}).get("chain_id"))
-        beta_chain = sanitize_value(gp.get("beta_subunit", {}).get("chain_id"))
-        gamma_chain = sanitize_value(gp.get("gamma_subunit", {}).get("chain_id"))
+        alpha_chain = sanitize_value((gp.get("alpha_subunit") or {}).get("chain_id"))
+        beta_chain = sanitize_value((gp.get("beta_subunit") or {}).get("chain_id"))
+        gamma_chain = sanitize_value((gp.get("gamma_subunit") or {}).get("chain_id"))
         rows_map["g_proteins.csv"].append(
             {
                 "PDB": pdb_id,
                 "Alpha_UniProt": sanitize_value(
-                    gp.get("alpha_subunit", {}).get("uniprot_entry_name")
+                    (gp.get("alpha_subunit") or {}).get("uniprot_entry_name")
                 ),
                 "Alpha_ChainID": alpha_chain,
                 "Alpha_label_asym_id": map_label_asym_id(alpha_chain, label_map),
                 "Beta_UniProt": sanitize_value(
-                    gp.get("beta_subunit", {}).get("uniprot_entry_name")
+                    (gp.get("beta_subunit") or {}).get("uniprot_entry_name")
                 ),
                 "Beta_ChainID": beta_chain,
                 "Beta_label_asym_id": map_label_asym_id(beta_chain, label_map),
                 "Gamma_UniProt": sanitize_value(
-                    gp.get("gamma_subunit", {}).get("uniprot_entry_name")
+                    (gp.get("gamma_subunit") or {}).get("uniprot_entry_name")
                 ),
                 "Gamma_ChainID": gamma_chain,
                 "Gamma_label_asym_id": map_label_asym_id(gamma_chain, label_map),
@@ -138,9 +138,9 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
         )
 
     # ── auxiliary protein CSVs ─────────────────────────────────────
-    for aux in data.get("auxiliary_proteins", []):
+    for aux in data.get("auxiliary_proteins") or []:
         target = AUX_PROTEIN_DISPATCH.get(
-            aux.get("type", {}).get("value", "Other"),
+            (aux.get("type") or {}).get("value") or "Other",
             "other_aux_proteins.csv",
         )
         rows_map[target].append({"PDB": pdb_id, "Name": sanitize_value(aux.get("name"))})

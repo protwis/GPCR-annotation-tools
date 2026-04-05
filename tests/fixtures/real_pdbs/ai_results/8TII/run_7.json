@@ -1,0 +1,80 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Here, to address this, we developed an antigen-binding fragment (Fab7) that recognizes both active arrestin2 (\u03b2-arrestin1) and arrestin3 (\u03b2-arrestin2) without interacting with bound receptor polypeptides.",
+                    "reasoning": "The paper explicitly identifies Fab7 as an antigen-binding fragment (Fab) used for structural determination."
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "H, L",
+            "name": "Fab7"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The PDB metadata clearly describes this chain as an 'anti-Fab nanobody'.",
+                    "quote_or_path": "polymer_components[2].description",
+                    "source": "PDB Metadata"
+                },
+                "value": "Nanobody",
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "key_findings": [
+        "GRK-specific phosphorylation 'barcodes' on the ACKR3 C-tail lead to distinct structural and dynamic properties of ACKR3-arrestin complexes.",
+        "The arrestin finger loop in ACKR3-Arr2* complexes engages the micelle surface instead of the receptor cytoplasmic cleft, a binding mode distinct from many other GPCR-arrestin structures.",
+        "The contribution of the Arr2 finger loop to overall binding affinity is dependent on the ACKR3 phosphorylation barcode, being more critical for GRK2-phosphorylated ACKR3."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "none",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The PDB metadata explicitly lists no non-polymer components, indicating no small molecule ligand is bound to the receptor.",
+                    "quote_or_path": "non_polymer_components",
+                    "source": "PDB Metadata"
+                },
+                "value": "Apo (no ligand)",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Apo"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Engineered Beta-arrestin-1 (Arr2*) with I386A, V387A, F388A mutations in its C-tail and a pre-released C-tail.",
+            "chain_id": "A"
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-01-22",
+        "method": "Electron microscopy",
+        "note": "Reconstituted in POPC/POPS nanodiscs.",
+        "state": {
+            "evidence": {
+                "reasoning": "The Fab7 used in the complex is selective for activated arrestins, and the complex is formed with arrestin after GRK phosphorylation, indicating an active state of the receptor.",
+                "quote_or_path": "The Fab7 interface was not compatible with the basal conformation of Arr2 (Extended Data Fig. 5b), indicating that it was selective for the activated states of arrestins.",
+                "source": "Paper"
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

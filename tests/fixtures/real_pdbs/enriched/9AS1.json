@@ -1,0 +1,4672 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "9AS1",
+      "entry": {
+        "id": "9AS1"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00009as1"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2"
+        ],
+        "pubmed_id": 40108183,
+        "emdb_ids": [
+          "EMD-43801"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "assembly mmCIF",
+            "validation data mmCIF",
+            "validation slider image",
+            "validation report"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "N"
+      },
+      "struct": {
+        "title": "Local refinement of 5-HT2AR bound to DMT in complex with a mini-Gq protein and scFv16 obtained by cryo-electron microscopy (cryoEM)"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1038/s41467-025-57956-7"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 40108183
+        },
+        "rcsb_pubmed_central_id": "PMC11923220",
+        "rcsb_pubmed_doi": "10.1038/s41467-025-57956-7",
+        "rcsb_pubmed_abstract_text": "There is currently a resurgence in exploring the utility of classical psychedelics to treat depression, addiction, anxiety disorders, cluster headaches, and many other neuropsychiatric disorders. A biological target of these compounds, and a hypothesized target for their therapeutic actions, is the 5-HT <sub>2A </sub> serotonin receptor. Here, we present 7 cryo-EM structures covering all major compound classes of psychedelic and non-psychedelic agonists, including a \u03b2-arrestin-biased compound RS130-180. Identifying the molecular interactions between various psychedelics and the 5-HT <sub>2A </sub> receptor reveals both common and distinct motifs among the examined psychedelic chemotypes. These findings lead to a broader mechanistic understanding of 5-HT <sub>2A </sub> activation, which can catalyze the development of novel chemotypes with potential therapeutic utility and fewer side\u00a0effects.",
+        "rcsb_pubmed_affiliation_info": [
+          "Department of Pharmacology, University of North Carolina at Chapel Hill School of Medicine, Chapel Hill, NC, USA. rgumpper@email.unc.edu.",
+          "Division of Chemical Biology and Medicinal Chemistry, Eshelman School of Pharmacy, University of North Carolina, Chapel Hill, NC, USA. rgumpper@email.unc.edu.",
+          "Department of Pharmacology, University of North Carolina at Chapel Hill School of Medicine, Chapel Hill, NC, USA.",
+          "Department of Pharmacy, College of Pharmacy, Yonsei University, Incheon, Korea.",
+          "Mount Sinai Center for Therapeutics Discovery, Departments of Pharmacological Sciences, Oncological Sciences and Neuroscience, Tisch Cancer Institute, Icahn School of Medicine at Mount Sinai, New York, NY, USA.",
+          "EvE Bio, LLC, Durham, NC, USA.",
+          "Division of Chemical Biology and Medicinal Chemistry, Eshelman School of Pharmacy, University of North Carolina, Chapel Hill, NC, USA.",
+          "Department of Biochemistry and Molecular Biology, University of Maryland Baltimore, Baltimore, MD, USA.",
+          "Department of Pharmacology, University of North Carolina at Chapel Hill School of Medicine, Chapel Hill, NC, USA. bryan_roth@med.unc.edu.",
+          "Division of Chemical Biology and Medicinal Chemistry, Eshelman School of Pharmacy, University of North Carolina, Chapel Hill, NC, USA. bryan_roth@med.unc.edu."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-43801",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-43801"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "GPCR, G-protein Coupled Receptor, 5-HT2AR, serotonin, psychedelics, MEMBRANE PROTEIN"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2024-02-24T00:00:00Z",
+        "initial_release_date": "2025-04-02T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 1
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2025-04-02T00:00:00Z"
+        },
+        {
+          "ordinal": 8,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2025-05-21T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 8,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-43801",
+          "details": "Local refinement of 5-HT2AR bound to DMT in complex with a mini-Gq protein and scFv16 obtained by cryo-electron microscopy (cryoEM)",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Gumpper, R.H."
+        },
+        {
+          "name": "Fay, J.F."
+        },
+        {
+          "name": "Roth, B.L."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "Defense Advanced Research Projects Agency (DARPA)",
+          "country": "United States",
+          "grant_number": "HR0011-20-2-0029",
+          "ordinal": 1
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "PARTICLE",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 3.38
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": "PHENIX",
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "The structural diversity of psychedelic drug actions revealed.",
+          "rcsb_journal_abbrev": "Nat Commun",
+          "rcsb_authors": [
+            "Gumpper, R.H.",
+            "Jain, M.K.",
+            "Kim, K.",
+            "Sun, R.",
+            "Sun, N.",
+            "Xu, Z.",
+            "DiBerto, J.F.",
+            "Krumm, B.E.",
+            "Kapolka, N.J.",
+            "Kaniskan, H.U.",
+            "Nichols, D.E.",
+            "Jin, J.",
+            "Fay, J.F.",
+            "Roth, B.L."
+          ],
+          "year": 2025,
+          "journal_volume": "16",
+          "page_first": "2734",
+          "page_last": "2734",
+          "pdbx_database_id_PubMed": 40108183,
+          "pdbx_database_id_DOI": "10.1038/s41467-025-57956-7"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 52.84,
+        "deposited_atom_count": 1857,
+        "deposited_polymer_monomer_count": 471,
+        "deposited_modeled_polymer_monomer_count": 259,
+        "deposited_unmodeled_polymer_monomer_count": 212,
+        "polymer_entity_count_protein": 1,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "A",
+                "entry_id": "9AS1",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8091246"
+                },
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8091246"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9AS1",
+            "entity_id": "1",
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "uniprot_ids": [
+              "P28223"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P28223"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "P28223",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000102468"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "P28223"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "5ht2a_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "5-hydroxytryptamine receptor 2A",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "mpstruc",
+              "annotation_lineage": [
+                {
+                  "name": "5-HT<sub>2A</sub> serotonin receptor  - miniG<sub>q</sub> complex with bound 5-HT, local refined structure",
+                  "depth": 2
+                },
+                {
+                  "name": "G Protein-Coupled Receptors: Class A",
+                  "depth": 1
+                },
+                {
+                  "name": "TRANSMEMBRANE PROTEINS: ALPHA-HELICAL",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein tyrosine kinase activator activity",
+                  "depth": null
+                },
+                {
+                  "name": "enzyme regulator activity",
+                  "depth": null
+                },
+                {
+                  "name": "kinase activator activity",
+                  "depth": null
+                },
+                {
+                  "name": "enzyme activator activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular function activator activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular function regulator activity",
+                  "depth": null
+                },
+                {
+                  "name": "protein kinase activator activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "protein kinase regulator activity",
+                  "depth": null
+                },
+                {
+                  "name": "kinase regulator activity",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "response to xenobiotic stimulus",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "postsynapse",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "postsynaptic membrane",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane region",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled serotonin receptor complex",
+                  "depth": null
+                },
+                {
+                  "name": "receptor complex",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "phospholipase C-activating serotonin receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled serotonin receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "phospholipase C-activating G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "modulation of chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "presynaptic modulation of chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "anterograde trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of defense response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "defense response",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of inflammatory response",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of inflammatory response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of defense response",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "inflammatory response",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of tube diameter",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of tube size",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of system process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of vasoconstriction",
+                  "depth": null
+                },
+                {
+                  "name": "circulatory system process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of blood circulation",
+                  "depth": null
+                },
+                {
+                  "name": "vascular process in circulatory system",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of vasoconstriction",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "blood vessel diameter maintenance",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological quality",
+                  "depth": null
+                },
+                {
+                  "name": "vasoconstriction",
+                  "depth": null
+                },
+                {
+                  "name": "blood circulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of anatomical structure size",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "localization",
+                  "depth": null
+                },
+                {
+                  "name": "protein localization to cytoskeleton",
+                  "depth": null
+                },
+                {
+                  "name": "protein localization to organelle",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule localization",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular protein localization",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "neurotransmitter receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of lipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "glycerophospholipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "lipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "phospholipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphate-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of lipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phosphatidylinositol biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of phosphatidylinositol biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphatidylinositol metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "glycerophospholipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phospholipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of phospholipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "phospholipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of phospholipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphatidylinositol biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phospholipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of lipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "glycerolipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "glycerolipid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of lipid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "lipid metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "serotonin receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "presynapse",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "presynaptic membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane region",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "neuron apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "cell death",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of neuron apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of neuron apoptotic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "behavior",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "learning or memory",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "cognition",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "memory",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "somatodendritic compartment",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "dendrite",
+                  "depth": null
+                },
+                {
+                  "name": "dendritic tree",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "inorganic ion homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular calcium ion homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "homeostatic process",
+                  "depth": null
+                },
+                {
+                  "name": "calcium ion homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "cellular homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "chemical homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular monoatomic cation homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic ion homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular chemical homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic cation homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular monoatomic ion homeostasis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "G protein-coupled amine receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled serotonin receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled serotonin receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "cell death",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of execution phase of apoptosis",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of execution phase of apoptosis",
+                  "depth": null
+                },
+                {
+                  "name": "execution phase of apoptosis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of body fluid levels",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "homotypic cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell activation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "coagulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological quality",
+                  "depth": null
+                },
+                {
+                  "name": "response to wounding",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "wound healing",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of homotypic cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell activation",
+                  "depth": null
+                },
+                {
+                  "name": "hemostasis",
+                  "depth": null
+                },
+                {
+                  "name": "platelet aggregation",
+                  "depth": null
+                },
+                {
+                  "name": "blood coagulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of platelet activation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of platelet aggregation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of homotypic cell-cell adhesion",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of platelet aggregation",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "platelet activation",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                },
+                {
+                  "name": "glutamatergic synapse",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "ribonucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "aerobic respiration",
+                  "depth": null
+                },
+                {
+                  "name": "oxoacid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate derivative metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside phosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "glycolytic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphate-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nicotinamide nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyruvate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "monocarboxylic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribose phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular respiration",
+                  "depth": null
+                },
+                {
+                  "name": "catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ATP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "energy derivation by oxidation of organic compounds",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate derivative catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ADP catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carboxylic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "generation of precursor metabolites and energy",
+                  "depth": null
+                },
+                {
+                  "name": "purine-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ADP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside diphosphate catabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "G protein-coupled amine receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled serotonin receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "Gq/11-coupled serotonin receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of temperature stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of pain",
+                  "depth": null
+                },
+                {
+                  "name": "detection of temperature stimulus involved in sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "response to temperature stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of abiotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of temperature stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to abiotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus involved in sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "detection of temperature stimulus involved in sensory perception of pain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "somatodendritic compartment",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "dendrite",
+                  "depth": null
+                },
+                {
+                  "name": "dendritic tree",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "dendritic shaft",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "modulation of chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic transmission, glutamatergic",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of synaptic transmission, glutamatergic",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "anterograde trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of synaptic transmission, glutamatergic",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "urinary bladder smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "urinary tract smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "muscle system process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "anterograde trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "somatodendritic compartment",
+                  "depth": null
+                },
+                {
+                  "name": "cell body",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "neuronal cell body",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "axon",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "fat cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of fat cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of fat cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "5-hydroxytryptamine receptor family",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "identical protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway, coupled to cyclic nucleotide second messenger",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cation binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "ion binding",
+                  "depth": null
+                },
+                {
+                  "name": "serotonin binding",
+                  "depth": null
+                },
+                {
+                  "name": "amine binding",
+                  "depth": null
+                },
+                {
+                  "name": "heterocyclic compound binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "small molecule binding",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "virus receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "exogenous protein binding",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "negative regulation of potassium ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of localization",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of potassium ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of transport",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of monoatomic ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of monoatomic ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of transport",
+                  "depth": null
+                },
+                {
+                  "name": "establishment of localization",
+                  "depth": null
+                },
+                {
+                  "name": "metal ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "localization",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "potassium ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic cation transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metal ion transport",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "positive regulation of cytosolic calcium ion concentration",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological quality",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of heat generation",
+                  "depth": null
+                },
+                {
+                  "name": "homeostatic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of heat generation",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "heat generation",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal-level homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "temperature homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "ribonucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "aerobic respiration",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "oxoacid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate derivative metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of generation of precursor metabolites and energy",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside phosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of ATP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of purine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "glycolytic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphate-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of nucleobase-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nicotinamide nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyruvate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of carbohydrate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of purine nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of ATP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of phosphorus metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of carbohydrate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "monocarboxylic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "pyridine-containing compound catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribose phosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular respiration",
+                  "depth": null
+                },
+                {
+                  "name": "ATP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "energy derivation by oxidation of organic compounds",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of purine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleoside diphosphate catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of carbohydrate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleoside triphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine nucleotide catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate derivative catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of glycolytic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "ADP catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "carboxylic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "generation of precursor metabolites and energy",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of glycolytic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of purine nucleotide metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "ADP metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "organophosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside diphosphate metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of small molecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "purine ribonucleoside diphosphate catabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "behavior",
+                  "depth": null
+                },
+                {
+                  "name": "adult behavior",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "behavioral response to cocaine",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "response to cocaine",
+                  "depth": null
+                },
+                {
+                  "name": "response to alkaloid",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of mechanical stimulus involved in sensory perception of pain",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to mechanical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of pain",
+                  "depth": null
+                },
+                {
+                  "name": "detection of mechanical stimulus involved in sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of mechanical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of abiotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "detection of mechanical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "response to abiotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus involved in sensory perception",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of ERK1 and ERK2 cascade",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of intracellular signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular signaling cassette",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of MAPK cascade",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of intracellular signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of MAPK cascade",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "MAPK cascade",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "ERK1 and ERK2 cascade",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of ERK1 and ERK2 cascade",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signaling",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "membrane microdomain",
+                  "depth": null
+                },
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "membrane raft",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane raft",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane region",
+                  "depth": null
+                },
+                {
+                  "name": "caveola",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "behavior",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "learning",
+                  "depth": null
+                },
+                {
+                  "name": "learning or memory",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "nonassociative learning",
+                  "depth": null
+                },
+                {
+                  "name": "sensitization",
+                  "depth": null
+                },
+                {
+                  "name": "cognition",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "monoamine transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of localization",
+                  "depth": null
+                },
+                {
+                  "name": "nitrogen compound transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of catecholamine secretion",
+                  "depth": null
+                },
+                {
+                  "name": "transport",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "organic hydroxy compound transport",
+                  "depth": null
+                },
+                {
+                  "name": "dopamine transport",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "localization",
+                  "depth": null
+                },
+                {
+                  "name": "secretion by cell",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of secretion by cell",
+                  "depth": null
+                },
+                {
+                  "name": "catecholamine transport",
+                  "depth": null
+                },
+                {
+                  "name": "signal release",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "secretion",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of transport",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "export from cell",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "dopamine secretion",
+                  "depth": null
+                },
+                {
+                  "name": "establishment of localization",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of secretion",
+                  "depth": null
+                },
+                {
+                  "name": "catecholamine secretion",
+                  "depth": null
+                },
+                {
+                  "name": "amine transport",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of amine transport",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of dopamine secretion",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G protein-coupled receptor, rhodopsin-like",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell body fiber",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, rhodopsin-like, 7TM",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "5-hydroxytryptamine receptor family",
+                  "depth": 1
+                },
+                {
+                  "name": "5-Hydroxytryptamine 2A receptor",
+                  "depth": 2
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to dopamine",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "serotonin receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to dopamine",
+                  "depth": null
+                },
+                {
+                  "name": "response to monoamine",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to catecholamine",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to monoamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to catecholamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular organelle",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasmic vesicle",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular vesicle",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasm",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "vesicle",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "1-(4-iodo-2,5-dimethoxyphenyl)propan-2-amine binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "amine binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "calcium ion transmembrane import into cytosol",
+                  "depth": null
+                },
+                {
+                  "name": "transport",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic ion transmembrane transport",
+                  "depth": null
+                },
+                {
+                  "name": "establishment of localization",
+                  "depth": null
+                },
+                {
+                  "name": "calcium ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "metal ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic cation transmembrane transport",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane transport",
+                  "depth": null
+                },
+                {
+                  "name": "release of sequestered calcium ion into cytosol",
+                  "depth": null
+                },
+                {
+                  "name": "localization",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic ion transport",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "monoatomic cation transport",
+                  "depth": null
+                },
+                {
+                  "name": "calcium ion transmembrane transport",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of tube diameter",
+                  "depth": null
+                },
+                {
+                  "name": "vascular associated smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of tube size",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "muscle system process",
+                  "depth": null
+                },
+                {
+                  "name": "circulatory system process",
+                  "depth": null
+                },
+                {
+                  "name": "smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "artery smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "vascular process in circulatory system",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "blood vessel diameter maintenance",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological quality",
+                  "depth": null
+                },
+                {
+                  "name": "tonic smooth muscle contraction",
+                  "depth": null
+                },
+                {
+                  "name": "vasoconstriction",
+                  "depth": null
+                },
+                {
+                  "name": "blood circulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of anatomical structure size",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of DNA biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleic acid biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of nucleobase-containing compound metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of DNA biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "DNA metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleobase-containing compound biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "nucleic acid metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of DNA metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "DNA biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of DNA metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal-level homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "homeostatic process",
+                  "depth": null
+                },
+                {
+                  "name": "temperature homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of immune effector process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of immune effector process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "cytokine production involved in immune response",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "production of molecular mediator of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cytokine production involved in immune response",
+                  "depth": null
+                },
+                {
+                  "name": "immune response",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "immune effector process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cytokine production involved in immune response",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of production of molecular mediator of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of production of molecular mediator of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "polymeric cytoskeletal fiber",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "neurofilament",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular membraneless organelle",
+                  "depth": null
+                },
+                {
+                  "name": "intermediate filament cytoskeleton",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular organelle",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cytoskeleton",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                },
+                {
+                  "name": "membraneless organelle",
+                  "depth": null
+                },
+                {
+                  "name": "intermediate filament",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasm",
+                  "depth": null
+                },
+                {
+                  "name": "supramolecular fiber",
+                  "depth": null
+                },
+                {
+                  "name": "supramolecular polymer",
+                  "depth": null
+                },
+                {
+                  "name": "supramolecular complex",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "3082_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "P28223",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "4047_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3468_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3795_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4905_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3628_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MDILCEENTSLSSTTNSLMQLNDDTRLYSNDFNSGEANTSDAFNWTVDSENRTNLSCEGCLSPSCLSLLHLQEKNWSALLTAVVIILTIAGNILVIMAVSLEKKLQNATNYFLMSLAIADMLLGFLVMPVSMLTILYGYRWPLPSKLCAVWIYLDVLFSTASIMHLCAISLDRYVAIQNPIHHSRFNSRTKAFLKIIAVWTISVGISMPIPVFGLQDDSKVFKEGSCLLADDNFVLIGSFVSFFIPLTIMVITYFLTIKSLQKEATLCVSDLGTRAKLASFSFLPQSSLSSEKLFQRSIHREPGSYTGRRTMQSISNEQKACKVLGIVFFLFVVMWCPFFITNIMAVICKESCNEDVIGALLNVFVWIGYLSSAVNPLVYTLFNKTYRSAFSRYIQCQYKENKKPLQLILVNTIPALAYKSSQLQMGQKKNSKQDAKTTDNDCSMVALGKQHSEEASKDNSDGVNEKVSCV",
+            "rcsb_sample_sequence_length": 471,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "HTR2A",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "HTR2",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Spodoptera frugiperda"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": [
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9AS1",
+            "entity_id": "2",
+            "auth_asym_ids": [
+              "A"
+            ],
+            "asym_ids": [
+              "B"
+            ],
+            "nonpolymer_comp_id": "A1AFV"
+          },
+          "rcsb_nonpolymer_entity_annotation": [
+            {
+              "type": "SUBJECT_OF_INVESTIGATION"
+            }
+          ],
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "501",
+                "auth_asym_id": "A",
+                "asym_id": "B",
+                "entry_id": "9AS1",
+                "entity_id": "2"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4468,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "2-(1H-indol-3-yl)-N,N-dimethylethan-1-amine"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1AFV",
+              "formula_weight": 188.269,
+              "name": "2-(1H-indol-3-yl)-N,N-dimethylethan-1-amine",
+              "formula": "C12 H16 N2"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "DMULVCHRPCFFGV-UHFFFAOYSA-N",
+              "SMILES": "CN(C)CCc1c[nH]c2c1cccc2",
+              "SMILES_stereo": "CN(C)CCc1c[nH]c2c1cccc2"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "6089",
+            "gpcrdb_pubchem_synonyms": [
+              "N,N-DIMETHYLTRYPTAMINE",
+              "DIMETHYLTRYPTAMINE",
+              "61-50-7",
+              "2-(3-Indolyl)ethyldimethylamine",
+              "3-(2-Dimethylaminoethyl)indole",
+              "1H-Indole-3-ethanamine, N,N-dimethyl-",
+              "N,N-Dimethyl-1H-indole-3-ethylamine",
+              "2-(1H-Indol-3-yl)-N,N-dimethylethanamine",
+              "DEA No. 7435",
+              "3-[2-(dimethylamino)ethyl]indole",
+              "WUB601BHAA",
+              "NSC-63795",
+              "DTXSID60110053",
+              "CHEBI:28969",
+              "[2-(1H-indol-3-yl)ethyl]dimethylamine",
+              "3-(2-(DIMETHYLAMINO)ETHYL)INDOLE",
+              "(2-(1H-indol-3-yl)ethyl)dimethylamine",
+              "N,N Dimethyltryptamine",
+              "RefChem:34942",
+              "DTXCID4065313",
+              "200-508-4",
+              "N,N-dimethyl-1H-Indole-3-ethanamine",
+              "2-(1H-INDOL-3-YL)-N,N-DIMETHYL-ETHANAMINE",
+              "CHEMBL12420",
+              "(2-Indol-3-ylethyl)dimethylamine",
+              "Indole, 3-(2-(dimethylamino)ethyl)-",
+              "Indole, 3-[2-(dimethylamino)ethyl]-",
+              "A1AFV",
+              "DMT (psychogenic)",
+              "(psychogenic)",
+              "N,N-Dimethyltryptamine (1mg/ml in Methanol)",
+              "N,N-Dimethyltryptamine (1mg/ml in Acetonitrile)",
+              "EINECS 200-508-4",
+              "UNII-WUB601BHAA",
+              "NSC 63795",
+              "BRN 0138259",
+              "HSDB 8017",
+              "NN-Dimethyltryptamine",
+              "Dimethyltryptamine(DMT)",
+              "dimethyltryptamine [INN]",
+              "(N,N)-Dimethyltryptamine",
+              "N-DIMETHYLTRYPTAMINE",
+              "VLS01",
+              "GTPL141",
+              "3-(dimethylaminoethyl)-indole",
+              "SCHEMBL335710",
+              "[2-(1H-INDOL-3-YL)-ETHYL]-DIMETHYL-AMINE",
+              "Dimethyltryptamine (USAN/INN)",
+              "SCHEMBL4035596",
+              "SCHEMBL9232580",
+              "VLS-01",
+              "METHYL-(2-(1H-INDOL-3-YL)-ETHYL)-METHYLAMINE",
+              "SCHEMBL23723328",
+              "SCHEMBL29261888",
+              "SCHEMBL29350959",
+              "DIMETHYLTRYPTAMINE [USAN]",
+              "DIMETHYLTRYPTAMINE [MART.]",
+              "N,N-Dimethyltryptamine, free base",
+              "DIMETHYLTRYPTAMINE [WHO-DD]",
+              "N,N-DIMETHYLTRYPTAMINE [MI]",
+              "NSC63795",
+              "WLN: T56 BMJ D2N1&1",
+              "3-(2-(dimethylamino)ethyl)-Indole",
+              "BDBM50026868",
+              "MFCD00055989",
+              "STK370594",
+              "3-[2- (dimethylamino)ethyl]-Indole",
+              "AKOS005446117",
+              "3-(2-Dimethylaminoethyl) indole; DMT",
+              "DB01488",
+              "MB00483",
+              "3-(2-DIMETHYLAMINOETHYL) INDOLE",
+              "2-(1H-indol-3-yl)-ethyl-dimethyl-amine",
+              "AS-47089",
+              "N,N-Dimethyltryptamine, >=97% (HPLC)",
+              "2-(1H-indol-3-yl)-N,N-dimethylethylamine",
+              "DB-308391",
+              "N,N-Dimethyltryptamine, 1mg/ml in Methanol",
+              "1H-INDOLE-3-ETHANAMINE,N,N-DIMETHYL",
+              "NS00005525",
+              "N,N-dimethyl-1H-Indole-3-ethanamine (9CI)",
+              "2-(1H-Indol-3-yl)-N,N-dimethylethanamine #",
+              "C08302",
+              "D-5500",
+              "D13141",
+              "2-(1H-Indol-3-yl)-N,N-dimethylethan-1-amine",
+              "061D507",
+              "L001288",
+              "Q407217",
+              "2-(1H-indol-3-yl)-N,N-dimethylethanamine (ACD/Name 4.0)",
+              "N-(2-(1H-indol-3-yl)ethyl)-N,N-dimethylamine (ACD/Name 4.0)",
+              "InChI=1/C12H16N2/c1-14(2)8-7-10-9-13-12-6-4-3-5-11(10)12/h3-6,9,13H,7-8H2,1-2H"
+            ]
+          }
+        }
+      ],
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": [
+            {
+              "experimental_support": "electron microscopy"
+            }
+          ],
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Asymmetric",
+              "symbol": "C1",
+              "oligomeric_state": "Monomer",
+              "stoichiometry": [
+                "A1"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 259
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "9ARX",
+        "9ARY",
+        "9ARZ",
+        "9AS0",
+        "9AS2",
+        "9AS3",
+        "9AS4",
+        "9AS5",
+        "9AS6",
+        "9AS7",
+        "9AS8",
+        "9AS9",
+        "9ASA"
+      ]
+    }
+  }
+}

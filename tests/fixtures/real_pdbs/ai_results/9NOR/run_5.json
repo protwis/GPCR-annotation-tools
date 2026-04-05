@@ -1,0 +1,80 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "Cryo-EM reveals the structure of the human sweet taste receptor, a heteromeric GPCR composed of TAS1R2 and TAS1R3, bound to artificial sweeteners sucralose and aspartame.",
+        "The TAS1R2 subunit is identified as the primary ligand-binding site, accommodating both sucralose and aspartame in a common binding pocket within its Venus flytrap (VFT) domain, which adopts a closed conformation upon ligand binding.",
+        "The structure demonstrates coordinated conformational changes between the TAS1R2 and TAS1R3 subunits, with TAS1R3 maintaining an open VFT conformation, providing insight into the mechanism of sweet taste recognition."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "5352778",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "reasoning": "The paper explicitly states sucralose was used to obtain the 'agonist-bound state' of the receptor, indicating its role as an agonist.",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Sucralose"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "134901",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states aspartame was used to obtain the 'agonist-bound state' of the receptor, indicating its role as an agonist.",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Aspartame"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "174780",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Finally, we generated receptor complexes without the G protein, using a different stabilizing agent (polyethylene glycol [PEG400]) that simultaneously serves as a sweet ligand.",
+                    "reasoning": "The paper describes PEG400 as a 'stabilizing agent' that 'simultaneously serves as a sweet ligand,' implying an agonistic role in activating the receptor."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "PEG400"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.4,
+        "method": "Electron microscopy",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars.",
+                "reasoning": "The paper explicitly states the receptor was crystallized in the 'agonist-bound state' with artificial sweeteners to enable activation of the signaling cascade, confirming an active functional state."
+            },
+            "value": "active",
+            "confidence": "High"
+        },
+        "note": "This structure represents a consensus map from combined cryo-EM datasets of TAS1R2+3 bound to sucralose, aspartame, and PEG400, but without a G-protein complex.",
+        "release_date": "2025-05-14"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

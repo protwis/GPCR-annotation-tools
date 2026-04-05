@@ -1,0 +1,2838 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "9EJZ",
+      "entry": {
+        "id": "9EJZ"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00009ejz"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "pubmed_id": 40745154,
+        "emdb_ids": [
+          "EMD-48110"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "assembly mmCIF",
+            "validation report",
+            "validation slider image",
+            "validation data mmCIF"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "N"
+      },
+      "struct": {
+        "title": "Human M5 muscarinic acetylcholine receptor complex with mini-Gq, agonist acetylcholine and positive allosteric modulator VU6007678"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1038/s41467-025-62212-z"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 40745154
+        },
+        "rcsb_pubmed_central_id": "PMC12314052",
+        "rcsb_pubmed_doi": "10.1038/s41467-025-62212-z",
+        "rcsb_pubmed_abstract_text": "The M <sub>5 </sub> muscarinic acetylcholine receptor (M <sub>5 </sub> mAChR) represents a promising therapeutic target for neurological disorders. However, the high conservation of its orthosteric binding site poses significant challenges for drug development. While selective positive allosteric modulators (PAMs) offer a potential solution, a structural understanding of the M <sub>5 </sub> mAChR and its allosteric binding sites remains limited. Here, we present a 2.8\u2009\u00c5 cryo-electron microscopy structure of the M <sub>5 </sub> mAChR complexed with heterotrimeric G <sub>q </sub> protein and the agonist iperoxo, completing the active-state structural characterization of the mAChR family. To identify the binding site of M <sub>5 </sub>-selective PAMs, we implement an integrated approach combining mutagenesis, pharmacological assays, structural biology, and molecular dynamics simulations. Our mutagenesis studies reveal that selective M <sub>5 </sub> PAMs bind outside previously characterized M <sub>5 </sub> mAChR allosteric sites. Subsequently, we obtain a 2.1\u2009\u00c5 structure of M <sub>5 </sub> mAChR co-bound with acetylcholine and the selective PAM VU6007678, revealing an allosteric pocket at the extrahelical interface between transmembrane domains 3 and 4 that is confirmed through mutagenesis and simulations. These findings demonstrate the diverse mechanisms of allosteric regulation in mAChRs and highlight the value of integrating pharmacological and structural approaches to identify allosteric binding sites.",
+        "rcsb_pubmed_affiliation_info": [
+          "Drug Discovery Biology, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia.",
+          "Australian Research Council Centre for Cryo-Electron Microscopy of Membrane Proteins, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia.",
+          "Computational Medicine Program and Department of Pharmacology, University of North Carolina, Chapel Hill, NC, USA.",
+          "Ramaciotti Centre for Cryo-Electron Microscopy, Monash University, Clayton, Vic, Australia.",
+          "Department of Pharmacology, Warren Center for Neuroscience Drug Discovery and Department of Chemistry, Vanderbilt University, Nashville, TN, USA.",
+          "Computational Medicine Program and Department of Pharmacology, University of North Carolina, Chapel Hill, NC, USA. Yinglong_Miao@med.unc.edu.",
+          "Drug Discovery Biology, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. arthur.christopoulos@monash.edu.",
+          "Australian Research Council Centre for Cryo-Electron Microscopy of Membrane Proteins, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. arthur.christopoulos@monash.edu.",
+          "Neuromedicines Discovery Centre, Monash University, Parkville, Vic, Australia. arthur.christopoulos@monash.edu.",
+          "Drug Discovery Biology, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. celine.valant@monash.edu.",
+          "Australian Research Council Centre for Cryo-Electron Microscopy of Membrane Proteins, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. celine.valant@monash.edu.",
+          "Drug Discovery Biology, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. david.thal@monash.edu.",
+          "Australian Research Council Centre for Cryo-Electron Microscopy of Membrane Proteins, Monash Institute of Pharmaceutical Sciences, Monash University, Parkville, Vic, Australia. david.thal@monash.edu."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-48110",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-48110"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "G protein-coupled receptor, acetylcholine binding, seven transmembrane protein, MEMBRANE PROTEIN"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2024-11-30T00:00:00Z",
+        "initial_release_date": "2025-08-13T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 1
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2025-08-13T00:00:00Z"
+        },
+        {
+          "ordinal": 9,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2025-10-08T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 9,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 2,
+          "revision_ordinal": 9,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "focused EM volume",
+          "db_id": "EMD-48108",
+          "details": "Focused refinement of M5 Muscarinic acetylcholine receptor in complex with agonist acetylcholine and positive allosteric modulator VU6007678",
+          "db_name": "EMDB"
+        },
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-48110",
+          "details": "Human M5 muscarinic acetylcholine receptor complex with mini-Gq, agonist acetylcholine and positive allosteric modulator VU6007678",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Burger, W.A.C."
+        },
+        {
+          "name": "Mobbs, J.I."
+        },
+        {
+          "name": "Thal, D.M."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "National Health and Medical Research Council (NHMRC, Australia)",
+          "country": "Australia",
+          "grant_number": "1196951",
+          "ordinal": 1
+        },
+        {
+          "funding_organization": "Australian Research Council (ARC)",
+          "country": "Australia",
+          "grant_number": "LP180100560",
+          "ordinal": 2
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "PARTICLE",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 2.06
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": "PHENIX",
+          "version": "1.21rc1_5127"
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "Cryo-EM reveals an extrahelical allosteric binding site at the M 5 mAChR.",
+          "rcsb_journal_abbrev": "Nat Commun",
+          "rcsb_authors": [
+            "Burger, W.A.C.",
+            "Mobbs, J.I.",
+            "Rana, B.",
+            "Wang, J.",
+            "Joshi, K.",
+            "Gentry, P.R.",
+            "Yeasmin, M.",
+            "Venugopal, H.",
+            "Bender, A.M.",
+            "Lindsley, C.W.",
+            "Miao, Y.",
+            "Christopoulos, A.",
+            "Valant, C.",
+            "Thal, D.M."
+          ],
+          "year": 2025,
+          "journal_volume": "16",
+          "page_first": "7046",
+          "page_last": "7046",
+          "pdbx_database_id_PubMed": 40745154,
+          "pdbx_database_id_DOI": "10.1038/s41467-025-62212-z"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 158.67,
+        "deposited_atom_count": 9985,
+        "deposited_polymer_monomer_count": 1421,
+        "deposited_modeled_polymer_monomer_count": 1268,
+        "deposited_unmodeled_polymer_monomer_count": 153,
+        "polymer_entity_count_protein": 6,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "N",
+                "asym_id": "A",
+                "entry_id": "9EJZ",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "1",
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "N"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "nanobody 35",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "14_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "113_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "166_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "124_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "113_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MKYLLPTAAAGLLLLAAQPAMAQVQLQESGGGLVQPGGSLRLSCAASGFTFSNYKMNWVRQAPGKGLEWVSDISQSGASISYTGSVKGRFTISRDNAKNTLYLQMNSLKPEDTAVYYCARCPAPFTRDCFDVTSTTYAYRGQGTQVTVSSHHHHHH",
+            "rcsb_sample_sequence_length": 156,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Lama glama",
+              "ncbi_scientific_name": "Lama glama",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Escherichia coli"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "B",
+                "asym_id": "B",
+                "entry_id": "9EJZ",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": null
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "2",
+            "asym_ids": [
+              "B"
+            ],
+            "auth_asym_ids": [
+              "B"
+            ],
+            "uniprot_ids": [
+              "P54311"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P54311"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "P54311",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Rattus norvegicus"
+                }
+              },
+              "rcsb_uniprot_external_reference": null,
+              "gpcrdb_entry_name_slug": "gbb1_rat"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Guanine nucleotide-binding protein G(I)/G(S)/G(T) subunit beta-1",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cytoskeletal protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "spectrin binding",
+                  "depth": null
+                },
+                {
+                  "name": "protein-containing complex binding",
+                  "depth": null
+                },
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "positive regulation of cytosolic calcium ion concentration",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological quality",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "WD40 repeat, conserved site",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic complex",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasmic side of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "heterotrimeric G-protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "side of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasmic side of plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "GTPase complex",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of cytoplasmic side of plasma membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor inner segment",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory organ development",
+                  "depth": null
+                },
+                {
+                  "name": "eye development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "retina development in camera-type eye",
+                  "depth": null
+                },
+                {
+                  "name": "visual system development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "camera-type eye development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory system development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "response to decreased oxygen levels",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen levels",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to hypoxia",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to decreased oxygen levels",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "response to hypoxia",
+                  "depth": null
+                },
+                {
+                  "name": "response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen levels",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "response to abiotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "PAC1/LIS1-like, WD-40 repeat",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G-protein beta subunit-like, WD40 repeats",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "somatodendritic compartment",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "dendrite",
+                  "depth": null
+                },
+                {
+                  "name": "dendritic tree",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasm",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "WD40/YVTN repeat-like-containing domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "enzyme binding",
+                  "depth": null
+                },
+                {
+                  "name": "GTPase binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "non-motile cilium",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "9+0 non-motile cilium",
+                  "depth": null
+                },
+                {
+                  "name": "cilium",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor outer segment",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor cell cilium",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G-protein subunit beta 1-5",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "non-motile cilium",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cilium",
+                  "depth": null
+                },
+                {
+                  "name": "9+0 non-motile cilium",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "ciliary membrane",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor outer segment membrane",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor outer segment",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "bounding membrane of organelle",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "photoreceptor cell cilium",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane region",
+                  "depth": null
+                },
+                {
+                  "name": "organelle membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "phospholipase C-activating G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "WD40-repeat-containing domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "WD40 repeat",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell body",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "muscle cell apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "striated muscle cell apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "apoptotic process",
+                  "depth": null
+                },
+                {
+                  "name": "cell death",
+                  "depth": null
+                },
+                {
+                  "name": "programmed cell death",
+                  "depth": null
+                },
+                {
+                  "name": "cardiac muscle cell apoptotic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "phosphoric ester hydrolase activity",
+                  "depth": null
+                },
+                {
+                  "name": "alkylglycerophosphoethanolamine phosphodiesterase activity",
+                  "depth": null
+                },
+                {
+                  "name": "hydrolase activity, acting on ester bonds",
+                  "depth": null
+                },
+                {
+                  "name": "phosphoric diester hydrolase activity",
+                  "depth": null
+                },
+                {
+                  "name": "hydrolase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "pyrophosphatase activity",
+                  "depth": null
+                },
+                {
+                  "name": "GTPase activity",
+                  "depth": null
+                },
+                {
+                  "name": "ribonucleoside triphosphate phosphatase activity",
+                  "depth": null
+                },
+                {
+                  "name": "hydrolase activity, acting on acid anhydrides, in phosphorus-containing anhydrides",
+                  "depth": null
+                },
+                {
+                  "name": "hydrolase activity",
+                  "depth": null
+                },
+                {
+                  "name": "hydrolase activity, acting on acid anhydrides",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "signaling receptor complex adaptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "protein-macromolecule adaptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "molecular adaptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling adaptor activity",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "21_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "11_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "P54311",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "9_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "2_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "27_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MHHHHHHGSSGSELDQLRQEAEQLKNQIRDARKACADATLSQITNNIDPVGRIQMRTRRTLRGHLAKIYAMHWGTDSRLLVSASQDGKLIIWDSYTTNKVHAIPLRSSWVMTCAYAPSGNYVACGGLDNICSIYNLKTREGNVRVSRELAGHTGYLSCCRFLDDNQIVTSSGDTTCALWDIETGQQTTTFTGHTGDVMSLSLAPDTRLFVSGACDASAKLWDVREGMCRQTFTGHESDINAICFFPNGNAFATGSDDATCRLFDLRADQELMTYSHDNIICGITSVSFSKSGRLLLAGYDDFNCNVWDALKADRAGVLAGHDNRVSCLGVTDDGMAVATGSWDSFLKIWN",
+            "rcsb_sample_sequence_length": 350,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Rattus norvegicus",
+              "ncbi_scientific_name": "Rattus norvegicus",
+              "rcsb_gene_name": [
+                {
+                  "value": "Gnb1",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Trichoplusia ni"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "G",
+                "asym_id": "C",
+                "entry_id": "9EJZ",
+                "entity_id": "3"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8070798"
+                }
+              ],
+              "rcsb_polymer_struct_conn": null
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "3",
+            "asym_ids": [
+              "C"
+            ],
+            "auth_asym_ids": [
+              "G"
+            ],
+            "uniprot_ids": [
+              "P59768"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P59768"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "P59768",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000186469"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "P59768"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "gbg2_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Guanine nucleotide-binding protein G(I)/G(S)/G(O) subunit gamma-2",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "G-protein beta-subunit binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "fibroblast proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic complex",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasmic side of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "heterotrimeric G-protein complex",
+                  "depth": null
+                },
+                {
+                  "name": "side of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasmic side of plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "GTPase complex",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of membrane",
+                  "depth": null
+                },
+                {
+                  "name": "extrinsic component of cytoplasmic side of plasma membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G-protein, gamma subunit",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "extracellular exosome",
+                  "depth": null
+                },
+                {
+                  "name": "membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular vesicle",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular organelle",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular region",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular space",
+                  "depth": null
+                },
+                {
+                  "name": "vesicle",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular membrane-bounded organelle",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G-protein, gamma subunit-like domain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to dopamine",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to dopamine",
+                  "depth": null
+                },
+                {
+                  "name": "response to monoamine",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "response to catecholamine",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-activating dopamine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to catecholamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled dopamine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-activating G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to monoamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-modulating G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G-protein gamma-like domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to monoamine",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to monoamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to catecholamine",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to catecholamine stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to ketone",
+                  "depth": null
+                },
+                {
+                  "name": "response to prostaglandin",
+                  "depth": null
+                },
+                {
+                  "name": "response to lipid",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to endogenous stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to alcohol",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to prostaglandin stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to endogenous stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to prostaglandin E stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to alcohol",
+                  "depth": null
+                },
+                {
+                  "name": "response to hormone",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to lipid",
+                  "depth": null
+                },
+                {
+                  "name": "response to prostaglandin E",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to ketone",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to hormone stimulus",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "5_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "31_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "15_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "38_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "P59768",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "11_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "11_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MASNNTASIAQARKLVEQLKMEANIDRIKVSKAAADLMAYCEAHAKEDPLLTPVPASENPFREKKFFC",
+            "rcsb_sample_sequence_length": 68,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "GNG2",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Trichoplusia ni"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "D",
+                "entry_id": "9EJZ",
+                "entity_id": "4"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": null
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "4",
+            "asym_ids": [
+              "D"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Guanine nucleotide-binding protein Gq chimera",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "4778_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "998_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "1966_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "22934_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "1339_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "973_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "GCTLSAEDKAAVERSKMIDRNLREDGEKARRTLRLLLLGADNSGKSTIVKQMRILHGGSGGSGGTSGIFETKFQVDKVNFHMFDVGGQRDERRKWIQCFNDVTAIIFVVDSSDYNRLQEALNDFKSIWNNRWLRTISVILFLNKQDLLAEKVLAGKSKIEDYFPEFARYTTPEDATPEPGEDPRVTRAKYFIRKEFVDISTASGDGRHICYPHFTCAVDTENARRIFNDCKDIILQMNLREYNLV",
+            "rcsb_sample_sequence_length": 245,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Trichoplusia ni"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "R",
+                "asym_id": "F",
+                "entry_id": "9EJZ",
+                "entity_id": "6"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "6",
+            "asym_ids": [
+              "F"
+            ],
+            "auth_asym_ids": [
+              "R"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Human M5 muscarinic acetylcholine receptor",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "92183_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "129993_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "118746_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "16279_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "266_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "35151_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "DYKDDDDAEGDSYHNATTVNGTPVNHQPLERHRLWEVITIAAVTAVVSLITIVGNVLVMISFKVNSQLKTVNNYYLLSLACADLIIGIFSMNLYTTYILMGRWALGSLACDLWLALDYVASNASVMNLLVISFDRYFSITRPLTYRAKRTPKRAGIMIGLAWLISFILWAPAILCWQYLVGKRTVPLDECQIQFLSEPTITFGTAIAAFYIPVSVMTILYCRIYRETEKRTKDLADLQGSDSVPSHQMTKRKRVVLVKERKAAQTLSAILLAFIITWTPYNIMVLVSTFCDKCVPVTLWHLGYWLCYVNSTVNPICYALCNRTFRKTFKMLLLCRWKKKKVEE",
+            "rcsb_sample_sequence_length": 343,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "CHRM5",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Spodoptera frugiperda"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "H",
+                "asym_id": "E",
+                "entry_id": "9EJZ",
+                "entity_id": "5"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "E"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "E"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "E"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "E"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "E"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "E"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "E"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "E"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "5",
+            "asym_ids": [
+              "E"
+            ],
+            "auth_asym_ids": [
+              "H"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "scFv16",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "255_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "241_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "167_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "75_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "312_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "65_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "DVQLVESGGGLVQPGGSRKLSCSASGFAFSSFGMHWVRQAPEKGLEWVAYISSGSGTIYYADTVKGRFTISRDDPKNTLFLQMTSLRSEDTAMYYCVRSIYYYGSSPFDFWGQGTTLTVSSGGGGSGGGGSGGGGSDIVMTQATSSVPVTPGESVSISCRSSKSLLHSNGNTYLYWFLQRPGQSPQLLIYRMSNLASGVPDRFSGSGSGTAFTLTISRLEAEDVGVYYCMQHLEYPLTFGAGTKLELKAAAHHHHHHHH",
+            "rcsb_sample_sequence_length": 259,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Mus musculus",
+              "ncbi_scientific_name": "Mus musculus",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Trichoplusia ni"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": [
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "7",
+            "auth_asym_ids": [
+              "R"
+            ],
+            "asym_ids": [
+              "G"
+            ],
+            "nonpolymer_comp_id": "A1BKS"
+          },
+          "rcsb_nonpolymer_entity_annotation": [
+            {
+              "type": "SUBJECT_OF_INVESTIGATION"
+            }
+          ],
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "601",
+                "auth_asym_id": "R",
+                "asym_id": "G",
+                "entry_id": "9EJZ",
+                "entity_id": "7"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.6464,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "Author"
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "VU6007678"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "A1BKS",
+              "formula_weight": 484.586,
+              "name": "VU6007678",
+              "formula": "C25 H29 F N4 O3 S"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "ZAMIBFZZLIZYNL-XMMPIXPASA-N",
+              "SMILES": "CCCN(C1CCc2c1cccc2F)C(=O)C3CCN(CC3)S(=O)(=O)c4ccc5c(c4)cn[nH]5",
+              "SMILES_stereo": "CCCN([C@@H]1CCc2c1cccc2F)C(=O)C3CCN(CC3)S(=O)(=O)c4ccc5c(c4)cn[nH]5"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "154731959",
+            "gpcrdb_pubchem_synonyms": [
+              "VU6007678",
+              "2222737-15-5",
+              "N-[(1R)-4-fluoro-2,3-dihydro-1H-inden-1-yl]-1-(1H-indazol-5-ylsulfonyl)-N-propylpiperidine-4-carboxamide",
+              "A1BKS",
+              "GTPL14058"
+            ]
+          }
+        },
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9EJZ",
+            "entity_id": "8",
+            "auth_asym_ids": [
+              "R"
+            ],
+            "asym_ids": [
+              "H"
+            ],
+            "nonpolymer_comp_id": "ACH"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "602",
+                "auth_asym_id": "R",
+                "asym_id": "H",
+                "entry_id": "9EJZ",
+                "entity_id": "8"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.6672,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "N",
+                  "is_subject_of_investigation_provenance": null
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "ACETYLCHOLINE"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "ACH",
+              "formula_weight": 146.207,
+              "name": "ACETYLCHOLINE",
+              "formula": "C7 H16 N O2"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "OIPILFWXSMYKGL-UHFFFAOYSA-N",
+              "SMILES": "CC(=O)OCC[N+](C)(C)C",
+              "SMILES_stereo": "CC(=O)OCC[N+](C)(C)C"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "187",
+            "gpcrdb_pubchem_synonyms": [
+              "acetylcholine",
+              "O-Acetylcholine",
+              "51-84-3",
+              "Choline acetate (ester)",
+              "2-acetyloxyethyl(trimethyl)azanium",
+              "2-(Acetyloxy)-N,N,N-trimethylethanaminium",
+              "ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl-",
+              "N9YNS0M02X",
+              "CHEBI:15355",
+              "[2-(acetyloxy)ethyl]trimethylazanium",
+              "2-acetyloxyethyl-trimethylazanium",
+              "DTXSID8075334",
+              "(2-(acetyloxy)ethyl)trimethylazanium",
+              "Cusi, Acetilcolina",
+              "Fluoride, Acetylcholine",
+              "RefChem:5512",
+              "Hydroxide, Acetylcholine",
+              "Acetylcholine L Tartrate",
+              "L-Tartrate, Acetylcholine",
+              "DTXCID6040951",
+              "200-128-9",
+              "Acetylcholine Picrate",
+              "Choline acetate",
+              "(2-Acetoxyethyl)trimethylammonium",
+              "Acetyl choline ion",
+              "Acetylcholinum",
+              "Acetyl choline cation",
+              "Ach",
+              "Azetylcholin",
+              "COL Acetate",
+              "Acetylcholine cation",
+              "BRN 1764436",
+              "(2-Acetoxyethyl)trimetilammonium",
+              "CHEMBL667",
+              "[3H]acetylcholine",
+              "14047-05-3",
+              "2-acetoxyethyl(trimethyl)ammonium;bromide",
+              "NCGC00018123-05",
+              "EINECS 200-128-9",
+              "UNII-N9YNS0M02X",
+              "2rin",
+              "3rqw",
+              "(14C)Acetylcholine",
+              "(14C)-Acetylcholine",
+              "Spectrum_000022",
+              "2ha4",
+              "2xz5",
+              "starbld0009701",
+              "Spectrum2_001258",
+              "Spectrum3_000286",
+              "Spectrum4_000136",
+              "Spectrum5_000762",
+              "Epitope ID:176773",
+              "cid_6060",
+              "SCHEMBL3216",
+              "ACETYLCHOLINE [VANDF]",
+              "BSPBio_001792",
+              "GTPL294",
+              "KBioGR_000552",
+              "KBioSS_000382",
+              "4-04-00-01446 (Beilstein Handbook Reference)",
+              "DivK1c_000686",
+              "SPBio_001196",
+              "ACETYLCHOLINE [WHO-DD]",
+              "Acetylcholinium: acetyl-Choline",
+              "GTPL8593",
+              "orb1991950",
+              "orb2279699",
+              "BDBM10759",
+              "KBio1_000686",
+              "KBio2_000382",
+              "KBio2_002950",
+              "KBio2_005518",
+              "KBio3_001292",
+              "NINDS_000686",
+              "HMS2089A14",
+              "ACETYLCHOLINE [USP IMPURITY]",
+              "NSC800293",
+              "AKOS040734806",
+              "DB03128",
+              "NSC-800293",
+              "2-acetyloxy-N,N,N-trimethylethanaminium",
+              "IDI1_000686",
+              "NCGC00018123-01",
+              "NCGC00018123-02",
+              "NCGC00018123-03",
+              "NCGC00018123-04",
+              "NCGC00021161-03",
+              "NCGC00021161-04",
+              "NCGC00163215-01",
+              "2-Acetoxy-N,N,N-trimethylethan-1-aminium",
+              "SBI-0051271.P003",
+              "CS-0453239",
+              "NS00002053",
+              "ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl",
+              "C01996",
+              "AB00053790-25",
+              "AB00053790_26",
+              "AB00053790_27",
+              "L000783",
+              "Q180623",
+              "BRD-K82381502-003-23-1",
+              "BRD-K82381502-003-24-9",
+              "Ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl- (9CI)",
+              "2-(Acetyloxy)-N,N,N-trimethylethanaminium labeled with carbon-14",
+              "Ethanaminium, 2-(acetyloxy)-N,N,N-trimethyl-, labeled with carbon-14",
+              "InChI=1/C7H16NO2/c1-7(9)10-6-5-8(2,3)4/h5-6H2,1-4H3/q+"
+            ]
+          }
+        }
+      ],
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_and_software_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": [
+            {
+              "experimental_support": "electron microscopy"
+            }
+          ],
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Asymmetric",
+              "symbol": "C1",
+              "oligomeric_state": "Hetero 6-mer",
+              "stoichiometry": [
+                "A1",
+                "B1",
+                "C1",
+                "D1",
+                "E1",
+                "F1"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 1268
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "9EK0"
+      ]
+    }
+  }
+}

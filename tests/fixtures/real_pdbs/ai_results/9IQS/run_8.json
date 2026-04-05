@@ -1,0 +1,86 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "polymer_components[0].description",
+                    "reasoning": "Soluble cytochrome b562 is co-crystallized with the receptor on the same chain and doesn't fit other specific auxiliary protein categories, so 'Other' is the most appropriate classification."
+                },
+                "value": "Other",
+                "confidence": "Medium"
+            },
+            "chain_id": "B",
+            "name": "Soluble cytochrome b562"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states mBril was engineered into the receptor for stabilization, defining it as a fusion protein.",
+                    "quote_or_path": "receptors were engineered by inserting mBril between TM5 and TM6 to create continuous helices within the receptor.",
+                    "source": "Paper"
+                },
+                "value": "Fusion protein",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "mBril"
+        },
+        {
+            "type": {
+                "value": "Other",
+                "evidence": {
+                    "reasoning": "The K3-ALFA tag is described as an engineered helical tag at the C-terminus of the receptor, serving as an auxiliary component.",
+                    "quote_or_path": "Additionally, a K3-ALFA helical tag was introduced at the C-terminus of H8 in the desired configuration",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "K3-ALFA tag"
+        }
+    ],
+    "key_findings": [
+        "The cryo-EM structure reveals that muscarinic toxin 3 (MT3) binding induces an inactive conformation in the Muscarinic acetylcholine receptor M4, characterized by the close packing of TM6.",
+        "MT3 functions as an antagonist by partially occupying the orthosteric binding pocket via its finger loop 2, distinguishing its mechanism from allosteric modulators.",
+        "Structure-guided engineering and directed evolution of MT3 variants successfully generated subtype-selective modulators for \u03b12A and M4AChR, highlighting the potential of venom-derived scaffolds for drug discovery."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "protein",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Antagonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).; Collectively, through the partial occupancy of the orthostatic pocket with finger loop 2, MT3 antagonistically modulates target receptors.",
+                    "reasoning": "The paper consistently describes MT3's action as antagonistic and states it antagonistically modulates target receptors."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.6,
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).",
+                "reasoning": "The paper explicitly states that the receptor adopts an inactive conformation due to the antagonistic activity of MT3."
+            },
+            "value": "inactive",
+            "confidence": "High"
+        },
+        "release_date": "2025-07-23",
+        "note": "Engineered with mBril inserted between TM5 and TM6, and a K3-ALFA helical tag at the C-terminus of H8. MT3 is fused directly to the N-terminus of the receptor.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

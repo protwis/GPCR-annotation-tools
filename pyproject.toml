@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gpcr-annotation-tools"
-version = "0.1.1"
+version = "0.1.2"
 description = "Human-in-the-loop curation suite for GPCR structure annotations"
 readme = "README.md"
 license = "Apache-2.0"
@@ -25,6 +25,7 @@ classifiers = [
 dependencies = [
     "rich>=13.0",
     "tqdm>=4.60",
+    "requests>=2.31",
 ]
 
 [project.optional-dependencies]
@@ -33,6 +34,8 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.4",
     "mypy>=1.10",
+    "types-requests>=2.31",
+    "types-tqdm>=4.60",
 ]
 
 [project.scripts]
@@ -75,7 +78,7 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false          # gradual adoption
 check_untyped_defs = true
-ignore_missing_imports = true
+ignore_missing_imports = false
 
 # ── Pytest ──────────────────────────────────────────────────────────────
 [tool.pytest.ini_options]

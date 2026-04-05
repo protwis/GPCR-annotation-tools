@@ -1,0 +1,1505 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "9IQS",
+      "entry": {
+        "id": "9IQS"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00009iqs"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2"
+        ],
+        "pubmed_id": 40659608,
+        "emdb_ids": [
+          "EMD-60794"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "entry PDB",
+            "assembly mmCIF",
+            "assembly PDB",
+            "validation report",
+            "validation slider image",
+            "validation data mmCIF"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "Y"
+      },
+      "struct": {
+        "title": "Cryo-EM structure of MT3-Muscarinic acetylcholine receptor 4"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1038/s41467-025-61695-0"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 40659608
+        },
+        "rcsb_pubmed_central_id": "PMC12259985",
+        "rcsb_pubmed_doi": "10.1038/s41467-025-61695-0",
+        "rcsb_pubmed_abstract_text": "Adrenergic receptors (ARs) and muscarinic acetylcholine receptors (mAChRs) are essential G protein-coupled receptors (GPCRs) that regulate a wide range of physiological processes. Despite their significance, developing subtype-selective modulators for these receptors has been a formidable challenge due to the high structural and sequence similarities within their subfamilies. In this study, we elucidated the recognition and regulatory mechanisms of ARs and mAChRs by muscarinic toxin 3 (MT3), a cross-reactive ligand derived from snake venom. By leveraging the distinct toxin-receptor interfaces, we engineer a panel of toxin variants capable of selectively modulating \u03b12A and M <sub>4 </sub>AChR using computational design and directed evolution. These subtype-selective toxins not only provide valuable tools for basic research but also hold therapeutic potential for diseases associated with these GPCRs. This study further underscores the effectiveness of structure-guided approaches in transforming venom-derived scaffolds into receptor-specific modulators.",
+        "rcsb_pubmed_affiliation_info": [
+          "Department of Laboratory Medicine, The First Affiliated Hospital of USTC, MOE Key Laboratory for Membraneless Organelles and Cellular Dynamics, Hefei National Center for Cross-disciplinary Sciences, Biomedical Sciences and Health Laboratory of Anhui Province, Center for Advanced Interdisciplinary Science and Biomedicine of IHM, Division of Life Sciences and Medicine, University of Science and Technology of China, 230027, Hefei, P.R. China.",
+          "Kobilka Institute of Innovative Drug Discovery, School of Medicine, The Chinese University of Hong Kong, Shenzhen, China.",
+          "Kobilka Institute of Innovative Drug Discovery, School of Medicine, The Chinese University of Hong Kong, Shenzhen, China. honglihu@cuhk.edu.cn.",
+          "Department of Laboratory Medicine, The First Affiliated Hospital of USTC, MOE Key Laboratory for Membraneless Organelles and Cellular Dynamics, Hefei National Center for Cross-disciplinary Sciences, Biomedical Sciences and Health Laboratory of Anhui Province, Center for Advanced Interdisciplinary Science and Biomedicine of IHM, Division of Life Sciences and Medicine, University of Science and Technology of China, 230027, Hefei, P.R. China. qguo32@ustc.edu.cn.",
+          "Department of Laboratory Medicine, The First Affiliated Hospital of USTC, MOE Key Laboratory for Membraneless Organelles and Cellular Dynamics, Hefei National Center for Cross-disciplinary Sciences, Biomedical Sciences and Health Laboratory of Anhui Province, Center for Advanced Interdisciplinary Science and Biomedicine of IHM, Division of Life Sciences and Medicine, University of Science and Technology of China, 230027, Hefei, P.R. China. taoyy@ustc.edu.cn."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-60794",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-60794"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "complex, MEMBRANE PROTEIN"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2024-07-13T00:00:00Z",
+        "initial_release_date": "2025-07-23T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 1
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2025-07-23T00:00:00Z"
+        },
+        {
+          "ordinal": 8,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2026-02-04T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 8,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 2,
+          "revision_ordinal": 8,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-60794",
+          "details": "Cryo-EM structure of MT3-Muscarinic acetylcholine receptor 4",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Zhong, Y.X."
+        },
+        {
+          "name": "Tao, H.H."
+        },
+        {
+          "name": "Tao, Y.Y."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "National Natural Science Foundation of China (NSFC)",
+          "country": "China",
+          "grant_number": null,
+          "ordinal": 1
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "CELL",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 3.6
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "Structure-guided engineering of snake toxins for selective modulation of adrenergic and muscarinic receptors.",
+          "rcsb_journal_abbrev": "Nat Commun",
+          "rcsb_authors": [
+            "Zhong, Y.",
+            "Tao, H.",
+            "Zhang, Y.",
+            "He, B.",
+            "Jiao, H.",
+            "Wang, D.",
+            "Teng, M.",
+            "Hu, H.",
+            "Guo, Q.",
+            "Tao, Y."
+          ],
+          "year": 2025,
+          "journal_volume": "16",
+          "page_first": "6478",
+          "page_last": "6478",
+          "pdbx_database_id_PubMed": 40659608,
+          "pdbx_database_id_DOI": "10.1038/s41467-025-61695-0"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 56.17,
+        "deposited_atom_count": 2738,
+        "deposited_polymer_monomer_count": 497,
+        "deposited_modeled_polymer_monomer_count": 345,
+        "deposited_unmodeled_polymer_monomer_count": 152,
+        "polymer_entity_count_protein": 2,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "B",
+                "asym_id": "B",
+                "entry_id": "9IQS",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8091156"
+                },
+                {
+                  "type": "SCOP2",
+                  "annotation_id": "8091156"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9IQS",
+            "entity_id": "2",
+            "asym_ids": [
+              "B"
+            ],
+            "auth_asym_ids": [
+              "B"
+            ],
+            "uniprot_ids": [
+              "P08173"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P08173"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "P08173",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000180720"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "P08173"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "acm4_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Muscarinic acetylcholine receptor M4,Soluble cytochrome b562",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "MemProtMD",
+              "annotation_lineage": [
+                {
+                  "name": "Generic MemProtMD",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "postsynapse",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "postsynaptic membrane",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane region",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Muscarinic acetylcholine receptor family",
+                  "depth": 1
+                },
+                {
+                  "name": "Muscarinic acetylcholine receptor M4",
+                  "depth": 2
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to acetylcholine",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "acetylcholine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "postsynaptic signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-inhibiting G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled acetylcholine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-modulating G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to acetylcholine",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "adenylate cyclase-inhibiting G protein-coupled acetylcholine receptor signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Muscarinic acetylcholine receptor family",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "anterograde trans-synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "chemical synaptic transmission",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "synapse",
+                  "depth": null
+                },
+                {
+                  "name": "cell junction",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "neurotransmitter receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled amine receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled acetylcholine receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "postsynaptic neurotransmitter receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled neurotransmitter receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "acetylcholine receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G protein-coupled receptor, rhodopsin-like",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "synaptic signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to acetylcholine",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cell-cell signaling",
+                  "depth": null
+                },
+                {
+                  "name": "response to nitrogen compound",
+                  "depth": null
+                },
+                {
+                  "name": "acetylcholine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "postsynaptic signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to oxygen-containing compound",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled acetylcholine receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "response to acetylcholine",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "somatodendritic compartment",
+                  "depth": null
+                },
+                {
+                  "name": "cell projection",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "dendrite",
+                  "depth": null
+                },
+                {
+                  "name": "dendritic tree",
+                  "depth": null
+                },
+                {
+                  "name": "neuron projection",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane bounded cell projection",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, rhodopsin-like, 7TM",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of locomotion",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "locomotion",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway, coupled to cyclic nucleotide second messenger",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "4511_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4400_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "P08173",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "466907_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "564870_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "37349_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "495261_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "HNRYETVEMVFIATVTGSLSLVTVVGNILVMLSIKVNRQLQTVNNYFLFSLACADLIIGAFSMNLYTVYIIKGYWPLGAVVCDLWLALDYVVSNASVMNLLIISFDRYFCVTKPLTYPARRTTKMAGLMIAAAWVLSFVLWAPAILFWQFVVGKRTVPDNQCFIQFLSNPAVTFGTAIAAFYLPVVIMTVLYIHISLASRSRVADLEDNWETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKASGSGSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTRNAYIQKYLRMAARERKVTRTIFAILLAFILTWTPYNVMVLVNTFCQSCIPDTVWSIGYWLCYVNSTINPACYALCNATFKKTFRHLLLKIAALKEKIAALKEKIAALKEAEEKRASRLEEELRRRLTEGSHHHHHHHH",
+            "rcsb_sample_sequence_length": 432,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "CHRM4",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            },
+            {
+              "scientific_name": "synthetic construct",
+              "ncbi_scientific_name": "synthetic construct",
+              "rcsb_gene_name": null
+            },
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "CHRM4",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            },
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            },
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "A",
+                "entry_id": "9IQS",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9IQS",
+            "entity_id": "1",
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "uniprot_ids": [
+              "P81031"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P81031"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "P81031",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Dendroaspis angusticeps"
+                }
+              },
+              "rcsb_uniprot_external_reference": null,
+              "gpcrdb_entry_name_slug": "3sim3_denan"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Muscarinic toxin 3",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Snake cytotoxin, cobra-type",
+                  "depth": 2
+                },
+                {
+                  "name": "Snake three-finger toxin",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Snake toxin, conserved site",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Snake toxin-like superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular region",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Snake toxin cobra-type",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "toxin activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Snake three-finger toxin",
+                  "depth": 1
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "6135_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4015_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "27956_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "37396_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "13807_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "9883_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "P81031",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "LTCVTKNTIFGITTENCPAGQNLCFKRWHYVIPRYTEITRGCAATCPIPENYDSIHCCKTDKCNE",
+            "rcsb_sample_sequence_length": 65,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Dendroaspis angusticeps",
+              "ncbi_scientific_name": "Dendroaspis angusticeps",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": null,
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_and_software_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": [
+            {
+              "experimental_support": "electron microscopy"
+            }
+          ],
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Asymmetric",
+              "symbol": "C1",
+              "oligomeric_state": "Hetero 2-mer",
+              "stoichiometry": [
+                "A1",
+                "B1"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 345
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "9IQR",
+        "9IQV"
+      ]
+    }
+  }
+}

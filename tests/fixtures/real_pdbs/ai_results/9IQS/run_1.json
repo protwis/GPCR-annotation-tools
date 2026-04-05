@@ -1,0 +1,86 @@
+{
+    "key_findings": [
+        "The structure reveals a distinctive antagonistic binding mode for Muscarinic toxin 3 (MT3), involving partial occupancy of the orthosteric pocket, which explains its insurmountable antagonism.",
+        "The MT3-bound M4 muscarinic acetylcholine receptor (M4AChR) adopts an inactive conformation, characterized by the close packing of transmembrane helix 6 (TM6) with the intracellular receptor core.",
+        "MT3 stabilizes receptor interactions through a rigid \u03b2-strand architecture, diverging fundamentally in spatial orientation within the orthosteric binding pocket compared to conformationally flexible nanobody complementarity-determining region 3 (CDR3) loops."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The PDB metadata explicitly lists 'Soluble cytochrome b562' as part of the receptor's polymer chain description.",
+                    "quote_or_path": "polymer_components[0].description",
+                    "source": "PDB Metadata"
+                },
+                "value": "Other",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "Soluble cytochrome b562"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Briefly, receptors were engineered by inserting mBril between TM5 and TM6 to create continuous helices within the receptor.",
+                    "reasoning": "The paper explicitly states mBril was inserted as an engineering strategy to stabilize the receptor."
+                },
+                "value": "Fusion protein",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "mBril"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states the K3-ALFA tag was introduced as an engineering strategy for the receptor.",
+                    "quote_or_path": "Additionally, a K3-ALFA helical tag was introduced at the C-terminus of H8 in the desired configuration (Supplementary Fig. 1c-e).",
+                    "source": "Paper"
+                },
+                "value": "Other",
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "K3-ALFA tag"
+        }
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "peptide",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "Collectively, through the partial occupancy of the orthostatic pocket with finger loop 2, MT3 antagonistically modulates target receptors.; In contrast, MT3 exhibits a broader specificity profile... acting as an antagonist",
+                    "reasoning": "The paper explicitly states MT3 acts as an antagonist and antagonistically modulates target receptors."
+                },
+                "value": "Antagonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.6,
+        "method": "Electron microscopy",
+        "release_date": "2025-07-23",
+        "note": "Engineered construct with mBril inserted between TM5 and TM6, a K3-ALFA tag at the C-terminus of H8, and fused with soluble cytochrome b562.",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).",
+                "reasoning": "The paper explicitly states that the receptor adopts an 'inactive conformation' in complex with MT3, which is described as an antagonist."
+            },
+            "value": "inactive",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

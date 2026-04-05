@@ -1,0 +1,60 @@
+{
+    "key_findings": [
+        "Elucidation of the recognition and regulatory mechanisms of adrenergic and muscarinic acetylcholine receptors by muscarinic toxin 3 (MT3).",
+        "MT3 acts as an antagonist by stabilizing the M4AChR in an inactive conformation through partial occupancy of the orthosteric pocket.",
+        "Structure-guided engineering of MT3 variants for subtype-selective modulation of \u03b12A and M4AChR demonstrates a promising direction for drug discovery."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Fusion protein",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "the intracellular loop 3 (ICL3) residues 220\u2013393 of M4AChR were deleted and replaced by mBRIL, respectively.",
+                    "reasoning": "The paper explicitly states mBRIL was inserted into the receptor as a replacement for ICL3, making it a fusion protein."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "B",
+            "name": "mBRIL"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "protein",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Antagonist",
+                "evidence": {
+                    "reasoning": "The paper explicitly identifies MT3 as an antagonist based on its binding mode and effect.",
+                    "quote_or_path": "This distinctive binding mode of MT3 elucidates its role as an antagonist rather than an allosteric modulator like MT7 and may also be responsible for the insurmountable antagonism observed in MTs41.",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Muscarinic toxin 3"
+        }
+    ],
+    "structure_info": {
+        "resolution": 3.6,
+        "method": "Electron microscopy",
+        "state": {
+            "value": "inactive",
+            "evidence": {
+                "reasoning": "The paper explicitly states that the receptor adopts an inactive conformation due to MT3's antagonistic activity.",
+                "quote_or_path": "In line with the antagonistic activity of MT3, all three target receptors adopt an inactive conformation, characterized by the close packing of TM6 with the intracellular receptor core (Fig. 1d).",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "Receptor engineered with mBRIL fusion in ICL3 and K3-ALFA tag at C-terminus; Muscarinic toxin 3 (MT3) fused to N-terminus of receptor via a 15 glycine-serine linker.",
+        "release_date": "2025-07-23"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "acm4_human",
+        "chain_id": "B"
+    }
+}

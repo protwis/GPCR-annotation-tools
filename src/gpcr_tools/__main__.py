@@ -37,6 +37,30 @@ def cli() -> None:
         help="Run non-interactively with accept-all behavior (for CI smoke tests).",
     )
 
+    # aggregate --------------------------------------------------------
+    agg_parser = subparsers.add_parser(
+        "aggregate",
+        help="Aggregate multi-run AI results and validate against PDB metadata.",
+    )
+    agg_parser.add_argument(
+        "pdb_id",
+        nargs="?",
+        default=None,
+        help="Optional: aggregate a specific PDB ID instead of all pending.",
+    )
+    agg_parser.add_argument(
+        "--skip-api-checks",
+        action="store_true",
+        default=False,
+        help="Skip UniProt/PubChem/chimera API validation calls.",
+    )
+    agg_parser.add_argument(
+        "--force",
+        action="store_true",
+        default=False,
+        help="Re-process PDBs already in the aggregate log.",
+    )
+
     # csv-generator (kept temporarily for backward compat) -------------
     csv_parser = subparsers.add_parser(
         "csv-generator",
@@ -71,6 +95,30 @@ def cli() -> None:
         from gpcr_tools.csv_generator.app import main
 
         main(target_pdb=args.pdb_id, auto_accept=False)
+
+    elif args.command == "aggregate":
+        from gpcr_tools.aggregator.runner import aggregate_all, aggregate_pdb
+
+        if args.pdb_id:
+            result = aggregate_pdb(
+                args.pdb_id,
+                skip_api_checks=args.skip_api_checks,
+            )
+            if result.success:
+                print(f"Aggregated {args.pdb_id} -> {result.aggregated_path}")
+            else:
+                print(f"Failed {args.pdb_id}: {result.error}", file=sys.stderr)
+                sys.exit(1)
+        else:
+            results = aggregate_all(
+                skip_api_checks=args.skip_api_checks,
+                force=args.force,
+            )
+            ok = sum(1 for r in results if r.success)
+            fail = sum(1 for r in results if not r.success)
+            print(f"Aggregation complete: {ok} succeeded, {fail} failed.")
+            if fail > 0:
+                sys.exit(1)
 
     elif args.command == "curate":
         from gpcr_tools.csv_generator.app import main

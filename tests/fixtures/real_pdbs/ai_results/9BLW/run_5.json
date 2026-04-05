@@ -1,0 +1,91 @@
+{
+    "key_findings": [
+        "Cagrilintide demonstrates an amylin-like binding mode but induces distinct conformational dynamics at calcitonin-family receptors compared to other peptides, potentially contributing to its clinical efficacy.",
+        "Cagrilintide engages the Calcitonin Receptor (CTR) primarily in a bypass conformation, stabilized in 85% of particles, and this conformation is energetically favored by an intra-peptide ionic lock (R17Cagri-E14Cagri).",
+        "The C-terminal P37Cagri contributes to altered dynamics of the extracellular domain protomers in an AMYR-subtype-specific manner, differentiating Cagrilintide's pharmacological profile."
+    ],
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "polymer_components[3].description",
+                    "reasoning": "The PDB metadata description for chain N explicitly identifies it as 'Nanobody 35'."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "Nanobody-35"
+        },
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper clearly identifies RAMPs as receptor activity-modifying proteins, and 'Receptor activity-modifying protein 1' is a RAMP.",
+                    "quote_or_path": "AMYRs are heterodimers of the class B1 G protein-coupled receptor, calcitonin (CT) receptor (CTR), and receptor activity-modifying proteins (RAMPs)67.",
+                    "source": "Paper"
+                },
+                "value": "RAMP",
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Receptor activity-modifying protein 1"
+        }
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "peptide",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "reasoning": "The paper explicitly states Cagrilintide is an agonist for both amylin and calcitonin receptors.",
+                    "quote_or_path": "cagrilintide, a long-acting amylin and calcitonin receptor agonist.",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "P",
+            "name": "Cagrilintide backbone (non-acylated)"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "G"
+            },
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "A"
+            },
+            "note": "Engineered dominant negative Gs (DNGs) protein used for stabilization.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "B"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.2,
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states the determined structures are of 'active' receptors and refers to them as 'active, Gs-coupled' complexes.",
+                "quote_or_path": "determine structures of cagrilintide bound to Gs-coupled, active, amylin receptors (AMY1R, AMY2R, AMY3R) and calcitonin receptor (CTR)",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "method": "Electron microscopy",
+        "note": "Cryo-EM structure of human calcitonin receptor (CTR) in complex with an engineered Gs protein, Cagrilintide peptide, RAMP1, and Nanobody 35.",
+        "release_date": "2025-04-16"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "calcr_human",
+        "chain_id": "R"
+    }
+}

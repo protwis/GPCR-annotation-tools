@@ -1,0 +1,87 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "evidence": {
+                    "reasoning": "The paper explicitly describes Fab7 as an antigen-binding fragment (Fab) designed to recognize arrestin, confirming its classification as an Antibody Fab fragment.",
+                    "quote_or_path": "Here, to address this, we developed an antigen-binding fragment (Fab7) that recognizes both active arrestin2 (\u03b2-arrestin1) and arrestin3 (\u03b2-arrestin2) without interacting with bound receptor polypeptides.",
+                    "source": "Paper"
+                },
+                "value": "Antibody fab fragment",
+                "confidence": "High"
+            },
+            "chain_id": "L, H",
+            "name": "Fab7"
+        },
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "reasoning": "Both the PDB metadata and the paper describe this component as an \"anti-Fab nanobody\" or a \"variable heavy-chain (VH) domain\" used for stabilization, directly identifying it as a Nanobody.",
+                    "quote_or_path": "polymer_components[2].description; Fab7 was further stabilized with a variable heavy-chain (VH) domain that binds to the hinge of the Fab light chain37.",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "N",
+            "name": "anti-Fab nanobody"
+        }
+    ],
+    "key_findings": [
+        "Differential phosphorylation by GRK2 versus GRK5 on ACKR3's C-terminal tail dictates distinct structural and dynamic properties of the receptor-arrestin assemblies, resulting in heterogeneous 'tail-mode' assemblies for GRK2-phosphorylated ACKR3 and more rigid 'ACKR3-adjacent' assemblies for GRK5-phosphorylated ACKR3.",
+        "The arrestin finger loops (Arr2*) surprisingly engage the micelle surface, not the receptor intracellular pocket, and Arr3* exhibits greater dynamics, partly due to the absence of a membrane-anchoring motif, altering GPCR-arrestin complex structure and dynamics.",
+        "A newly developed antigen-binding fragment, Fab7, functions as an arrestin conformational sensor by selectively recognizing active arrestin2 and arrestin3 without binding to receptor polypeptides, thereby proving crucial for cryo-EM structure determination of ACKR3-arrestin complexes."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "5997",
+            "type": "lipid",
+            "chem_comp_id": "CLR",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "Cholesterol is listed as a model component in the Extended Data Table for PDB 8TII, implying its role as a cofactor in the membrane environment.",
+                    "quote_or_path": "Extended Data Table 1, row 9, \"Model composition\" -> \"Ligands\": \"CLR:1\"",
+                    "source": "PDB Metadata"
+                },
+                "value": "Cofactor",
+                "confidence": "Medium"
+            },
+            "chain_id": "None",
+            "name": "Cholesterol"
+        }
+    ],
+    "signaling_partners": {
+        "arrestin": {
+            "uniprot_entry_name": "arrb1_bovin",
+            "note": "Engineered mutant Arr2* with I386A, V387A, F388A mutations in its C-tail to stabilize active conformation.",
+            "chain_id": "A"
+        },
+        "g_protein": {
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "none",
+                "chain_id": "None"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "method": "Electron microscopy",
+        "state": {
+            "value": "active",
+            "evidence": {
+                "reasoning": "The paper explicitly states that Fab7, a component of this complex, is selective for activated arrestin states, directly implying an active receptor state.",
+                "quote_or_path": "The Fab7 interface was not compatible with the basal conforma-tion of Arr2 (Extended Data Fig. 5b), indicating that it was selective for the activated states of arrestins.",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "Nanodisc",
+        "release_date": "2025-01-22"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ackr3_human",
+        "chain_id": "R"
+    }
+}

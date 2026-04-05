@@ -11,7 +11,13 @@ from rich import box
 from rich.panel import Panel
 from rich.text import Text
 
-from gpcr_tools.config import VALIDATION_FATAL_KEYWORDS
+from gpcr_tools.config import (
+    ALERT_HALLUCINATION,
+    ALERT_MISSED_PROTOMER,
+    ALERT_SUSPICIOUS_7TM,
+    TM_STATUS_INCOMPLETE,
+    VALIDATION_FATAL_KEYWORDS,
+)
 from gpcr_tools.csv_generator.ui import console
 
 # ── Oligomer Alert Injection ───────────────────────────────────────────
@@ -39,14 +45,14 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
             f"({override.get('trigger')}). Human confirmation required."
         )
 
-    for alert in oligo.get("alerts", []):
-        atype = alert.get("type", "")
-        if atype in ("HALLUCINATION", "MISSED_PROTOMER"):
+    for alert in oligo.get("alerts") or []:
+        atype = alert.get("type") or ""
+        if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER, ALERT_SUSPICIOUS_7TM):
             warnings.append(
-                f"OLIGOMER ALERT at 'receptor_info': [{atype}] {alert.get('message', '')}"
+                f"OLIGOMER ALERT at 'receptor_info': [{atype}] {alert.get('message') or ''}"
             )
 
-    if any(c.get("7tm_status") == "INCOMPLETE_7TM" for c in oligo.get("all_gpcr_chains", [])):
+    if any(c.get("7tm_status") == TM_STATUS_INCOMPLETE for c in oligo.get("all_gpcr_chains") or []):
         warnings.append(
             "STRUCTURAL QUALITY at 'receptor_info': "
             "One or more GPCR chains have INCOMPLETE 7TM domains."
@@ -77,7 +83,7 @@ def display_validation_alert(path: str, validation_data: dict) -> bool:
     if warnings:
         warn_text = Text()
         for w in warnings:
-            if "CONFLICT" in w or "HALLUCINATION" in w:
+            if "CONFLICT" in w or ALERT_HALLUCINATION in w:
                 warn_text.append(f"⚠ {w}\n", style="bold red")
             else:
                 warn_text.append(f"• {w}\n", style="yellow")
@@ -118,7 +124,7 @@ def extract_validation_entries(validation_data: dict | None) -> list[dict]:
                     "text": warn_str,
                     "path": path_match.group(1) if path_match else None,
                     "bucket": bucket,
-                    "is_hallucination": "HALLUCINATION" in warn_str.upper(),
+                    "is_hallucination": ALERT_HALLUCINATION in warn_str.upper(),
                 }
             )
     return entries
@@ -136,7 +142,7 @@ def warning_matches_block(entry: dict, block_path: str) -> bool:
         if normalized_path.startswith(f"{normalized_block}["):
             return True
     if entry.get("is_hallucination"):
-        warn_text = entry.get("text", "").lower()
+        warn_text = (entry.get("text") or "").lower()
         if normalized_block in warn_text:
             return True
         if normalized_block == "signaling_partners" and (
@@ -169,7 +175,9 @@ def analyze_validation_impact(
         entry
         for entry in entries
         if entry.get("is_hallucination")
-        or any(keyword in entry.get("text", "").lower() for keyword in VALIDATION_FATAL_KEYWORDS)
+        or any(
+            keyword in (entry.get("text") or "").lower() for keyword in VALIDATION_FATAL_KEYWORDS
+        )
     ]
 
     if isinstance(block_data, dict):

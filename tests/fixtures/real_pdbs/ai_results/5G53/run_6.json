@@ -1,0 +1,215 @@
+{
+    "structure_info": {
+        "resolution": 3.4,
+        "method": "X-ray diffraction",
+        "release_date": "2016-08-03",
+        "note": "Structure of a receptor-G-protein complex.",
+        "state": {
+            "value": "active",
+            "confidence": "High",
+            "evidence": {
+                "quote_or_path": "Here we present the structure of the adenosine A2A receptor (A2AR) bound to an engineered G protein, mini-Gs, at 3.4 \u00c5 resolution.",
+                "reasoning": "The structure contains the receptor bound to both an agonist (NECA) and a G-protein (mini-Gs), which is the canonical definition of a fully active state.",
+                "source": "Paper"
+            }
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "aa2ar_human",
+        "chain_id": "A"
+    },
+    "signaling_partners": {
+        "g_protein": {
+            "is_chimeric": false,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "C, D"
+            },
+            "note": "Engineered minimal Gs protein (mini-Gs) with N-terminal and other truncations and eight point mutations to improve stability and facilitate crystallization."
+        }
+    },
+    "key_findings": [
+        "The transition from an agonist-bound intermediate state to the fully active G-protein-bound state involves a large 14 \u00c5 outward movement of the cytoplasmic end of transmembrane helix 6 (H6).",
+        "G-protein binding induces significant rotamer changes in the highly conserved amino acid side chains of Arg3.50, Tyr5.58, and Tyr7.53 to accommodate the G-protein.",
+        "The A2AR-mini-Gs interface (1,048 \u00c5\u00b2) is extensive and similar, but not identical, to the interface observed between Gs and the B2-adrenergic receptor, indicating both conserved and diverse mechanisms of G-protein recognition."
+    ],
+    "ligands": [
+        {
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "The A2AR-mini-Gs complex contained density for the agonist NECA bound to A2AR...",
+                    "reasoning": "The paper explicitly identifies NECA as the agonist used to form and stabilize the active receptor-G protein complex."
+                },
+                "confidence": "High"
+            },
+            "chem_comp_id": "NEC",
+            "name": "N-ETHYL-5'-CARBOXAMIDO ADENOSINE",
+            "pubchem_id": "448222",
+            "type": "small-molecule",
+            "chain_id": "A, B",
+            "synonyms": [
+                "NECA",
+                "N-ethyl-5'-carboxamidoadenosine",
+                "3WC8SJ5ZLJ",
+                "(2S,3S,4R,5R)-5-(6-aminopurin-9-yl)-N-ethyl-3,4-dihydroxyoxolane-2-carboxamide",
+                "CHEBI:73284",
+                "RefChem:1092299",
+                "35920-39-9",
+                "5'-N-Ethylcarboxamidoadenosine",
+                "5'-Ethylcarboxamido Adenosine",
+                "Adenosine-5'-(N-ethylcarboxamide)",
+                "[3H]NECA",
+                "1-(6-Amino-9H-purin-9-yl)-1-deoxy-N-ethyl-beta-D-ribofuranuronamide",
+                "MFCD00069195",
+                "(2S,3S,4R,5R)-5-(6-Amino-9H-purin-9-yl)-N-ethyl-3,4-dihydroxytetrahydrofuran-2-carboxamide",
+                "MLS000069759",
+                "CHEMBL464859",
+                "C12H16N6O4",
+                "SMR000058759",
+                "(2S,3S,4R,5R)-5-(6-amino-9H-purin-9-yl)-N-ethyl-3,4-dihydroxyoxolane-2-carboxamide",
+                "NEC",
+                "N-Ethylcarboxamidoadenosine",
+                "Adenosine, N6-Ethyl-carboxamido",
+                "5'-n-ethylcarboxamidoadenosine (neca)",
+                "2ydv",
+                "DTXSID801017234",
+                "5'-N(Sup 6)-Ethylcarboxamidoadenosine",
+                "[3H]adenosine-5'-(N-ethylcarboxamide)",
+                "1qy5",
+                "Opera_ID_470",
+                "5'-ethylcarboxamidoadenosine",
+                "5-N-Ethylcarboxamidoadenosine",
+                "GTPL377",
+                "GTPL425",
+                "MLS002153347",
+                "5-N-Ethylcarboxamido-Adenosine",
+                "orb1299903",
+                "5'-Ethylcarboxamido-D-adenosine",
+                "REGID_for_CID_448222",
+                "SCHEMBL16585523",
+                "SCHEMBL29361791",
+                "BDBM21220",
+                "5'-(N-Ethylcarboxamido)adenosine",
+                "Adenosine-5-(N-ethylcarboxamide)",
+                "HMS2234O07",
+                "HMS3412B16",
+                "HMS3676B16",
+                "s6347",
+                "AKOS024456749",
+                "CS-8131",
+                "NE06155",
+                "NCGC00025260-02",
+                "NCGC00025260-03",
+                "NCGC00025260-04",
+                "NCGC00025260-05",
+                "5'-(N-Ethylcarboxamido)adenosine, powder",
+                "AC-27392",
+                "DA-76065",
+                "MS-24461",
+                "HY-103173",
+                "G12184",
+                "5 inverted exclamation mark -EthylcarboxamidoAdenosine",
+                "BRD-K14395568-001-16-3",
+                "Q27087892",
+                "1-(6-Amino-9H-purin-9-yl)-1-deoxy-N-ethyl-b-D-ribofuranuronamide",
+                ".beta.-D-Ribofuranuronamide, 1-(6-amino-9H-purin-9-yl)-1-deoxy-N-ethyl-",
+                "beta-D-Ribofuranuronamide, 1-(6-amino-9H-purin-9-yl)-1-deoxy-N-ethyl-",
+                "(2S,3S,4R)-5-(6-Aminopurin-9-yl)-N-ethyl-3,4-dihydroxy-oxolane-2-carboxamide",
+                "(2S,3S,4R,5R)-5-(6-aminopurin-9-yl)-N-ethyl-3,4-dihydroxy-tetrahydrofuran-2-carboxamide",
+                "(2S,3S,4R,5R)-5-(6-amino-9H-purin-9-yl)-N-ethyl-3,4-dihydroxytetrahydrofuran-2-carboxamide (non-preferred name)",
+                "100111-00-0"
+            ]
+        },
+        {
+            "type": "small-molecule",
+            "pubchem_id": "8977",
+            "chem_comp_id": "GDP",
+            "name": "GUANOSINE-5'-DIPHOSPHATE",
+            "role": {
+                "evidence": {
+                    "quote_or_path": "The A2AR-mini-Gs complex contained density for the agonist NECA bound to A2AR and density for a molecule of GDP bound to mini-Gs.",
+                    "reasoning": "GDP is the canonical nucleotide bound to the G alpha subunit in the inactive, heterotrimeric state, and its presence here confirms the identity of the G-protein complex. It is a required cofactor.",
+                    "source": "Paper"
+                },
+                "confidence": "High",
+                "value": "Cofactor"
+            },
+            "synonyms": [],
+            "chain_id": "C"
+        },
+        {
+            "chain_id": "A",
+            "synonyms": [
+                "85618-21-9",
+                "n-octyl-beta-D-thioglucopyranoside",
+                "N-Octyl-beta-D-thioglucoside",
+                "octyl beta-d-thioglucopyranoside",
+                "Octyl-thioglucoside",
+                "Glc-S-C7-Me",
+                "beta-D-Glucopyranoside, octyl 1-thio-",
+                "RefChem:473473",
+                "octyl beta-D-thioglucoside",
+                "617-729-0",
+                "Octyl thioglucoside",
+                "b-D-Glucopyranoside, octyl 1-thio-",
+                "(2R,3S,4S,5R,6S)-2-(Hydroxymethyl)-6-(octylthio)tetrahydro-2H-pyran-3,4,5-triol",
+                "MFCD00012189",
+                "octyl b-d-thioglucopyranoside",
+                "OCTYL-beta-D-THIOGLUCOPYRANOSIDE",
+                "Octyl |A-D-Thioglucopyranoside",
+                "octyl 1-thio-beta-D-glucopyranoside",
+                "N-Octyl-|A-D-thioglucopyranoside",
+                "(2R,3S,4S,5R,6S)-2-(hydroxymethyl)-6-octylsulfanyloxane-3,4,5-triol",
+                "C14H28O5S",
+                "2-HYDROXYMETHYL-6-OCTYLSULFANYL-TETRAHYDRO-PYRAN-3,4,5-TRIOL",
+                "1-s-octyl-beta-d-thioglucopyranoside",
+                "n-Octyl b-D-thioglucoside",
+                "(2R,3S,4S,5R,6S)-2-(hydroxymethyl)-6-(octylsulfanyl)oxane-3,4,5-triol",
+                "octylthioglucopyranoside",
+                "SCHEMBL151041",
+                "n-Octyl b-D-thioglucoside;OTG",
+                "orb3027201",
+                "DTXSID50893686",
+                "CGVLVOOFCGWBCS-RGDJUOJXSA-N",
+                "CHEBI:194397",
+                "n-octyl beta-d-thioglucopyranoside",
+                "Octyl 1-thio-?-D-glucopyranoside",
+                "Octyl beta-D-1-thioglucopyranoside",
+                "n-Octyl- beta -D-thioglucopyranoside",
+                "AKOS017343238",
+                "CS-W020964",
+                "DB08558",
+                "DO06354",
+                "HY-W040224",
+                "AS-61772",
+                "DA-56382",
+                "SY066418",
+                "NS00070373",
+                "A12892",
+                "O-2715",
+                "F828655",
+                "Octyl beta-D-1-thioglucopyranoside, >=99% (TLC)",
+                "Q7073093",
+                "Octyl beta-D-1-thioglucopyranoside, >=98.0% (GC)",
+                "(2R,3S,4S,5R,6S)-2-(hydroxymethyl)-6-octylsulanyloxane-3,4,5-triol",
+                "(2R,3S,5R,6S)-2-(hydroxymethyl)-6-octylsulfanyloxane-3,4,5-triol"
+            ],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper explicitly states this molecule is the detergent used for crystallization, making it a non-biological cofactor for the experiment.",
+                    "quote_or_path": "This complex was crystallized in the detergent octylthioglucoside by vapour diffusion...",
+                    "source": "Paper"
+                },
+                "confidence": "High",
+                "value": "Cofactor"
+            },
+            "type": "small-molecule",
+            "pubchem_id": "656909",
+            "name": "octyl 1-thio-beta-D-glucopyranoside",
+            "chem_comp_id": "SOG"
+        }
+    ],
+    "auxiliary_proteins": []
+}

@@ -1,0 +1,2610 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "9NOR",
+      "entry": {
+        "id": "9NOR"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00009nor"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2",
+          "3"
+        ],
+        "pubmed_id": 40339580,
+        "emdb_ids": [
+          "EMD-49608"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "entry PDB",
+            "assembly mmCIF",
+            "assembly PDB",
+            "validation report",
+            "validation slider image",
+            "validation data mmCIF"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "Y"
+      },
+      "struct": {
+        "title": "Human sweet taste receptor composed of TAS1R2 and TAS1R3 GPCRs from the combined datasets"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1016/j.cell.2025.04.021"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 40339580
+        },
+        "rcsb_pubmed_central_id": null,
+        "rcsb_pubmed_doi": "10.1016/j.cell.2025.04.021",
+        "rcsb_pubmed_abstract_text": "In humans, the detection and ultimately the perception of sweetness begin in the oral cavity, where taste receptor cells (TRCs) dedicated to sweet-sensing interact with sugars, artificial sweeteners, and other sweet-tasting chemicals. Human sweet TRCs express on their cell surface a sweet receptor that initiates the cascade of signaling events responsible for our strong attraction to sweet stimuli. Here, we describe the cryo-electron microscopy (cryo-EM) structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detection, provide insights into how a single receptor mediates all our responses to such a wide range of sweet-tasting compounds, and open up unique possibilities for designing a generation of taste modulators informed by the structure of the human receptor.",
+        "rcsb_pubmed_affiliation_info": [
+          "Zuckerman Mind Brain Behavior Institute and Department of Biochemistry and Molecular Biophysics, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY, USA; Howard Hughes Medical Institute, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY 10032, USA.",
+          "Zuckerman Mind Brain Behavior Institute and Department of Biochemistry and Molecular Biophysics, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY, USA; Howard Hughes Medical Institute, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY 10032, USA; Department of Biological Sciences, Columbia University, New York, NY, USA.",
+          "Zuckerman Mind Brain Behavior Institute and Department of Biochemistry and Molecular Biophysics, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY, USA.",
+          "Zuckerman Mind Brain Behavior Institute and Department of Biochemistry and Molecular Biophysics, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY, USA; Howard Hughes Medical Institute, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY 10032, USA; Department of Neuroscience, Vagelos College of Physicians and Surgeons, Columbia University, New York, NY 10032, USA. Electronic address: cz2195@columbia.edu."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-49608",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-49608"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "Sweet, taste, receptor, GPCR, TAS1R2, TAS1R3, T1R2, T1R3, MEMBRANE PROTEIN, human"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2025-03-10T00:00:00Z",
+        "initial_release_date": "2025-05-14T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 2
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2025-05-14T00:00:00Z"
+        },
+        {
+          "ordinal": 2,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2025-05-21T00:00:00Z"
+        },
+        {
+          "ordinal": 3,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 2,
+          "revision_date": "2025-08-06T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 2,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 2,
+          "revision_ordinal": 2,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        },
+        {
+          "ordinal": 3,
+          "revision_ordinal": 3,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 4,
+          "revision_ordinal": 3,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "consensus EM volume",
+          "db_id": "EMD-49607",
+          "details": "Consensus map of the human sweet taste receptor composed of TAS1R2 and TAS1R3 GPCRs from the combined datasets",
+          "db_name": "EMDB"
+        },
+        {
+          "content_type": "focused EM volume",
+          "db_id": "EMD-49605",
+          "details": "Local refinement map of the human sweet taste receptor Venus Fly Trap domains (VFT) and upper-half of the Cysteine-Rich domains (CR) from the combined datasets",
+          "db_name": "EMDB"
+        },
+        {
+          "content_type": "focused EM volume",
+          "db_id": "EMD-49606",
+          "details": "Local refinement map of the human sweet taste receptor lower-half of the Cysteine-Rich domains (CR) and transmembrane domains (TMD) from the combined datasets",
+          "db_name": "EMDB"
+        },
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-49608",
+          "details": "Human sweet taste receptor composed of TAS1R2 and TAS1R3 GPCRs from the combined datasets",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Juen, Z."
+        },
+        {
+          "name": "Lu, Z."
+        },
+        {
+          "name": "Yu, R."
+        },
+        {
+          "name": "Chang, A.N."
+        },
+        {
+          "name": "Wang, B."
+        },
+        {
+          "name": "Fitzpatrick, A.W.P."
+        },
+        {
+          "name": "Zuker, C.S."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "Howard Hughes Medical Institute (HHMI)",
+          "country": "United States",
+          "grant_number": null,
+          "ordinal": 1
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "PARTICLE",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 3.4
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "The structure of human sweetness.",
+          "rcsb_journal_abbrev": "Cell",
+          "rcsb_authors": [
+            "Juen, Z.",
+            "Lu, Z.",
+            "Yu, R.",
+            "Chang, A.N.",
+            "Wang, B.",
+            "Fitzpatrick, A.W.P.",
+            "Zuker, C.S."
+          ],
+          "year": 2025,
+          "journal_volume": "188",
+          "page_first": "4141",
+          "page_last": "4153.e18",
+          "pdbx_database_id_PubMed": 40339580,
+          "pdbx_database_id_DOI": "10.1016/j.cell.2025.04.021"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 194.34,
+        "deposited_atom_count": 12555,
+        "deposited_polymer_monomer_count": 1707,
+        "deposited_modeled_polymer_monomer_count": 1565,
+        "deposited_unmodeled_polymer_monomer_count": 142,
+        "polymer_entity_count_protein": 2,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "B",
+                "asym_id": "A",
+                "entry_id": "9NOR",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "GlyGen",
+                  "annotation_id": "Q7RTX0-1"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "G"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "H"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "E"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "I"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "J"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "C"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9NOR",
+            "entity_id": "1",
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "B"
+            ],
+            "uniprot_ids": [
+              "Q7RTX0"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q7RTX0"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q7RTX0",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000169962"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "Q7RTX0"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "ts1r3_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Taste receptor type 1 member 3",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR family 3, C-terminal",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "taste receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, conserved site",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, nine cysteines domain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular organelle",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "Golgi apparatus",
+                  "depth": null
+                },
+                {
+                  "name": "organelle",
+                  "depth": null
+                },
+                {
+                  "name": "cytoplasm",
+                  "depth": null
+                },
+                {
+                  "name": "intracellular membrane-bounded organelle",
+                  "depth": null
+                },
+                {
+                  "name": "endomembrane system",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Periplasmic binding protein-like I",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of umami taste",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus involved in sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "taste receptor complex",
+                  "depth": null
+                },
+                {
+                  "name": "sweet taste receptor complex",
+                  "depth": null
+                },
+                {
+                  "name": "receptor complex",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, extracellular calcium-sensing receptor-related",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, nine cysteines domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Receptor, ligand binding region",
+                  "depth": 1
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "5635_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "7555_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "Q7RTX0",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "6672_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "10260_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "10940_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "14555_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MKTIIALSYIFCLVFADYKDDDDKAAAAPLCLSQQLRMKGDYVLGGLFPLGEAEEAGLRSRTRPSSPVCTRFSSNGLLWALAMKMAVEEINNKSDLLPGLRLGYDLFDTCSEPVVAMKPSLMFLAKAGSRDIAAYCNYTQYQPRVLAVIGPHSSELAMVTGKFFSFFLMPQVSYGASMELLSARETFPSFFRTVPSDRVQLTAAAELLQEFGWNWVAALGSDDEYGRQGLSIFSALAAARGICIAHEGLVPLPRADDSRLGKVQDVLHQVNQSSVQVVLLFASVHAAHALFNYSISSRLSPKVWVASEAWLTSDLVMGLPGMAQMGTVLGFLQRGAQLHEFPQYVKTHLALATDPAFCSALGEREQGLEEDVVGQRCPQCDCITLQNVSAGLNHHQTFSVYAAVYSVAQALHNTLQCNASGCPAQDPVKPWQLLENMYNLTFHVGGLPLRFDSSGNVDMEYDLKLWVWQGSVPRLHDVGRFNGSLRTERLKIRWHTSDNQKPVSRCSRQCQEGQVRRVKGFHSCCYDCVDCEAGSYRQNPDDIACTFCGQDEWSPERSTRCFRRRSRFLAWGEPAVLLLLLLLSLALGLVLAALGLFVHHRDSPLVQASGGPLACFGLVCLGLVCLSVLLFPGQPSPARCLAQQPLSHLPLTGCLSTLFLQAAEIFVESELPLSWADRLSGCLRGPWAWLVVLLAMLVEVALCTWYLVAFPPEVVTDWHMLPTEALVHCRTRSWVSFGLAHATNATLAFLCFLGTFLVRSQPGRYNRARGLTFAMLAYFITWVSFVPLLANVQVVLRPAVQMGALLLCVLGILAAFHLPRCYLLMRQPGLNTPEFFLGGGPGDAQGQNDGNTGNQGKHE",
+            "rcsb_sample_sequence_length": 859,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "TAS1R3",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "T1R3",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "TR3",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "B",
+                "entry_id": "9NOR",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "GlyGen",
+                  "annotation_id": "Q8TE23-1"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "B"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "M"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "P"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "Q"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "O"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "R"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "N"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "L"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                },
+                {
+                  "role": "N-Glycosylation",
+                  "connect_type": "covalent bond",
+                  "connect_partner": {
+                    "label_asym_id": "K"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "B"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "9NOR",
+            "entity_id": "2",
+            "asym_ids": [
+              "B"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "uniprot_ids": [
+              "Q8TE23"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q8TE23"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q8TE23",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000179002"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "Q8TE23"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "ts1r2_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Taste receptor type 1 member 2",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "receptor complex",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR family 3, C-terminal",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "taste receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, conserved site",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of cytokinesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell division",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell cycle process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "cytokinesis",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell cycle",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell division",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cytokinesis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell cycle process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell division",
+                  "depth": null
+                },
+                {
+                  "name": "cell cycle",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell cycle",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell cycle process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, nine cysteines domain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Periplasmic binding protein-like I",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "system process",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of sweet taste",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "sensory perception of taste",
+                  "depth": null
+                },
+                {
+                  "name": "response to chemical",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "detection of stimulus involved in sensory perception",
+                  "depth": null
+                },
+                {
+                  "name": "detection of chemical stimulus involved in sensory perception",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein-containing complex",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "taste receptor complex",
+                  "depth": null
+                },
+                {
+                  "name": "sweet taste receptor complex",
+                  "depth": null
+                },
+                {
+                  "name": "receptor complex",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, extracellular calcium-sensing receptor-related",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "taste receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "sweet taste receptor activity",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, family 3, nine cysteines domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Receptor, ligand binding region",
+                  "depth": 1
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "2889_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "Q8TE23",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "2710_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3659_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3057_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "7039_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3201_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "MKTIIALSYIFCLVFAYPYDVPDYAAAAEPAENSDFYLPGDYLLGGLFSLHANMKGIVHLNFLQVPMCKEYEVKVIGYNLMQAMRFAVEEINNDSSLLPGVLLGYEIVDVCYISNNVQPVLYFLAHEDNLLPIQEDYSNYISRVVAVIGPDNSESVMTVANFLSLFLLPQITYSAISDELRDKVRFPALLRTTPSADHHIEAMVQLMLHFRWNWIIVLVSSDTYGRDNGQLLGERVARRDICIAFQETLPTLQPNQNMTSEERQRLVTIVDKLQQSTARVVVVFSPDLTLYHFFNEVLRQNFTGAVWIASESWAIDPVLHNLTELRHLGTFLGITIQSVPIPGFSEFREWGPQAGPPPLSRTSQSYTCNQECDNCLNATLSFNTILRLSGERVVYSVYSAVYAVAHALHSLLGCDKSTCTKRVVYPWQLLEEIWKVNFTLLDHQIFFDPQGDVALHLEIVQWQWDRSQNPFQSVASYYPLQRQLKNIQDISWHTINNTIPMSMCSKRCQSGQKKKPVGIHVCCFECIDCLPGTFLNHTEDEYECQACPNNEWSYQSETSCFKRQLVFLEWHEAPTIAVALLAALGFLSTLAILVIFWRHFQTPIVRSAGGPMCFLMLTLLLVAYMVVPVYVGPPKVSTCLCRQALFPLCFTICISCIAVRSFQIVCAFKMASRFPRAYSYWVRYQGPYVSMAFITVLKMVIVVIGMLATGLSPTTRTDPDDPKITIVSCNPNYRNSLLFNTSLDLLLSVVGFSFAYMGKELPTNYNEAKFITLSMTFYFTSSVSLCTFMSAYSGVLVTIVDLLVTVLNLLAISLGYFGPKCYMILFYPERNTPAYFNSMIQGYTMRRD",
+            "rcsb_sample_sequence_length": 848,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "TAS1R2",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "GPR71",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "T1R2",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "TR2",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": [
+        {
+          "rcsb_nonpolymer_entity_container_identifiers": {
+            "entry_id": "9NOR",
+            "entity_id": "3",
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "asym_ids": [
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J",
+              "K",
+              "L",
+              "M",
+              "N",
+              "O",
+              "P",
+              "Q",
+              "R"
+            ],
+            "nonpolymer_comp_id": "NAG"
+          },
+          "rcsb_nonpolymer_entity_annotation": null,
+          "nonpolymer_entity_instances": [
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "901",
+                "auth_asym_id": "B",
+                "asym_id": "C",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5768,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "902",
+                "auth_asym_id": "B",
+                "asym_id": "D",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5645,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "903",
+                "auth_asym_id": "B",
+                "asym_id": "E",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.485,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "904",
+                "auth_asym_id": "B",
+                "asym_id": "F",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4758,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "905",
+                "auth_asym_id": "B",
+                "asym_id": "G",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5452,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "906",
+                "auth_asym_id": "B",
+                "asym_id": "H",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5569,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "907",
+                "auth_asym_id": "B",
+                "asym_id": "I",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5456,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "908",
+                "auth_asym_id": "B",
+                "asym_id": "J",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5337,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "901",
+                "auth_asym_id": "A",
+                "asym_id": "K",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4878,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "902",
+                "auth_asym_id": "A",
+                "asym_id": "L",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.3292,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "903",
+                "auth_asym_id": "A",
+                "asym_id": "M",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4675,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "904",
+                "auth_asym_id": "A",
+                "asym_id": "N",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5739,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "905",
+                "auth_asym_id": "A",
+                "asym_id": "O",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.2193,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "907",
+                "auth_asym_id": "A",
+                "asym_id": "Q",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4854,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "908",
+                "auth_asym_id": "A",
+                "asym_id": "R",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.5572,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            },
+            {
+              "rcsb_nonpolymer_entity_instance_container_identifiers": {
+                "auth_seq_id": "906",
+                "auth_asym_id": "A",
+                "asym_id": "P",
+                "entry_id": "9NOR",
+                "entity_id": "3"
+              },
+              "rcsb_nonpolymer_instance_validation_score": [
+                {
+                  "ranking_model_fit": null,
+                  "ranking_model_geometry": 0.4232,
+                  "average_occupancy": null,
+                  "is_subject_of_investigation": "Y",
+                  "is_subject_of_investigation_provenance": "RCSB"
+                }
+              ]
+            }
+          ],
+          "rcsb_nonpolymer_entity": {
+            "pdbx_description": "2-acetamido-2-deoxy-beta-D-glucopyranose"
+          },
+          "nonpolymer_comp": {
+            "chem_comp": {
+              "id": "NAG",
+              "formula_weight": 221.208,
+              "name": "2-acetamido-2-deoxy-beta-D-glucopyranose",
+              "formula": "C8 H15 N O6"
+            },
+            "pdbx_reference_molecule": null,
+            "rcsb_chem_comp_descriptor": {
+              "InChIKey": "OVRNDRQMDRJTHS-FMDGEEDCSA-N"
+            },
+            "gpcrdb_determined_type": "small-molecule",
+            "gpcrdb_pubchem_cid": "24139",
+            "gpcrdb_pubchem_synonyms": [
+              "N-Acetyl-beta-D-glucosamine",
+              "2-acetamido-2-deoxy-beta-D-glucopyranose",
+              "CHEBI:28009",
+              "beta-N-Acetylglucosamin",
+              "2-Acetamido-2-deoxy-beta-D-glucose",
+              "8P59336F68",
+              "Glucopyranose, 2-acetamido-2-deoxy-, beta-D-",
+              "RefChem:7894",
+              "GlyTouCan:G49108TO",
+              "G49108TO",
+              "Beta-N-Acetylglucosamine",
+              "14131-68-1",
+              "CHITIN",
+              "betaGlcNAc",
+              "GlcNAc-beta",
+              "N-[(2R,3R,4R,5S,6R)-2,4,5-trihydroxy-6-(hydroxymethyl)oxan-3-yl]acetamide",
+              "2-Acetamido-2-deoxy-beta-D-glucosamine",
+              "72-87-7",
+              "103094-10-6",
+              "N-[(2R,3R,4R,5S,6R)-2,4,5-trihydroxy-6-(hydroxymethyl)tetrahydropyran-3-yl]acetamide",
+              "137630-09-2",
+              "C8H15NO6",
+              "1398-61-4",
+              "NAcGlc",
+              "Cheon shim bo yun",
+              "n-acetyl-b-d-glucosamine",
+              "2-acetamido-2-deoxyhexopyranose",
+              "pharmaceutical aid",
+              "ssGlcNAc-R",
+              "Crab Shell Chitin",
+              "MFCD00797589",
+              "b-N-Acetylglucosamine",
+              "Spectrum_000999",
+              "Spectrum2_001353",
+              "Spectrum3_001400",
+              "Spectrum4_001179",
+              "b-N-Acetyl-D-glucosamine",
+              "bmse000231",
+              "Epitope ID:135813",
+              "beta-N-Acetyl-D-glucosamine",
+              "SCHEMBL19345",
+              "BSPBio_003020",
+              "KBioGR_001817",
+              "KBioSS_001479",
+              "DivK1c_000352",
+              "SPECTRUM1500715",
+              "n-acetyl-.beta.-d-glucosamine",
+              "SPBio_001565",
+              "CHEMBL447878",
+              "beta-N-Acetyl-delta-glucosamine",
+              "SCHEMBL11283044",
+              "CHEBI:17029",
+              "HMS501B14",
+              "KBio1_000352",
+              "KBio2_001479",
+              "KBio2_004047",
+              "KBio2_006615",
+              "KBio3_002240",
+              ".BETA.-N-ACETYLGLUCOSAMIN",
+              "[4)-beta-D-GlcpNAc(1->]n",
+              "2-Acetamido-2-deoxy-b-D-glucose",
+              "NINDS_000352",
+              "DTXSID301045979",
+              "HMS1921E22",
+              "UNII-8P59336F68",
+              "N-Acetyl-D-glucosamine, USP grade",
+              "BDBM50481442",
+              "CCG-39291",
+              "AKOS015960418",
+              "AT21015",
+              "2-Acetamido-2-deoxy-beta-delta-glucose",
+              "IDI1_000352",
+              "NCGC00178341-01",
+              "[1,4-(N-Acetyl-beta-D-glucosaminyl)]n",
+              "2-deoxy-2-acetamido-beta-D-glucopyranose",
+              "AC-11093",
+              "(1->4)-2-acetamido-2-deoxy-beta-D-glucan",
+              "2-(acetylamino)-2-deoxy-beta-D-glucopyranose",
+              "2-ACETAMIDO-2-DEOXY-.BETA.-D-GLUCOSE",
+              "12A176",
+              "C03878",
+              "N-acetyl-D-glucosamine (complete stereochemistry)",
+              "Q284367",
+              "2-ACETAMIDO-2-DEOXY-.BETA.-D-GLUCOPYRANOSE",
+              "GLUCOPYRANOSE, 2-ACETAMIDO-2-DEOXY-, .BETA.-D-",
+              "Poly-(b1-4)-N-acetyl glucosamine/Poly-(a1-4)-N-acetyl glucosamine"
+            ]
+          }
+        }
+      ],
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": [
+            {
+              "experimental_support": "electron microscopy"
+            }
+          ],
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Asymmetric",
+              "symbol": "C1",
+              "oligomeric_state": "Hetero 2-mer",
+              "stoichiometry": [
+                "A1",
+                "B1"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 1565
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "9NOS",
+        "9NOT",
+        "9NOU",
+        "9NOV",
+        "9NOW",
+        "9NOX",
+        "9NOY",
+        "9O38"
+      ]
+    }
+  }
+}

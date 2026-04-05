@@ -1,0 +1,73 @@
+{
+    "auxiliary_proteins": [],
+    "key_findings": [
+        "Cryo-EM reveals the structure of the human sweet taste receptor, a heteromer of TAS1R2 and TAS1R3 GPCRs, providing structural basis for sweet detection.",
+        "The TAS1R2 subunit is the primary ligand-binding and G-protein coupling subunit, with a common binding pocket recognizing both sucralose and aspartame.",
+        "Agonist binding induces a closed conformation in the TAS1R2 VFT and conformational changes in the CR linkers, suggesting an active state for G protein engagement."
+    ],
+    "ligands": [
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "evidence": {
+                    "reasoning": "The paper identifies sucralose as an 'artificial sweetener' and states the receptor is in an 'agonist-bound state' in its presence, confirming its role as an agonist bound to TAS1R2.",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars. The TAS1R2 subunit binds the ligands and couples to the G protein.",
+                    "source": "Paper"
+                },
+                "value": "Agonist",
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Sucralose"
+        },
+        {
+            "chem_comp_id": "None",
+            "type": "small-molecule",
+            "pubchem_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "reasoning": "The paper identifies aspartame as an 'artificial sweetener' and states it binds to TAS1R2 in an 'agonist-bound state', confirming its role as an agonist.",
+                    "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose and aspartame; these are many 100-fold more potent than natural sugars. Aspartame also binds to the TAS1R2 subunit in the same binding pocket as sucralose.",
+                    "source": "Paper"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "A",
+            "name": "Aspartame"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "None"
+            },
+            "note": "Engineered miniGs/gust chimera from Gnas2_human and Gnat3_human (gustducin). Alpha subunit chain ID is not resolved in this specific structure (9NOR) as G protein was averaged out."
+        }
+    },
+    "structure_info": {
+        "resolution": 3.4,
+        "release_date": "2025-05-14",
+        "method": "Electron microscopy",
+        "note": "The structure is a composite from datasets with sucralose, aspartame, and PEG400.",
+        "state": {
+            "evidence": {
+                "source": "Paper",
+                "quote_or_path": "In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; these are many 100-fold more potent than natural sugars. The TAS1R2 LB1 and LB2 subdomains clamp down around the sucralose molecule and display a significant conformational difference when compared with the open conformation in TAS1R3 (Figure 4). We suggest that this reflects the active state, potentially transmitting the signal between agonist-binding and the TM domains for G protein engagement and intracellular signaling.",
+                "reasoning": "The paper explicitly states that the receptor was prepared in the 'agonist-bound state' with sucralose and displays conformational changes 'expected to cause conformational changes... that enable activation of the signaling cascade', which 'reflects the active state'."
+            },
+            "value": "active",
+            "confidence": "High"
+        }
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}

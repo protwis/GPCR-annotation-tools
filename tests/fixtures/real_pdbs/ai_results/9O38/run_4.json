@@ -1,0 +1,78 @@
+{
+    "auxiliary_proteins": [
+        {
+            "type": {
+                "value": "Nanobody",
+                "evidence": {
+                    "reasoning": "Both PDB metadata and the paper identify Chain E as 'Nanobody 35' and describe its role as stabilizing the receptor-G protein complex.",
+                    "quote_or_path": "polymer_components[2].description; The cells also co-expressed G\\[beta] and G\\[gamma], and the purifi-cation was performed in the presence of recombinant Nb35 nanobodies 58 to help stabilize the receptor-G protein complex. (page 3, 'Purification...' section)",
+                    "source": "Both Paper and PDB Metadata"
+                },
+                "confidence": "High"
+            },
+            "chain_id": "E",
+            "name": "Nanobody-35"
+        }
+    ],
+    "key_findings": [
+        "The structure reveals the human sweet receptor's (TAS1R2) transmembrane (TM) domain in an inactive pre-coupled state when bound to a G-protein complex.",
+        "Identification of specific TAS1R2 residues (Y756 and F827) in the TM domain and C-terminal tail that are crucial for G-protein alpha subunit contact and receptor signaling.",
+        "Confirmation of the G-protein coupling occurring via the TAS1R2 subunit, not TAS1R3."
+    ],
+    "ligands": [
+        {
+            "pubchem_id": "None",
+            "type": "small-molecule",
+            "chem_comp_id": "None",
+            "synonyms": [],
+            "role": {
+                "value": "Agonist",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "cryo-EM structure of the human sweet receptor bound to two of the most widely used artificial sweeteners-sucralose and aspartame. Our results reveal the structural basis for sweet detec-tion, provide insights into how a single receptor mediates all our responses to such a wide range of sweet-tasting compounds, and open up unique possibilities for designing a generation of taste modulators informed by the structure of the human receptor. (page 2, Summary); In order to obtain the structure of the human sweet receptor in the agonist-bound state, we generated receptor complexes in the presence of the artificial sweeteners sucralose or aspartame; (page 3, 'Purification...' section)",
+                    "reasoning": "The paper explicitly states that sucralose is an artificial sweetener that binds to the receptor to initiate a signaling cascade, and the structure was generated in the agonist-bound state in the presence of sucralose."
+                },
+                "confidence": "High"
+            },
+            "chain_id": "None",
+            "name": "Sucralose"
+        }
+    ],
+    "signaling_partners": {
+        "g_protein": {
+            "gamma_subunit": {
+                "uniprot_entry_name": "gbg2_human",
+                "chain_id": "D"
+            },
+            "is_chimeric": true,
+            "alpha_subunit": {
+                "uniprot_entry_name": "gnas2_human",
+                "chain_id": "B, F"
+            },
+            "note": "The G alpha s subunit (GNAS2_HUMAN) is a miniGs/gust chimera (with the C-terminus from GNAT3) and is further fused to the C-terminus of the TAS1R3 receptor subunit.",
+            "beta_subunit": {
+                "uniprot_entry_name": "gbb1_human",
+                "chain_id": "C"
+            }
+        }
+    },
+    "structure_info": {
+        "resolution": 3.0,
+        "release_date": "2025-05-14",
+        "state": {
+            "value": "inactive",
+            "evidence": {
+                "reasoning": "The paper explicitly states that the TM domains in this specific particle class (Class 3, which PDB 9O38 represents) adopt an 'inactive pre-coupled state' and compares it to inactive mGluR2.",
+                "quote_or_path": "the orientation of the TMs in TAS1R2, together with analysis of the low-resolution TAS1R3 density, suggests an inactive pre-coupled state, as pre-viously reported for the mGluR2 receptor (Figures S8E and S8F; see legend for details). (page 7); Note that the sweet receptor in the class 3 particle set adopts a conformation with a TM3-TM3 interface, which is comparable to the conformation of the inactive mGluR2 (TM3-TM4) ... but different from the TM arrangement in the active state of family C receptors (TM6-TM6...). (Figure S8 caption)",
+                "source": "Paper"
+            },
+            "confidence": "High"
+        },
+        "note": "Transmembrane (TM) domains only from Class 3 particles.",
+        "method": "Electron microscopy"
+    },
+    "receptor_info": {
+        "uniprot_entry_name": "ts1r2_human",
+        "chain_id": "A"
+    }
+}
