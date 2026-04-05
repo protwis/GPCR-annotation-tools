@@ -39,6 +39,8 @@ def _build_ligand_api_context(
     """
     np_by_comp: dict[str, dict[str, Any]] = {}
     for np_ent in enriched_entry.get("nonpolymer_entities") or []:
+        if not isinstance(np_ent, dict):
+            continue
         comp = np_ent.get("nonpolymer_comp") or {}
         cc = comp.get("chem_comp") or {}
         descriptor = comp.get("rcsb_chem_comp_descriptor") or {}
