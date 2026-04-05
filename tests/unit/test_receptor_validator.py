@@ -160,6 +160,112 @@ class TestEdgeCases:
         assert len(data["receptor_info"]["api_reality"]) == 2
 
 
+class TestMultiChain:
+    """Multi-chain chain_id scenarios (comma-separated)."""
+
+    def test_same_entity_match(self) -> None:
+        """Both chains in same entity — homodimer, slug matches."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "A, B",
+            }
+        }
+        enriched = _make_enriched([_make_entity(["A", "B"], ["drd2_human"])])
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert warnings == []
+        assert data["receptor_info"]["validation_status"] == VALIDATION_RECEPTOR_MATCH
+        assert data["receptor_info"]["api_reality"] == ["drd2_human"]
+
+    def test_different_entities_all_match(self) -> None:
+        """Chains in different entities, both map to same UniProt."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "A, C",
+            }
+        }
+        enriched = _make_enriched(
+            [
+                _make_entity(["A"], ["drd2_human"]),
+                _make_entity(["C"], ["drd2_human"]),
+            ]
+        )
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert warnings == []
+        assert data["receptor_info"]["validation_status"] == VALIDATION_RECEPTOR_MATCH
+
+    def test_different_entities_all_clash(self) -> None:
+        """Chains in different entities, neither matches AI UniProt."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "A, C",
+            }
+        }
+        enriched = _make_enriched(
+            [
+                _make_entity(["A"], ["5ht2a_human"]),
+                _make_entity(["C"], ["oprm_human"]),
+            ]
+        )
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert len(warnings) == 1
+        assert data["receptor_info"]["validation_status"] == VALIDATION_UNIPROT_CLASH
+        assert "Chain A" in warnings[0]
+        assert "Chain C" in warnings[0]
+
+    def test_different_entities_partial_clash(self) -> None:
+        """One chain matches, the other doesn't — still a clash."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "B, F",
+            }
+        }
+        enriched = _make_enriched(
+            [
+                _make_entity(["B"], ["drd2_human"]),
+                _make_entity(["F"], ["oprm_human"]),
+            ]
+        )
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert len(warnings) == 1
+        assert data["receptor_info"]["validation_status"] == VALIDATION_UNIPROT_CLASH
+        # Only the clashing chain appears in the warning
+        assert "Chain F" in warnings[0]
+        assert "Chain B" not in warnings[0]
+        # api_reality aggregates slugs from all matched entities
+        assert "drd2_human" in data["receptor_info"]["api_reality"]
+        assert "oprm_human" in data["receptor_info"]["api_reality"]
+
+    def test_one_chain_found_one_missing(self) -> None:
+        """One chain exists in enriched, the other doesn't — validate what we can."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "A, Z",
+            }
+        }
+        enriched = _make_enriched([_make_entity(["A"], ["drd2_human"])])
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert warnings == []
+        assert data["receptor_info"]["validation_status"] == VALIDATION_RECEPTOR_MATCH
+
+    def test_no_spaces_in_chain_id(self) -> None:
+        """chain_id without spaces (e.g. 'A,B') still works."""
+        data: dict[str, Any] = {
+            "receptor_info": {
+                "uniprot_entry_name": "drd2_human",
+                "chain_id": "A,B",
+            }
+        }
+        enriched = _make_enriched([_make_entity(["A", "B"], ["drd2_human"])])
+        warnings = validate_receptor_identity("TEST", data, enriched)
+        assert warnings == []
+        assert data["receptor_info"]["validation_status"] == VALIDATION_RECEPTOR_MATCH
+
+
 class TestWarningFormat:
     def test_all_warnings_match_regex(self) -> None:
         """Blood Lesson 3: every warning must match the UI regex contract."""

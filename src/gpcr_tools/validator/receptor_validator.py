@@ -45,43 +45,57 @@ def validate_receptor_identity(
     if not ai_uniprot or not ai_chain:
         return warnings
 
-    # Traverse polymer entities to find the chain
+    # chain_id can be comma-separated (e.g. "B, F" for homodimers)
+    ai_chains = [c.strip() for c in ai_chain.split(",") if c.strip()]
+
+    # Traverse polymer entities to collect slugs for every reported chain
     polymer_entities = enriched_entry.get("polymer_entities") or []
 
-    api_slugs: list[str] = []
-    found_chain = False
+    # Per-chain results: chain -> list of slugs from its entity
+    chain_slugs: dict[str, list[str]] = {}
 
-    for entity in polymer_entities:
-        if not isinstance(entity, dict):
-            continue
-        identifiers = entity.get("rcsb_polymer_entity_container_identifiers") or {}
-        auth_asym_ids = identifiers.get("auth_asym_ids") or []
+    for chain in ai_chains:
+        for entity in polymer_entities:
+            if not isinstance(entity, dict):
+                continue
+            identifiers = entity.get("rcsb_polymer_entity_container_identifiers") or {}
+            auth_asym_ids = identifiers.get("auth_asym_ids") or []
 
-        if ai_chain in auth_asym_ids:
-            found_chain = True
-            uniprots = entity.get("uniprots") or []
-            for u in uniprots:
-                if not isinstance(u, dict):
-                    continue
-                slug = u.get("gpcrdb_entry_name_slug")
-                if slug:
-                    api_slugs.append(slug)
-            break
+            if chain in auth_asym_ids:
+                slugs: list[str] = []
+                for u in entity.get("uniprots") or []:
+                    if not isinstance(u, dict):
+                        continue
+                    slug = u.get("gpcrdb_entry_name_slug")
+                    if slug:
+                        slugs.append(slug)
+                chain_slugs[chain] = slugs
+                break  # found entity for this chain, move to next chain
 
-    if not found_chain:
+    if not chain_slugs:
         return warnings
 
-    match = ai_uniprot in api_slugs
+    # Determine match / clash per chain
+    clashed_chains = [c for c, s in chain_slugs.items() if ai_uniprot not in s]
 
-    if match:
+    # Aggregate all unique slugs across matched entities for api_reality
+    all_slugs: list[str] = []
+    seen: set[str] = set()
+    for s_list in chain_slugs.values():
+        for s in s_list:
+            if s not in seen:
+                seen.add(s)
+                all_slugs.append(s)
+
+    if not clashed_chains:
         receptor_info["validation_status"] = VALIDATION_RECEPTOR_MATCH
-        receptor_info["api_reality"] = api_slugs
+        receptor_info["api_reality"] = all_slugs
     else:
         receptor_info["validation_status"] = VALIDATION_UNIPROT_CLASH
-        receptor_info["api_reality"] = api_slugs
+        receptor_info["api_reality"] = all_slugs
+        clash_detail = ", ".join(f"Chain {c} -> {chain_slugs[c]}" for c in clashed_chains)
         warnings.append(
-            f"UNIPROT_CLASH at 'receptor_info': "
-            f"'{ai_uniprot}' on Chain {ai_chain} vs API reality {api_slugs}."
+            f"UNIPROT_CLASH at 'receptor_info': '{ai_uniprot}' clashes on {clash_detail}."
         )
 
     return warnings
