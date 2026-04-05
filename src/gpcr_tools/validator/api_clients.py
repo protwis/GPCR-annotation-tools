@@ -27,8 +27,8 @@ def check_uniprot_existence(
 
     Returns ``True``/``False`` on success, ``None`` on network error.
     """
-    clean_name = entry_name.split(".")[0].lower()
-    key = f"uniprot:{clean_name}"
+    clean_name = entry_name.split(".")[0].upper()
+    key = f"uniprot:{clean_name.lower()}"
 
     cached = cache.get(key)
     if cached is not None:
