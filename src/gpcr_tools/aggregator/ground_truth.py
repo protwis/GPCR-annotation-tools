@@ -14,9 +14,21 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from gpcr_tools.aggregator.voting import _first_list_entry
-
 logger = logging.getLogger(__name__)
+
+
+def first_list_entry(container: Any, key: str) -> dict[str, Any]:
+    """Return the first element of *container[key]* if it is a non-empty list,
+    otherwise an empty dict.  *container* itself may be any type — if it is not
+    a dict the function returns ``{}`` without raising.
+    """
+    if not isinstance(container, dict):
+        return {}
+    value = container.get(key)
+    if isinstance(value, list) and value:
+        first = value[0]
+        return first if isinstance(first, dict) else {}
+    return {}
 
 
 def inject_ground_truth(
@@ -41,16 +53,16 @@ def inject_ground_truth(
     structure_info: dict[str, Any] = best_run_data.setdefault("structure_info", {})
 
     # --- Method ---
-    exptl_entry = _first_list_entry(enriched_entry, "exptl")
+    exptl_entry = first_list_entry(enriched_entry, "exptl")
     method: str | None = (
         (exptl_entry.get("method") or None) if isinstance(exptl_entry, dict) else None
     )
 
     # --- Resolution (EM preferred, X-ray fallback) ---
-    em_entry = _first_list_entry(enriched_entry, "em_3d_reconstruction")
+    em_entry = first_list_entry(enriched_entry, "em_3d_reconstruction")
     em_resolution: float | None = em_entry.get("resolution") if isinstance(em_entry, dict) else None
 
-    refine_entry = _first_list_entry(enriched_entry, "refine")
+    refine_entry = first_list_entry(enriched_entry, "refine")
     xray_resolution: float | None = (
         refine_entry.get("ls_d_res_high") if isinstance(refine_entry, dict) else None
     )
