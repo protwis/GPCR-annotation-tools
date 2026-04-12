@@ -4,7 +4,7 @@ These tests actually call RCSB, UniProt, PubChem, and RCSB Search APIs.
 They use the canonical 9 PDB IDs from the test fixture set.
 
 Run with:
-    pytest tests/integration/test_fetch_live.py -v
+    GPCR_RUN_LIVE_TESTS=1 pytest tests/integration/test_fetch_live.py -v
 
 These tests require network access and may take 2-5 minutes due to
 API rate limiting (1s sleep per RCSB request).
@@ -13,11 +13,17 @@ API rate limiting (1s sleep per RCSB request).
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
 
 from tests.conftest import REAL_PDB_IDS
+
+pytestmark = pytest.mark.skipif(
+    not os.environ.get("GPCR_RUN_LIVE_TESTS"),
+    reason="Live API tests disabled; set GPCR_RUN_LIVE_TESTS=1 to enable",
+)
 
 
 @pytest.fixture()

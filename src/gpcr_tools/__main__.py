@@ -240,9 +240,17 @@ def cli() -> None:
 
                 pdb_ids = read_targets(Path(args.targets))
             else:
-                # Auto-discover: enriched PDBs missing ai_results
+                # Auto-discover: enriched PDBs missing complete ai_results
                 enriched_pdbs = {p.stem.upper() for p in cfg.enriched_dir.glob("*.json")}
-                done_pdbs = {d.name.upper() for d in cfg.ai_results_dir.iterdir() if d.is_dir()}
+                done_pdbs: set[str] = set()
+                if cfg.ai_results_dir.exists():
+                    for d in cfg.ai_results_dir.iterdir():
+                        if d.is_dir():
+                            completed = sum(
+                                1 for n in range(1, args.runs + 1) if (d / f"run_{n}.json").exists()
+                            )
+                            if completed >= args.runs:
+                                done_pdbs.add(d.name.upper())
                 pdb_ids = sorted(enriched_pdbs - done_pdbs)
 
             # Resolve prompt text

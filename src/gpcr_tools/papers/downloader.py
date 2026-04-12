@@ -241,9 +241,21 @@ def _download_file(url: str, output_path: Path, session: requests.Session) -> bo
         with open(output_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=PDF_DOWNLOAD_CHUNK_SIZE):
                 f.write(chunk)
+
+        # Validate that the downloaded content is actually a PDF
+        with open(output_path, "rb") as f:
+            header = f.read(len(_PDF_MAGIC))
+        if not header.startswith(_PDF_MAGIC):
+            logger.warning("Downloaded content from %s is not a PDF (header: %r)", url, header[:16])
+            with contextlib.suppress(OSError):
+                output_path.unlink()
+            return False
+
         return True
     except requests.exceptions.RequestException as exc:
         logger.warning("Download failed for %s: %s", url, exc)
+        with contextlib.suppress(OSError):
+            output_path.unlink()
         return False
 
 

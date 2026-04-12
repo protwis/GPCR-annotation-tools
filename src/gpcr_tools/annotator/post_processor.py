@@ -67,7 +67,7 @@ def _is_signaling_partners_empty(sp: dict[str, Any]) -> bool:
     return True
 
 
-def _standardize_auxiliary_name(name: str) -> str:
+def _standardize_auxiliary_name(name: str | None) -> str | None:
     """Standardise common auxiliary protein names.
 
     The explicit :data:`AUX_PROTEIN_NAME_MAPPING` is checked first; only if no

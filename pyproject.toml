@@ -36,7 +36,9 @@ dev = [
     "mypy>=1.10",
     "types-requests>=2.31",
     "types-tqdm>=4.60",
-    "gpcr-annotation-tools[annotate,papers]",
+    "google-genai",
+    "PyMuPDF",
+    "lxml",
 ]
 annotate = [
     "google-genai",

@@ -395,7 +395,7 @@ The test suite includes 770+ tests:
 - **Unit tests** for every module across all five pipeline stages
 - **Integration tests** for the full aggregation pipeline, error isolation, and atomic write safety
 - **Real PDB fixture tests** covering 9 canonical GPCR structures (5G53, 8TII, 9AS1, 9BLW, 9EJZ, 9IQS, 9M88, 9NOR, 9O38) with 10 AI runs each
-- **Mock HTTP** for all external APIs — no live network calls in the test suite
+- **Mock HTTP** for external APIs in the default test suite; live network integration tests are gated and skipped unless `GPCR_RUN_LIVE_TESTS=1` is set
 
 ### CI/CD
 

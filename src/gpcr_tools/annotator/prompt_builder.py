@@ -7,9 +7,15 @@ from typing import Any
 from gpcr_tools.config import LIGAND_EXCLUDE_LIST
 
 
+def _get_entry(enriched_data: dict) -> dict:
+    """Dereference the ``data.entry`` envelope from enriched JSON."""
+    return (enriched_data.get("data") or {}).get("entry") or {}
+
+
 def generate_chain_inventory_reminder(pdb_id: str, enriched_data: dict) -> str:
     """Generates a human-readable summary of the polymer chains in the PDB."""
-    polymers = enriched_data.get("polymer_entities") or []
+    entry = _get_entry(enriched_data)
+    polymers = entry.get("polymer_entities") or []
     if not polymers:
         return f"### CHAIN INVENTORY REMINDER\nThis structure ({pdb_id}) contains 0 polymer chains."
 
@@ -46,8 +52,8 @@ def generate_chain_inventory_reminder(pdb_id: str, enriched_data: dict) -> str:
 
 def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
     """Simplifies the enriched PDB JSON into a minimal dictionary for Gemini."""
-    pdb_id = (enriched_data.get("entry") or {}).get("id") or "UNKNOWN"
-    entry = enriched_data.get("entry") or {}
+    entry = _get_entry(enriched_data)
+    pdb_id = entry.get("id") or "UNKNOWN"
 
     # Safely get structural details
     method = "Unknown"
@@ -80,7 +86,7 @@ def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
     }
 
     # Extract polymers
-    polymers = enriched_data.get("polymer_entities") or []
+    polymers = entry.get("polymer_entities") or []
     for poly in polymers:
         chains = (poly.get("rcsb_polymer_entity_container_identifiers") or {}).get(
             "auth_asym_ids"
@@ -111,7 +117,7 @@ def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
         )
 
     # Extract nonpolymers
-    nonpolymers = enriched_data.get("nonpolymer_entities") or []
+    nonpolymers = entry.get("nonpolymer_entities") or []
     for np_entity in nonpolymers:
         comp = np_entity.get("nonpolymer_comp") or {}
         chem_comp = comp.get("chem_comp") or {}
@@ -166,7 +172,8 @@ def build_prompt_parts(
     parts.append("\n\n")
 
     # 3. Sibling structures warning
-    siblings = enriched_data.get("sibling_pdbs") or []
+    entry = _get_entry(enriched_data)
+    siblings = entry.get("sibling_pdbs") or []
     if siblings:
         sib_str = ", ".join(siblings)
         parts.append(
