@@ -19,6 +19,7 @@ from gpcr_tools.annotator.post_processor import post_process_annotation
 from gpcr_tools.annotator.prompt_builder import build_prompt_parts
 from gpcr_tools.annotator.schema import ANNOTATION_TOOL, TOOL_CONFIG
 from gpcr_tools.config import (
+    ANNOTATOR_FUNCTION_NAME,
     GEMINI_BASE_BACKOFF,
     GEMINI_DEFAULT_RUNS,
     GEMINI_MAX_RETRIES,
@@ -30,14 +31,6 @@ from gpcr_tools.config import (
 )
 
 logger = logging.getLogger(__name__)
-
-
-def _get_prompt_parts(
-    pdb_id: str, enriched_data: dict, prompt_text: str, pdf_path: Path
-) -> list[str]:
-    """Builds the contents array for Gemini."""
-    parts = build_prompt_parts(pdb_id, enriched_data, prompt_text)
-    return parts
 
 
 def run_single_pdb(
@@ -111,7 +104,7 @@ def run_single_pdb(
 
                         # Extract the first function call
                         fc = response.function_calls[0]
-                        if fc.name != "annotate_gpcr_db_structure":
+                        if fc.name != ANNOTATOR_FUNCTION_NAME:
                             raise ValueError(f"Unexpected function call: {fc.name}")
 
                         args = fc.args
@@ -364,27 +357,51 @@ def recover_batch() -> None:
                     run_num = int(run_part.replace("run_", ""))
 
                     response_obj = data.get("response", {})
-                    # Need to parse the response properly to extract function call args
-                    # This is simplified for recovery
                     candidates = response_obj.get("candidates") or []
-                    if candidates:
-                        content = candidates[0].get("content") or {}
-                        parts = content.get("parts") or []
-                        for part in parts:
-                            fc = part.get("functionCall")
-                            if fc and fc.get("name") == "annotate_gpcr_db_structure":
-                                args = fc.get("args")
-                                final_data = post_process_annotation(args)
+                    if not candidates:
+                        logger.warning(
+                            "[%s] Run %d: no candidates in batch response (line %d)",
+                            pdb_id,
+                            run_num,
+                            line_no,
+                        )
+                        continue
 
-                                out_dir = config.ai_results_dir / pdb_id
-                                os.makedirs(out_dir, exist_ok=True)
-                                out_file = out_dir / f"run_{run_num}.json"
-
-                                tmp_out = out_file.with_suffix(".tmp")
-                                with open(tmp_out, "w") as f_out:
-                                    json.dump(final_data, f_out, indent=2)
-                                os.replace(tmp_out, out_file)
+                    content = candidates[0].get("content") or {}
+                    parts = content.get("parts") or []
+                    matched = False
+                    for part in parts:
+                        fc = part.get("functionCall")
+                        if fc and fc.get("name") == ANNOTATOR_FUNCTION_NAME:
+                            args = fc.get("args")
+                            if args is None:
+                                logger.warning(
+                                    "[%s] Run %d: function call has no args (line %d)",
+                                    pdb_id,
+                                    run_num,
+                                    line_no,
+                                )
                                 break
+                            final_data = post_process_annotation(args)
+
+                            out_dir = config.ai_results_dir / pdb_id
+                            os.makedirs(out_dir, exist_ok=True)
+                            out_file = out_dir / f"run_{run_num}.json"
+
+                            tmp_out = out_file.with_suffix(".tmp")
+                            with open(tmp_out, "w") as f_out:
+                                json.dump(final_data, f_out, indent=2)
+                            os.replace(tmp_out, out_file)
+                            matched = True
+                            break
+
+                    if not matched:
+                        logger.warning(
+                            "[%s] Run %d: no matching function call in response (line %d)",
+                            pdb_id,
+                            run_num,
+                            line_no,
+                        )
                 except Exception as e:
                     logger.error(
                         "Row-level Error Isolation: Failed to process line %d in %s: %s",

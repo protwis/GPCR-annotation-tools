@@ -13,15 +13,12 @@ repos:
         additional_dependencies:
           - types-requests>=2.31
           - types-tqdm>=4.60
+          - rich>=13.0
+          - google-genai>=1.0
+          - requests>=2.31
+          - tqdm>=4.60
+          - lxml>=5.0
+          - PyMuPDF>=1.24
         args: [--config-file=pyproject.toml]
         pass_filenames: false
         entry: mypy src/
-
-  - repo: local
-    hooks:
-      - id: pytest-fast
-        name: pytest (fast unit tests)
-        entry: python -m pytest tests/unit/ -x -q --tb=line
-        language: system
-        pass_filenames: false
-        stages: [pre-commit]

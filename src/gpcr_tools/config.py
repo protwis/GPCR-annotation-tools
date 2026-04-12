@@ -103,7 +103,15 @@ PDF_COMPRESSION_THRESHOLD_BYTES: int = 19 * 1024 * 1024
 # ---------------------------------------------------------------------------
 
 GEMINI_MODEL_NAME_DEFAULT: str = "gemini-2.5-pro"
-GEMINI_MODEL_NAME: str = os.environ.get("GPCR_GEMINI_MODEL") or GEMINI_MODEL_NAME_DEFAULT
+
+
+def get_gemini_model_name() -> str:
+    """Resolve the Gemini model name from environment or default (lazy)."""
+    return os.environ.get("GPCR_GEMINI_MODEL") or GEMINI_MODEL_NAME_DEFAULT
+
+
+# Kept for backward-compat import; prefer get_gemini_model_name() for fresh reads.
+GEMINI_MODEL_NAME: str = GEMINI_MODEL_NAME_DEFAULT
 GEMINI_API_KEY_ENV: str = "GPCR_GEMINI_API_KEY"
 GEMINI_API_KEY_ENV_LEGACY: str = "GPCR_GEMINI_API_KEYS"
 GEMINI_RPM_LIMIT: int = 1000
@@ -166,17 +174,19 @@ class WorkspaceConfig:
 
 
 # Mapping from subdirectory name → env-var override
-OVERRIDE_VARS: dict[str, str] = {
-    "raw": "GPCR_RAW_PATH",
-    "enriched": "GPCR_ENRICHED_PATH",
-    "papers": "GPCR_PAPERS_PATH",
-    "ai_results": "GPCR_AI_RESULTS_PATH",
-    "aggregated": "GPCR_AGGREGATED_PATH",
-    "output": "GPCR_OUTPUT_PATH",
-    "cache": "GPCR_CACHE_PATH",
-    "state": "GPCR_STATE_PATH",
-    "tmp": "GPCR_TMP_PATH",
-}
+OVERRIDE_VARS: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "raw": "GPCR_RAW_PATH",
+        "enriched": "GPCR_ENRICHED_PATH",
+        "papers": "GPCR_PAPERS_PATH",
+        "ai_results": "GPCR_AI_RESULTS_PATH",
+        "aggregated": "GPCR_AGGREGATED_PATH",
+        "output": "GPCR_OUTPUT_PATH",
+        "cache": "GPCR_CACHE_PATH",
+        "state": "GPCR_STATE_PATH",
+        "tmp": "GPCR_TMP_PATH",
+    }
+)
 
 
 def _resolve(workspace: Path, explicit_var: str, workspace_subdir: str) -> Path:
@@ -509,70 +519,98 @@ DL_STATUS_ABSTRACT_ONLY: str = "fallback_abstract_only"
 DL_STATUS_SKIPPED_NO_PAPER: str = "skipped_no_paper"
 
 # ---------------------------------------------------------------------------
+# Aggregation / curation status values
+# ---------------------------------------------------------------------------
+
+AGG_STATUS_COMPLETED: str = "completed"
+AGG_STATUS_FAILED: str = "failed"
+AGG_STATUS_SKIPPED: str = "skipped"
+
+# ---------------------------------------------------------------------------
+# Alert prefix strings (used in validation reports)
+# ---------------------------------------------------------------------------
+
+ALERT_PREFIX_TIE_BREAKER_ALIGNED: str = "[TIE-BREAKER ALIGNED]"
+ALERT_PREFIX_TIE_BREAKER_OVERRIDE: str = "[TIE-BREAKER OVERRIDE]"
+ALERT_PREFIX_HALLUCINATION: str = "[HALLUCINATION ALERT]"
+ALERT_PREFIX_ALGO_WARNING: str = "[ALGO WARNING]"
+ALERT_PREFIX_API_UNAVAILABLE: str = "[API_UNAVAILABLE]"
+
+# ---------------------------------------------------------------------------
+# Annotator function call name
+# ---------------------------------------------------------------------------
+
+ANNOTATOR_FUNCTION_NAME: str = "annotate_gpcr_db_structure"
+
+# ---------------------------------------------------------------------------
 # Non-path constants (unchanged, not part of workspace resolution)
 # ---------------------------------------------------------------------------
 
-CSV_SCHEMA: dict[str, list[str]] = {
-    "structures.csv": [
-        "PDB",
-        "Receptor_UniProt",
-        "Method",
-        "Resolution",
-        "State",
-        "ChainID",
-        "label_asym_id",
-        "Note",
-        "Date",
-    ],
-    "ligands.csv": [
-        "PDB",
-        "ChainID",
-        "label_asym_id",
-        "Name",
-        "PubChemID",
-        "Role",
-        "Title",
-        "Type",
-        "Date",
-        "In structure",
-        "SMILES",
-        "InChIKey",
-        "Sequence",
-    ],
-    "g_proteins.csv": [
-        "PDB",
-        "Alpha_UniProt",
-        "Alpha_ChainID",
-        "Alpha_label_asym_id",
-        "Beta_UniProt",
-        "Beta_ChainID",
-        "Beta_label_asym_id",
-        "Gamma_UniProt",
-        "Gamma_ChainID",
-        "Gamma_label_asym_id",
-        "Note",
-    ],
-    "arrestins.csv": ["PDB", "UniProt", "ChainID", "label_asym_id", "Note"],
-    "fusion_proteins.csv": ["PDB", "Name"],
-    "nanobodies.csv": ["PDB", "Name"],
-    "grk.csv": ["PDB", "Name"],
-    "ramp.csv": ["PDB", "Name"],
-    "antibodies.csv": ["PDB", "Name"],
-    "scfv.csv": ["PDB", "Name"],
-    "other_aux_proteins.csv": ["PDB", "Name"],
-}
+CSV_SCHEMA: MappingProxyType[str, tuple[str, ...]] = MappingProxyType(
+    {
+        "structures.csv": (
+            "PDB",
+            "Receptor_UniProt",
+            "Method",
+            "Resolution",
+            "State",
+            "ChainID",
+            "label_asym_id",
+            "Note",
+            "Date",
+        ),
+        "ligands.csv": (
+            "PDB",
+            "ChainID",
+            "label_asym_id",
+            "Name",
+            "PubChemID",
+            "Role",
+            "Title",
+            "Type",
+            "Date",
+            "In structure",
+            "SMILES",
+            "InChIKey",
+            "Sequence",
+        ),
+        "g_proteins.csv": (
+            "PDB",
+            "Alpha_UniProt",
+            "Alpha_ChainID",
+            "Alpha_label_asym_id",
+            "Beta_UniProt",
+            "Beta_ChainID",
+            "Beta_label_asym_id",
+            "Gamma_UniProt",
+            "Gamma_ChainID",
+            "Gamma_label_asym_id",
+            "Note",
+        ),
+        "arrestins.csv": ("PDB", "UniProt", "ChainID", "label_asym_id", "Note"),
+        "fusion_proteins.csv": ("PDB", "Name"),
+        "nanobodies.csv": ("PDB", "Name"),
+        "grk.csv": ("PDB", "Name"),
+        "ramp.csv": ("PDB", "Name"),
+        "antibodies.csv": ("PDB", "Name"),
+        "scfv.csv": ("PDB", "Name"),
+        "other_aux_proteins.csv": ("PDB", "Name"),
+    }
+)
 
-AUX_PROTEIN_DISPATCH: dict[str, str] = {
-    "Fusion protein": "fusion_proteins.csv",
-    "Nanobody": "nanobodies.csv",
-    "GRK": "grk.csv",
-    "RAMP": "ramp.csv",
-    "MRAP": "ramp.csv",
-    "Antibody": "antibodies.csv",
-    "Antibody fab fragment": "antibodies.csv",
-    "scFv": "scfv.csv",
-    "Other": "other_aux_proteins.csv",
-}
+AUX_PROTEIN_DISPATCH: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "Fusion protein": "fusion_proteins.csv",
+        "Nanobody": "nanobodies.csv",
+        "GRK": "grk.csv",
+        "RAMP": "ramp.csv",
+        "MRAP": "ramp.csv",
+        "Antibody": "antibodies.csv",
+        "Antibody fab fragment": "antibodies.csv",
+        "scFv": "scfv.csv",
+        "Other": "other_aux_proteins.csv",
+    }
+)
 
 BLACKLISTED_KEYS: frozenset[str] = frozenset(
     {

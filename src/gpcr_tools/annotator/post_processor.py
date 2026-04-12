@@ -30,7 +30,7 @@ def _unwrap_composite(data: Any) -> Any:
     # Using duck typing because the actual protobuf types vary depending on the SDK version
     if isinstance(data, Mapping) and not isinstance(data, dict):
         return {str(k): _unwrap_composite(v) for k, v in data.items()}
-    if isinstance(data, Sequence) and not isinstance(data, (str, bytes, list, tuple)):
+    if isinstance(data, Sequence) and not isinstance(data, str | bytes | list | tuple):
         return [_unwrap_composite(x) for x in data]
     if isinstance(data, dict):
         return {str(k): _unwrap_composite(v) for k, v in data.items()}
@@ -43,7 +43,7 @@ def is_meaningfully_empty(val: Any) -> bool:
     """Return ``True`` if *val* is effectively empty or explicitly null-like."""
     if val is None:
         return True
-    if isinstance(val, (dict, list, str)) and not val:
+    if isinstance(val, dict | list | str) and not val:
         return True
     if isinstance(val, str) and val.lower().strip() in EMPTY_VALUES:
         return True

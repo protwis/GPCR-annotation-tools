@@ -56,7 +56,7 @@ def coerce_type(original: Any, new_str: str) -> Any:
             return float(new_str)
         except ValueError:
             pass
-    if isinstance(original, (list, dict)):
+    if isinstance(original, list | dict):
         try:
             parsed = json.loads(new_str)
         except (json.JSONDecodeError, ValueError):
@@ -144,7 +144,7 @@ def review_decision_unit(
     grid.add_column(style="value")
     grid.add_row("Value:", str(d_node.get("value", "N/A")))
     conf = d_node.get("confidence", 0)
-    conf_style = "success" if isinstance(conf, (int, float)) and conf >= 0.8 else "warning"
+    conf_style = "success" if isinstance(conf, int | float) and conf >= 0.8 else "warning"
     grid.add_row("Confidence:", f"[{conf_style}]{conf}[/{conf_style}]")
 
     content = Group(
@@ -242,7 +242,7 @@ def review_leaf(
                 return str(value)
 
         def format_value(value: Any) -> str:
-            if isinstance(value, (dict, list)):
+            if isinstance(value, dict | list):
                 try:
                     return json.dumps(value, sort_keys=True)
                 except (TypeError, ValueError):

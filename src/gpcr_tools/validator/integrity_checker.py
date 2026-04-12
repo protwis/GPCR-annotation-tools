@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from gpcr_tools.config import APO_SENTINEL, EMPTY_VALUES
+from gpcr_tools.config import ALERT_PREFIX_API_UNAVAILABLE, APO_SENTINEL, EMPTY_VALUES
 from gpcr_tools.validator.api_clients import check_pubchem_existence, check_uniprot_existence
 from gpcr_tools.validator.cache import ValidationCache
 
@@ -134,7 +134,7 @@ def validate_all(
                             )
                         elif result is None:
                             warnings.append(
-                                f"[API_UNAVAILABLE] at '{path}': "
+                                f"{ALERT_PREFIX_API_UNAVAILABLE} at '{path}': "
                                 f"Could not verify UniProt ID '{uid}'."
                             )
 
@@ -149,7 +149,7 @@ def validate_all(
                         )
                     elif result is None:
                         warnings.append(
-                            f"[API_UNAVAILABLE] at '{path}': Could not verify PubChem CID '{cid}'."
+                            f"{ALERT_PREFIX_API_UNAVAILABLE} at '{path}': Could not verify PubChem CID '{cid}'."
                         )
 
             # Check 4: Ghost Ligand

@@ -32,6 +32,12 @@ from urllib3.util.retry import Retry
 from gpcr_tools.config import (
     CROSSREF_API_URL,
     DL_STATUS_ABSTRACT_ONLY,
+    DL_STATUS_FAILED_NO_DATA,
+    DL_STATUS_FAILED_NO_DOI,
+    DL_STATUS_PAYWALLED,
+    DL_STATUS_SKIPPED_EXISTS,
+    DL_STATUS_SKIPPED_NO_ENRICHED,
+    DL_STATUS_SUCCESS,
     HTTP_RETRY_ALLOWED_METHODS,
     HTTP_RETRY_BACKOFF_FACTOR,
     HTTP_RETRY_CONNECT,
@@ -286,7 +292,7 @@ def download_paper_for_pdb(
     if not enriched_path.exists():
         logger.warning("[%s] Enriched data not found, skipping", pdb_id)
         entry: dict[str, Any] = {
-            "status": "skipped_no_enriched_data",
+            "status": DL_STATUS_SKIPPED_NO_ENRICHED,
             "source": None,
             "file_path": None,
             "doi": None,
@@ -301,7 +307,7 @@ def download_paper_for_pdb(
     if final_pdf.exists() and not force:
         logger.info("[%s] PDF already exists, skipping", pdb_id)
         entry = {
-            "status": "skipped_already_downloaded",
+            "status": DL_STATUS_SKIPPED_EXISTS,
             "source": None,
             "file_path": str(final_pdf),
             "doi": None,
@@ -319,7 +325,7 @@ def download_paper_for_pdb(
     except (json.JSONDecodeError, OSError) as exc:
         logger.error("[%s] Failed to read enriched JSON: %s", pdb_id, exc)
         entry = {
-            "status": "failed_no_data",
+            "status": DL_STATUS_FAILED_NO_DATA,
             "source": None,
             "file_path": None,
             "doi": None,
@@ -335,7 +341,7 @@ def download_paper_for_pdb(
     if not resolved_email:
         logger.error("GPCR_EMAIL_FOR_APIS is not set")
         entry = {
-            "status": "failed_no_data",
+            "status": DL_STATUS_FAILED_NO_DATA,
             "source": None,
             "file_path": None,
             "doi": None,
@@ -357,7 +363,7 @@ def download_paper_for_pdb(
     if not doi:
         logger.info("[%s] No DOI found", pdb_id)
         entry = {
-            "status": "failed_no_doi",
+            "status": DL_STATUS_FAILED_NO_DOI,
             "source": None,
             "file_path": None,
             "doi": None,
@@ -396,7 +402,7 @@ def download_paper_for_pdb(
             os.replace(str(temp_pdf), str(final_pdf))
             logger.info("[%s] Downloaded PDF → %s", pdb_id, final_pdf)
             entry = {
-                "status": "success_pdf_downloaded",
+                "status": DL_STATUS_SUCCESS,
                 "source": source,
                 "file_path": str(final_pdf),
                 "doi": doi,
@@ -438,7 +444,7 @@ def download_paper_for_pdb(
     # Fallback: paywalled
     logger.info("[%s] All download tiers failed, marking paywalled", pdb_id)
     entry = {
-        "status": "fallback_paywalled",
+        "status": DL_STATUS_PAYWALLED,
         "source": None,
         "file_path": None,
         "doi": doi,

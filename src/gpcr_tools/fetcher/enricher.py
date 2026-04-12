@@ -133,9 +133,13 @@ def enrich_single_pdb(
     _enrich_siblings(pdb_data, pdb_id, sess, doi_cache)
 
     # Write enriched output
-    cfg.enriched_dir.mkdir(parents=True, exist_ok=True)
-    with open(enriched_path, "w", encoding="utf-8") as f:
-        json.dump(pdb_data, f, indent=2, ensure_ascii=False)
+    try:
+        cfg.enriched_dir.mkdir(parents=True, exist_ok=True)
+        with open(enriched_path, "w", encoding="utf-8") as f:
+            json.dump(pdb_data, f, indent=2, ensure_ascii=False)
+    except OSError as exc:
+        logger.error("[%s] Failed to write enriched JSON: %s", pdb_id, exc)
+        return False
     logger.info("[%s] Enriched → %s", pdb_id, enriched_path)
     return True
 
@@ -306,8 +310,11 @@ def _get_pubchem_cid(
         if response.status_code == 200:
             data = response.json()
             cids = (data.get("IdentifierList") or {}).get("CID")
-            if cids and isinstance(cids, list) and len(cids) > 0:
-                pubchem_id = str(cids[0])
+            if cids is not None:
+                if isinstance(cids, list) and len(cids) > 0:
+                    pubchem_id = str(cids[0])
+                elif isinstance(cids, int | float):
+                    pubchem_id = str(int(cids))
     except requests.exceptions.RequestException as exc:
         logger.error("PubChem CID lookup failed for %s: %s", inchikey, exc)
 
@@ -332,9 +339,8 @@ def _get_pubchem_synonyms(
         response = session.get(url, timeout=TIMEOUT_PUBCHEM_SYNONYMS)
         if response.status_code == 200:
             data = response.json()
-            synonyms = (data.get("InformationList") or {}).get("Information", [{}])[0].get(
-                "Synonym"
-            ) or []
+            info_list = (data.get("InformationList") or {}).get("Information") or []
+            synonyms = info_list[0].get("Synonym") or [] if info_list else []
     except requests.exceptions.RequestException as exc:
         logger.error("PubChem synonyms lookup failed for CID %s: %s", cid, exc)
 
@@ -424,7 +430,7 @@ def _get_pdbs_from_doi(
         response.raise_for_status()
         results = response.json()
         pdb_ids: list[str] = sorted(
-            item["identifier"] for item in (results.get("result_set") or [])
+            item["identifier"] for item in (results.get("result_set") or []) if "identifier" in item
         )
         if cache:
             cache.set(doi, pdb_ids)

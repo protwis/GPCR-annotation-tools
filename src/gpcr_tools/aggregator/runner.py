@@ -37,6 +37,12 @@ from gpcr_tools.aggregator.voting import (
     select_best_run,
 )
 from gpcr_tools.config import (
+    AGG_STATUS_COMPLETED,
+    AGG_STATUS_FAILED,
+    ALERT_PREFIX_ALGO_WARNING,
+    ALERT_PREFIX_HALLUCINATION,
+    ALERT_PREFIX_TIE_BREAKER_ALIGNED,
+    ALERT_PREFIX_TIE_BREAKER_OVERRIDE,
     CHIMERA_STATUS_NO_G_PROTEIN,
     CHIMERA_STATUS_SKIPPED,
     CHIMERA_STATUS_SUCCESS,
@@ -117,13 +123,13 @@ def _build_validation_report(
             tail_seq = chimera_result.get("tail_seq") or "N/A"
             if ai_uniprot in max_matches:
                 report["algo_notes"].append(
-                    f"[TIE-BREAKER ALIGNED] at 'chimera_analysis': "
+                    f"{ALERT_PREFIX_TIE_BREAKER_ALIGNED} at 'chimera_analysis': "
                     f"Tail '{tail_seq}' matched {len(max_matches)} slugs. "
                     f"AI choice '{ai_uniprot}' retained."
                 )
             else:
                 report["algo_conflicts"].append(
-                    f"[TIE-BREAKER OVERRIDE] at 'chimera_analysis': "
+                    f"{ALERT_PREFIX_TIE_BREAKER_OVERRIDE} at 'chimera_analysis': "
                     f"Tail '{tail_seq}' matched {len(max_matches)} slugs. "
                     f"AI '{ai_uniprot}' failed. "
                     f"Defaulted to canonical '{can_best}'."
@@ -134,14 +140,14 @@ def _build_validation_report(
     elif status == CHIMERA_STATUS_NO_G_PROTEIN:
         if ai_uniprot and str(ai_uniprot).lower() not in EMPTY_VALUES:
             report["algo_conflicts"].append(
-                f"[HALLUCINATION ALERT] at 'chimera_analysis': "
+                f"{ALERT_PREFIX_HALLUCINATION} at 'chimera_analysis': "
                 f"AI found '{ai_uniprot}' but algorithm found NO G-protein "
                 f"in source PDB."
             )
     elif status != CHIMERA_STATUS_SKIPPED:
         error_msg = chimera_result.get("error")
         report["algo_conflicts"].append(
-            f"[ALGO WARNING] at 'chimera_analysis': "
+            f"{ALERT_PREFIX_ALGO_WARNING} at 'chimera_analysis': "
             f"Verification could not run. Status: '{status}'. "
             f"Details: {error_msg}"
         )
@@ -437,12 +443,12 @@ def aggregate_all(
                 sequence_cache=sequence_cache,
             )
             results.append(result)
-            status = "completed" if result.success else "failed"
+            status = AGG_STATUS_COMPLETED if result.success else AGG_STATUS_FAILED
             _update_aggregate_log(pdb_id, status)
         except Exception as exc:
             logger.error("[%s] Critical failure: %s", pdb_id, exc)
             results.append(AggregateResult(pdb_id=pdb_id, success=False, error=str(exc)))
-            _update_aggregate_log(pdb_id, "failed")
+            _update_aggregate_log(pdb_id, AGG_STATUS_FAILED)
 
     # Save caches (best-effort, after output commit)
     try:

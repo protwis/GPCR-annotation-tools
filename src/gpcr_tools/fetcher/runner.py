@@ -82,16 +82,20 @@ def run_fetch(
             continue
 
         # Step 2: Enrich
-        success = enrich_single_pdb(
-            pid,
-            force=force,
-            session=session,
-            uniprot_cache=uniprot_cache,
-            pubchem_cache=pubchem_cache,
-            synonyms_cache=synonyms_cache,
-            doi_cache=doi_cache,
-            smiles_cache=smiles_cache,
-        )
+        try:
+            success = enrich_single_pdb(
+                pid,
+                force=force,
+                session=session,
+                uniprot_cache=uniprot_cache,
+                pubchem_cache=pubchem_cache,
+                synonyms_cache=synonyms_cache,
+                doi_cache=doi_cache,
+                smiles_cache=smiles_cache,
+            )
+        except Exception as exc:
+            logger.error("[%s] Enrichment crashed: %s", pid, exc)
+            success = False
         if success:
             ok += 1
         else:

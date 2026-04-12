@@ -128,9 +128,15 @@ def cli() -> None:
         ),
     )
 
+    def _positive_int(value: str) -> int:
+        ivalue = int(value)
+        if ivalue < 1:
+            raise argparse.ArgumentTypeError(f"--runs must be >= 1, got {ivalue}")
+        return ivalue
+
     ann_parser.add_argument(
         "--runs",
-        type=int,
+        type=_positive_int,
         default=GEMINI_DEFAULT_RUNS,
         help=f"Number of annotation runs per PDB (default: {GEMINI_DEFAULT_RUNS}).",
     )
@@ -260,9 +266,9 @@ def cli() -> None:
                 prompt_text = cfg.default_prompt_file.read_text(encoding="utf-8")
 
             # Resolve model name: --model flag > GPCR_GEMINI_MODEL env > config default
-            from gpcr_tools.config import GEMINI_MODEL_NAME
+            from gpcr_tools.config import get_gemini_model_name
 
-            model_name = args.model or GEMINI_MODEL_NAME
+            model_name = args.model or get_gemini_model_name()
 
             if args.batch:
                 from gpcr_tools.annotator.runner import build_and_submit_batch
