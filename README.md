@@ -341,7 +341,7 @@ src/gpcr_tools/
 │   ├── receptor_validator.py  #   UniProt identity verification
 │   ├── ligand_validator.py    #   PDB-CCD existence check
 │   ├── oligomer.py            #   Complex classification + 7TM completeness
-│   ├─�� integrity_checker.py   #   Structural consistency validation
+│   ├── integrity_checker.py   #   Structural consistency validation
 │   └── api_clients.py         #   Shared API wrappers with retry + caching
 │
 └── csv_generator/             # Stage 5: Expert curation
