@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: pytest-fast
         name: pytest (fast unit tests)
-        entry: /Users/nht435/miniconda3/envs/iskold/bin/python -m pytest tests/unit/ -x -q --tb=line
+        entry: python -m pytest tests/unit/ -x -q --tb=line
         language: system
         pass_filenames: false
         stages: [pre-commit]
