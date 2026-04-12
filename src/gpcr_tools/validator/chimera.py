@@ -28,6 +28,9 @@ from gpcr_tools.config import (
     FAMILY_LEADERS,
     FULL_G_ALPHA_CANDIDATES,
     G_ALPHA_EXCLUDE_KEYWORDS,
+    SLEEP_VALIDATION_RETRY,
+    TIMEOUT_UNIPROT_FASTA,
+    UNIPROT_REST_URL,
 )
 from gpcr_tools.validator.cache import SequenceCache
 
@@ -99,10 +102,10 @@ def get_sequence_from_uniprot(
     if cached is not None:
         return cached
 
-    url = f"https://rest.uniprot.org/uniprotkb/{accession}.fasta"
+    url = f"{UNIPROT_REST_URL}/{accession}.fasta"
     for attempt in range(API_MAX_RETRIES):
         try:
-            resp = requests.get(url, timeout=10)
+            resp = requests.get(url, timeout=TIMEOUT_UNIPROT_FASTA)
             if resp.status_code == 200:
                 lines = resp.text.strip().split("\n")
                 if len(lines) > 1:
@@ -114,7 +117,7 @@ def get_sequence_from_uniprot(
             if attempt == API_MAX_RETRIES - 1:
                 logger.warning("UniProt FASTA fetch error for '%s': %s", accession, exc)
             else:
-                time.sleep(1)
+                time.sleep(SLEEP_VALIDATION_RETRY)
 
     return None
 

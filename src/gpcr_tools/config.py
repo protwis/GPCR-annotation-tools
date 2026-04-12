@@ -19,6 +19,115 @@ from pathlib import Path
 from types import MappingProxyType
 
 # ---------------------------------------------------------------------------
+# API base URLs
+# ---------------------------------------------------------------------------
+
+RCSB_GRAPHQL_URL: str = "https://data.rcsb.org/graphql"
+RCSB_SEARCH_URL: str = "https://search.rcsb.org/rcsbsearch/v2/query"
+
+UNIPROT_REST_URL: str = "https://rest.uniprot.org/uniprotkb"
+
+PUBCHEM_REST_URL: str = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound"
+
+CROSSREF_API_URL: str = "https://api.crossref.org/works"
+UNPAYWALL_API_URL: str = "https://api.unpaywall.org/v2"
+
+NCBI_PMC_OA_URL: str = "https://www.ncbi.nlm.nih.gov/pmc/utils/oa/oa.fcgi"
+NCBI_EUTILS_EFETCH_URL: str = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+
+# ---------------------------------------------------------------------------
+# HTTP User-Agent strings
+# ---------------------------------------------------------------------------
+
+USER_AGENT_ENRICHER: str = "GPCR_Annotation_Pipeline/1.0 (scientific_research_script)"
+
+# ---------------------------------------------------------------------------
+# HTTP retry strategy (shared by enricher & downloader sessions)
+# ---------------------------------------------------------------------------
+
+HTTP_RETRY_TOTAL: int = 5
+HTTP_RETRY_READ: int = 5
+HTTP_RETRY_CONNECT: int = 5
+HTTP_RETRY_BACKOFF_FACTOR: int = 1
+HTTP_RETRY_STATUS_FORCELIST: tuple[int, ...] = (429, 500, 502, 503, 504)
+HTTP_RETRY_ALLOWED_METHODS: tuple[str, ...] = ("HEAD", "GET", "POST", "OPTIONS")
+
+# ---------------------------------------------------------------------------
+# Per-endpoint timeout values (seconds)
+# ---------------------------------------------------------------------------
+
+TIMEOUT_RCSB_GRAPHQL: int = 30
+TIMEOUT_RCSB_GRAPHQL_VALIDATION: int = 15
+TIMEOUT_RCSB_CHEM_COMP: int = 10
+TIMEOUT_RCSB_SEARCH: int = 10
+
+TIMEOUT_UNIPROT_BATCH: int = 30
+TIMEOUT_UNIPROT_VALIDATION: int = 5
+TIMEOUT_UNIPROT_FASTA: int = 10
+
+TIMEOUT_PUBCHEM_CID: int = 20
+TIMEOUT_PUBCHEM_SYNONYMS: int = 60
+TIMEOUT_PUBCHEM_VALIDATION: int = 5
+
+TIMEOUT_CROSSREF: int = 15
+TIMEOUT_UNPAYWALL: int = 15
+TIMEOUT_NCBI_PMC_OA: int = 20
+TIMEOUT_NCBI_EUTILS: int = 20
+TIMEOUT_PDF_DOWNLOAD: int = 60
+TIMEOUT_BATCH_RESULT_DOWNLOAD: int = 60
+
+# ---------------------------------------------------------------------------
+# Rate-limit sleep durations (seconds)
+# ---------------------------------------------------------------------------
+
+SLEEP_NCBI_RATE_LIMIT: float = 0.4
+SLEEP_RCSB_POST_REQUEST: float = 1.0
+SLEEP_VALIDATION_RETRY: float = 1.0
+SLEEP_GEMINI_429: float = 5.0
+
+# ---------------------------------------------------------------------------
+# Enricher thresholds
+# ---------------------------------------------------------------------------
+
+LIGAND_WEIGHT_THRESHOLD: float = 900.0
+
+# ---------------------------------------------------------------------------
+# PDF download / compression
+# ---------------------------------------------------------------------------
+
+PDF_DOWNLOAD_CHUNK_SIZE: int = 8192
+PDF_COMPRESSION_THRESHOLD_BYTES: int = 19 * 1024 * 1024
+
+# ---------------------------------------------------------------------------
+# Gemini / annotation configuration
+# ---------------------------------------------------------------------------
+
+GEMINI_MODEL_NAME_DEFAULT: str = "gemini-2.5-pro"
+GEMINI_MODEL_NAME: str = os.environ.get("GPCR_GEMINI_MODEL") or GEMINI_MODEL_NAME_DEFAULT
+GEMINI_API_KEY_ENV: str = "GPCR_GEMINI_API_KEY"
+GEMINI_API_KEY_ENV_LEGACY: str = "GPCR_GEMINI_API_KEYS"
+GEMINI_RPM_LIMIT: int = 1000
+GEMINI_WINDOW_SECONDS: int = 60
+GEMINI_MAX_RETRIES: int = 5
+GEMINI_BASE_BACKOFF: int = 10
+GEMINI_DEFAULT_RUNS: int = 10
+GEMINI_MAX_WORKERS: int = 10
+
+# ---------------------------------------------------------------------------
+# Watcher polling configuration
+# ---------------------------------------------------------------------------
+
+WATCHER_POLL_INTERVAL: float = 2.0
+WATCHER_STABILITY_CHECKS: int = 2
+WATCHER_STABILITY_INTERVAL: float = 1.0
+
+# ---------------------------------------------------------------------------
+# Workspace contract
+# ---------------------------------------------------------------------------
+
+SUPPORTED_CONTRACT_VERSION: int = 1
+
+# ---------------------------------------------------------------------------
 # Workspace configuration
 # ---------------------------------------------------------------------------
 
@@ -42,11 +151,18 @@ class WorkspaceConfig:
     state_dir: Path
     tmp_dir: Path
 
+    raw_pdb_json_dir: Path
+
     contract_file: Path
     csv_output_dir: Path
     audit_output_dir: Path
     processed_log_file: Path
     pipeline_runs_dir: Path
+    targets_file: Path
+    download_log_file: Path
+    current_batch_job_file: Path
+    uploaded_files_registry_file: Path
+    default_prompt_file: Path
 
 
 # Mapping from subdirectory name → env-var override
@@ -98,11 +214,17 @@ def get_config() -> WorkspaceConfig:
         cache_dir=cache_dir,
         state_dir=state_dir,
         tmp_dir=tmp_dir,
+        raw_pdb_json_dir=raw_dir / "pdb_json",
         contract_file=workspace / "contract" / "storage_contract.json",
         csv_output_dir=output_dir / "csv",
         audit_output_dir=output_dir / "audit",
         processed_log_file=state_dir / "processed_log.json",
         pipeline_runs_dir=state_dir / "pipeline_runs",
+        targets_file=workspace / "targets.txt",
+        download_log_file=state_dir / "download_log.json",
+        current_batch_job_file=state_dir / "current_batch_job.txt",
+        uploaded_files_registry_file=state_dir / "uploaded_files_registry.json",
+        default_prompt_file=workspace / "prompts" / "v5.txt",
     )
 
 
@@ -371,6 +493,20 @@ GPCR_SLUG_NEGATIVE_PREFIXES: tuple[str, ...] = (
     "a0a",
     "mtor",
 )
+
+# ---------------------------------------------------------------------------
+# Download log status values (produced by papers/downloader, consumed by papers/watcher)
+# ---------------------------------------------------------------------------
+
+DL_STATUS_SUCCESS: str = "success_pdf_downloaded"
+DL_STATUS_SKIPPED_EXISTS: str = "skipped_already_downloaded"
+DL_STATUS_SKIPPED_NO_ENRICHED: str = "skipped_no_enriched_data"
+DL_STATUS_FAILED_NO_DOI: str = "failed_no_doi"
+DL_STATUS_FAILED_NO_DATA: str = "failed_no_data"
+DL_STATUS_PAYWALLED: str = "fallback_paywalled"
+DL_STATUS_MANUAL: str = "manual_user_provided"
+DL_STATUS_ABSTRACT_ONLY: str = "fallback_abstract_only"
+DL_STATUS_SKIPPED_NO_PAPER: str = "skipped_no_paper"
 
 # ---------------------------------------------------------------------------
 # Non-path constants (unchanged, not part of workspace resolution)

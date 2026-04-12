@@ -1,291 +1,414 @@
 # GPCR Annotation Tools
 
-**A production-grade, human-in-the-loop curation suite for GPCR structural biology.**
+**An end-to-end, AI-assisted annotation and human-in-the-loop curation suite for GPCR structural biology.**
 
-GPCR Annotation Tools provides GPCR structural biology experts with a robust, interactive command-line dashboard to review, validate, and export AI-assisted structural metadata into database-ready CSVs. Designed for high-throughput expert curation, the suite seamlessly integrates automated quality checks, algorithmic conflict resolution, and comprehensive decision provenance.
+GPCR Annotation Tools automates the extraction of structured metadata from GPCR crystal and cryo-EM structures deposited in the PDB. It combines automated data enrichment, multi-run AI annotation with structured output, algorithmic cross-validation, and an interactive expert review dashboard to produce database-ready CSVs with full decision provenance.
+
+---
+
+## Pipeline at a Glance
+
+```text
+                        PDB IDs (targets.txt)
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  1. gpcr-tools fetch          Download RCSB metadata + enrich       │
+│                                (UniProt, PubChem, CrossRef, SMILES) │
+├─────────────────────────────────────────────────────────────────────┤
+│  2. gpcr-tools fetch-papers   Download open-access PDFs             │
+│                                (Unpaywall → PMC OA → abstract       │
+│                                 fallback + manual watch mode)       │
+├─────────────────────────────────────────────────────────────────────┤
+│  3. gpcr-tools annotate       AI annotation via Gemini              │
+│                                (10 independent runs per PDB,        │
+│                                 structured output via tool calling) │
+├─────────────────────────────────────────────────────────────────────┤
+│  4. gpcr-tools aggregate      Majority-vote consensus + validation  │
+│                                (7-validator chain against PDB/      │
+│                                 UniProt/PubChem ground truth)       │
+├─────────────────────────────────────────────────────────────────────┤
+│  5. gpcr-tools curate         Interactive expert review dashboard   │
+│                                (Rich terminal UI + audit trail)     │
+└───────────────────────────────┬─────────────────────────────────────┘
+                                │
+                                ▼
+                          output/csv/
+                    (database-ready CSVs)
+```
+
+Each step is **resumable** and **idempotent** — re-running any command skips already-completed work unless `--force` is passed.
+
+---
 
 ## Key Features
 
-* **Multi-Run Aggregation:** Ingests 10 independent AI annotation runs per PDB, selects the highest-scoring run, and applies majority-vote consensus with per-field controversy detection.
-* **Algorithmic Validation:** A chain of validators cross-checks annotations against PDB and UniProt APIs — detecting chimeric fusion proteins, hallucinated ligands, incorrect receptor identities, and oligomeric assembly misclassifications.
-* **Oligomer Analysis:** Classifies complexes (monomer / homomer / heteromer), scans 7TM domain completeness per chain, suggests primary protomers, and auto-corrects chain-ID assignments when API evidence disagrees with AI output.
-* **Interactive Expert Review:** A rich, ergonomic terminal UI designed for rapid curation of GPCR complex structural data, signaling partners, and ligands.
-* **Integrated Validation Alerts:** Real-time, context-aware alerts for structural discrepancies (e.g., ghost chains, hallucinated ligands, and UniProt identity clashes).
-* **Provable Audit Trails:** Every intervention — whether automated correction or human decision — is securely logged to a JSONL audit trail.
-* **Docker-Native Deployment:** Zero-configuration setup for curators via a single workspace mount.
+### Data Enrichment (pre-annotation)
 
-## Pipeline Overview
+- **RCSB GraphQL integration** — Downloads comprehensive PDB metadata including polymer/nonpolymer entities, assemblies, citations, and experimental details.
+- **Multi-source enrichment** — Automatically resolves UniProt entry names, PubChem CIDs + synonyms, SMILES/InChIKey descriptors, and sibling PDB structures sharing the same publication.
+- **Persistent caching** — All external API responses are cached locally with atomic writes, eliminating redundant network calls across pipeline runs.
+- **Tiered paper acquisition** — Fetches open-access PDFs via Unpaywall and NCBI PMC OA, with PubMed abstract fallback for paywalled papers and a live filesystem watcher for manual drops.
 
-```text
-ai_results/         enriched/         PDB / UniProt APIs
-  (10 runs)           (metadata)            │
-     │                   │                  │
-     ▼                   ▼                  ▼
-┌─────────────────────────────────────────────────┐
-│              gpcr-tools aggregate               │
-│                                                 │
-│  1. Load & score AI runs                        │
-│  2. Majority-vote consensus                     │
-│  3. Ground truth injection                      │
-│  4. Chimera detection                           │
-│  5. Receptor identity validation                │
-│  6. Ligand PDB-CCD cross-check                  │
-│  7. Oligomer analysis & chain correction        │
-│  8. Structural integrity checks                 │
-│  9. Atomic output writes                        │
-└─────────────┬───────────────────────────────────┘
-              │
-              ▼
-         aggregated/
-      (validated JSON)
-              │
-              ▼
-┌─────────────────────────────────────────────────┐
-│              gpcr-tools curate                  │
-│                                                 │
-│  Interactive expert review with validation      │
-│  alerts, controversy resolution, and            │
-│  decision provenance logging                    │
-└─────────────┬───────────────────────────────────┘
-              │
-              ▼
-         output/csv/
-    (database-ready CSVs)
-```
+### AI Annotation
+
+- **Multi-run consensus** — Each PDB is annotated 10 times independently (configurable via `--runs`), producing a statistically robust basis for majority voting.
+- **Structured output via tool calling** — Gemini returns annotations in a strict JSON schema enforced by function calling, not free-form text. Every field (receptor identity, ligand roles, signaling partners, state classification) is constrained to defined types and enumerations.
+- **Context-rich prompts** — The AI receives not just the paper PDF but also pre-enriched PDB metadata, a chain inventory reminder, and sibling structure warnings — reducing hallucination by grounding the model in API-verified facts.
+- **Flexible model selection** — Switch models at runtime via `--model` flag or `GPCR_GEMINI_MODEL` environment variable without code changes.
+- **Batch API support** — Large-scale annotation via Gemini Batch API with JSONL submission, polling, and automatic result recovery.
+- **Rate-limited client** — Sliding-window rate limiting (1000 RPM) with exponential backoff on 429 responses.
+
+### Post-Annotation Validation
+
+- **7-validator chain** — Each aggregated annotation passes through a chain of cross-validation steps:
+  1. **Chimera detection** — Identifies fusion constructs by comparing G-alpha C-terminal tails against UniProt reference sequences.
+  2. **Receptor identity verification** — Validates UniProt entry names against the UniProt API.
+  3. **Ligand existence check** — Confirms every annotated ligand exists in PDB Chemical Component Dictionary, filtering common buffers and crystallization artifacts.
+  4. **Oligomer analysis** — Classifies complexes (monomer / homomer / heteromer), scans 7TM domain completeness per chain, suggests the primary protomer, and auto-corrects chain-ID assignments when API evidence disagrees with AI output.
+  5. **Structural integrity** — Cross-checks internal consistency of the annotation structure.
+  6. **Ground truth injection** — Overwrites method, resolution, and release date with PDB-authoritative values.
+  7. **Controversy detection** — Flags fields where AI runs disagreed, with per-field vote breakdowns.
+
+### Expert Curation
+
+- **Rich terminal dashboard** — An ergonomic review interface built with [Rich](https://github.com/Textualize/rich) for rapid, informed decision-making.
+- **Context-aware validation alerts** — Real-time display of ghost chains, hallucinated ligands, UniProt identity clashes, and chimera warnings alongside the data being reviewed.
+- **Recursive review engine** — Navigate field-by-field through the annotation tree, with controversy highlights guiding attention to disputed values.
+- **Append-only audit trail** — Every human decision (accept / edit / reject) is logged to `audit_trail.jsonl` with timestamps, providing full reproducibility.
+- **Resumable sessions** — Curation progress is persisted; interrupted sessions resume exactly where they left off.
+
+---
 
 ## Quick Start
 
-### Option 1: Docker (Recommended for Curators)
-
-The tool runs completely inside a container. You only need to mount a single workspace directory.
+### Option 1: Docker (Recommended)
 
 ```bash
-# Pull the latest production image
+# Pull the latest image
 docker pull ghcr.io/protwis/gpcr-annotation-tools:latest
 
-# Initialize a workspace (creates directory structure and contract file)
+# Initialize a workspace
 mkdir -p ~/gpcr_workspace
 docker run --rm \
   -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools init-workspace
 
-# Aggregate AI runs and validate against PDB/UniProt
+# Add PDB IDs to the target list
+echo -e "8TII\n7W55\n9BLW" >> ~/gpcr_workspace/targets.txt
+
+# Run the full pipeline
+docker run --rm \
+  -v ~/gpcr_workspace:/workspace \
+  -e GPCR_GEMINI_API_KEY="$GPCR_GEMINI_API_KEY" \
+  -e GPCR_EMAIL_FOR_APIS="you@example.com" \
+  ghcr.io/protwis/gpcr-annotation-tools fetch
+
+docker run --rm \
+  -v ~/gpcr_workspace:/workspace \
+  -e GPCR_EMAIL_FOR_APIS="you@example.com" \
+  ghcr.io/protwis/gpcr-annotation-tools fetch-papers --auto-only
+
+docker run --rm \
+  -v ~/gpcr_workspace:/workspace \
+  -e GPCR_GEMINI_API_KEY="$GPCR_GEMINI_API_KEY" \
+  ghcr.io/protwis/gpcr-annotation-tools annotate
+
 docker run --rm \
   -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools aggregate
 
-# Run the interactive curation dashboard
 docker run -it --rm \
   -v ~/gpcr_workspace:/workspace \
   ghcr.io/protwis/gpcr-annotation-tools curate
-
-# Target a specific PDB entry directly
-docker run -it --rm \
-  -v ~/gpcr_workspace:/workspace \
-  ghcr.io/protwis/gpcr-annotation-tools curate 8TII
 ```
 
-> **Note:** The `-it` (interactive + TTY) flags are required for the interactive review dashboard. The `aggregate` command does not need `-it`.
+> **Note:** The `-it` flags are required only for the interactive `curate` command. Pass `--user "$(id -u):$(id -g)"` to avoid root-owned files on the host.
 
-> **Tip:** To avoid root-owned files on the host, pass `--user "$(id -u):$(id -g)"` to `docker run`.
-
-### Option 2: Local Installation (For Developers)
+### Option 2: Local Installation
 
 Requires Python 3.11+.
 
 ```bash
-# Clone the repository
 git clone https://github.com/protwis/GPCR-annotation-tools.git
 cd GPCR-annotation-tools
 
-# Install the package and dependencies
+# Install with all optional dependencies
 pip install -e ".[dev]"
 
-# Point to your workspace directory
+# Configure
 export GPCR_WORKSPACE=~/gpcr_workspace
+export GPCR_GEMINI_API_KEY=your-api-key
+export GPCR_EMAIL_FOR_APIS=you@example.com
 
-# Initialize the workspace (creates directory tree and contract file)
+# Initialize and run
 gpcr-tools init-workspace
 
-# Aggregate all pending PDBs
+gpcr-tools fetch
+gpcr-tools fetch-papers
+gpcr-tools annotate
 gpcr-tools aggregate
-
-# Aggregate a single PDB (offline mode, no API calls)
-gpcr-tools aggregate 8TII --skip-api-checks
-
-# Re-aggregate already-processed PDBs
-gpcr-tools aggregate --force
-
-# Launch the interactive curation dashboard
 gpcr-tools curate
-
-# Target a specific PDB
-gpcr-tools curate 8Y72
 ```
+
+---
+
+## CLI Reference
+
+### `gpcr-tools fetch`
+
+Download PDB metadata from RCSB GraphQL and enrich with UniProt, PubChem, and CrossRef data.
+
+```bash
+gpcr-tools fetch                        # Process all targets
+gpcr-tools fetch 8TII                   # Single PDB
+gpcr-tools fetch --targets ids.txt      # Custom target file
+gpcr-tools fetch --force                # Re-fetch existing entries
+```
+
+### `gpcr-tools fetch-papers`
+
+Download open-access papers with tiered fallback (Unpaywall → PMC OA → abstract).
+
+```bash
+gpcr-tools fetch-papers                 # All targets, with watch mode for paywalled papers
+gpcr-tools fetch-papers --auto-only     # Skip watch mode (for CI/scripting)
+gpcr-tools fetch-papers 8TII           # Single PDB
+```
+
+### `gpcr-tools annotate`
+
+Run Gemini AI annotation with structured output.
+
+```bash
+gpcr-tools annotate                                    # Auto-discover pending PDBs
+gpcr-tools annotate 8TII --runs 5                      # Single PDB, 5 runs
+gpcr-tools annotate --model gemini-2.5-flash            # Use a different model
+gpcr-tools annotate --prompt prompts/custom.txt         # Custom prompt template
+gpcr-tools annotate --batch                             # Submit via Batch API
+gpcr-tools annotate --check-batch                       # Poll batch status
+gpcr-tools annotate --recover                           # Re-process raw batch output
+```
+
+### `gpcr-tools aggregate`
+
+Aggregate multi-run AI results with majority voting and cross-validation.
+
+```bash
+gpcr-tools aggregate                    # All pending PDBs
+gpcr-tools aggregate 8TII              # Single PDB
+gpcr-tools aggregate --skip-api-checks  # Offline mode (no UniProt/PubChem calls)
+gpcr-tools aggregate --force            # Re-process already-aggregated entries
+```
+
+### `gpcr-tools curate`
+
+Interactive expert review dashboard.
+
+```bash
+gpcr-tools curate                       # Review all pending PDBs
+gpcr-tools curate 8TII                  # Target a single PDB
+gpcr-tools curate --auto-accept         # Non-interactive mode (CI/testing)
+```
+
+---
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GPCR_WORKSPACE` | No | Workspace root (default: `/workspace`) |
+| `GPCR_GEMINI_API_KEY` | For `annotate` | Google Gemini API key |
+| `GPCR_GEMINI_MODEL` | No | Model override (default: `gemini-2.5-pro`) |
+| `GPCR_EMAIL_FOR_APIS` | For `fetch-papers` | Email for Unpaywall/NCBI polite access |
+
+<details>
+<summary>Advanced: per-directory path overrides</summary>
+
+For non-standard workspace layouts (e.g., separate storage mounts), each subdirectory can be overridden independently:
+
+| Variable | Default |
+|----------|---------|
+| `GPCR_RAW_PATH` | `{workspace}/raw` |
+| `GPCR_ENRICHED_PATH` | `{workspace}/enriched` |
+| `GPCR_PAPERS_PATH` | `{workspace}/papers` |
+| `GPCR_AI_RESULTS_PATH` | `{workspace}/ai_results` |
+| `GPCR_AGGREGATED_PATH` | `{workspace}/aggregated` |
+| `GPCR_OUTPUT_PATH` | `{workspace}/output` |
+| `GPCR_CACHE_PATH` | `{workspace}/cache` |
+| `GPCR_STATE_PATH` | `{workspace}/state` |
+| `GPCR_TMP_PATH` | `{workspace}/tmp` |
+
+</details>
+
+---
 
 ## Workspace Layout
 
-All commands operate under a single workspace root (`/workspace` inside Docker, or `GPCR_WORKSPACE` locally). The workspace must be initialized before first use:
-
 ```text
 /workspace/
-├── contract/
-│   └── storage_contract.json   # Versioned workspace contract (required)
-├── raw/                        # Downloaded source data
-├── enriched/                   # Normalized and enriched PDB metadata
-├── papers/                     # Paper files and metadata
-├── ai_results/                 # Per-PDB AI annotation runs (10 per PDB)
-│   ├── 8TII/
-│   │   ├── run_1.json
-│   │   ├── run_2.json
-│   │   └── ...                 # Up to run_10.json
-│   └── 8Y72/
-│       └── ...
-├── aggregated/                 # Voted/validated annotations (curation input)
-│   ├── 8TII.json
-│   ├── logs/                   # Multi-run voting discrepancy logs
-│   │   └── 8TII_voting_log.json
-│   └── validation_logs/        # Algorithmic validation reports
-│       └── 8TII_validation.json
+├── contract/storage_contract.json    # Versioned workspace contract
+├── targets.txt                       # PDB IDs to process (one per line)
+├── prompts/v5.txt                    # Default annotation prompt template
+│
+├── raw/pdb_json/                     # RCSB GraphQL responses
+├── enriched/                         # Enriched PDB metadata (AI input)
+├── papers/                           # Downloaded PDFs and abstracts
+├── ai_results/{pdb_id}/run_*.json   # 10 independent AI annotation runs
+│
+├── aggregated/                       # Voted + validated annotations
+│   ├── {pdb_id}.json
+│   ├── logs/                         # Per-field voting discrepancy logs
+│   └── validation_logs/              # Algorithmic validation reports
+│
 ├── output/
-│   ├── csv/                    # Curated database-ready CSVs
-│   └── audit/                  # Decision provenance (audit_trail.jsonl)
-├── cache/                      # Persistent API caches (UniProt, PDB-CCD)
-├── state/                      # Machine-owned operational state
-│   ├── processed_log.json      # Tracks completed/skipped PDBs
-│   ├── aggregate_log.json      # Tracks aggregation status per PDB
-│   └── pipeline_runs/
-└── tmp/                        # Ephemeral scratch space
+│   ├── csv/                          # Database-ready CSV exports
+│   └── audit/audit_trail.jsonl       # Append-only decision provenance
+│
+├── cache/                            # Persistent API caches
+└── state/                            # Operational state (resumability)
 ```
 
-### Data Requirements
-
-The **aggregation** step reads from `ai_results/` (10 AI runs per PDB) and `enriched/` (PDB metadata), and writes to `aggregated/`.
-
-The **curation** step reads from `aggregated/` and writes to `output/csv/` and `output/audit/`.
+---
 
 ## Output Artifacts
 
-The tool exports curated data into two main categories: strict relational CSVs for database ingestion, and provenance logs for quality assurance.
-
 ### Database CSVs (`output/csv/`)
 
-Generated as tab-separated files:
+Tab-separated, normalized files ready for database ingestion:
 
 | File | Contents |
-| --- | --- |
-| `structures.csv` | PDB ID, receptor, method, resolution, state, chain, date |
-| `ligands.csv` | Ligand names, PubChem IDs, roles, SMILES, InChIKey, sequences |
+|------|----------|
+| `structures.csv` | PDB ID, receptor UniProt, method, resolution, state, chain, date |
+| `ligands.csv` | Ligand names, PubChem IDs, roles, types, SMILES, InChIKey, sequences |
 | `g_proteins.csv` | G-protein subunit UniProt IDs and chain assignments |
 | `arrestins.csv` | Arrestin UniProt IDs and chains |
 | `fusion_proteins.csv` | Fusion protein names |
-| `nanobodies.csv` | Nanobody names |
-| `antibodies.csv` | Antibody and Fab fragment names |
-| `grk.csv` | GRK names |
-| `ramp.csv` | RAMP/MRAP names |
-| `scfv.csv` | scFv names |
-| `other_aux_proteins.csv` | Other auxiliary protein names |
+| `nanobodies.csv`, `antibodies.csv`, `scfv.csv` | Binding partner names |
+| `grk.csv`, `ramp.csv`, `other_aux_proteins.csv` | Auxiliary protein names |
 
 ### Validation Reports (`aggregated/validation_logs/`)
 
-Each PDB receives a structured validation report containing:
-* **Critical warnings** — hallucinated ligands, chimeric fusion proteins, identity clashes
-* **Algorithmic conflicts** — disagreements between AI annotation and API ground truth
-* **Oligomer analysis** — classification, 7TM completeness, chain corrections, alerts
+Per-PDB structured reports containing:
+- **Critical warnings** — hallucinated ligands, chimeric fusion proteins, identity clashes
+- **Algorithmic conflicts** — AI annotation vs. API ground truth disagreements
+- **Oligomer analysis** — complex classification, 7TM completeness, chain corrections
 
-### Provenance & Audit Logs
+### Provenance Logs
 
-* **`output/audit/audit_trail.jsonl`:** A meticulous, append-only log of every decision made by the human expert.
-* **`aggregated/logs/*_voting_log.json`:** Per-field majority-vote breakdown showing where AI runs disagreed.
-* **`state/processed_log.json`:** Tracks curation status (completed, skipped) to enable resumable sessions.
-* **`state/aggregate_log.json`:** Tracks aggregation status per PDB to avoid redundant processing.
+| Log | Purpose |
+|-----|---------|
+| `output/audit/audit_trail.jsonl` | Every human decision, timestamped and append-only |
+| `aggregated/logs/*_voting_log.json` | Per-field majority-vote breakdowns across 10 AI runs |
+| `state/processed_log.json` | Curation completion status (enables resumable sessions) |
 
-## Non-Interactive Mode
+---
 
-For CI pipelines and automated verification, curation can run without interactive prompts:
-
-```bash
-gpcr-tools curate --auto-accept
-```
-
-This processes all pending PDBs with deterministic accept-all behavior and writes the same output artifacts as the interactive path.
-
-## System Architecture
-
-The suite is engineered for modularity and safety, built upon modern Python packaging standards (PEP 621):
+## Architecture
 
 ```text
-gpcr_tools/
-├── aggregator/          # Multi-run aggregation engine
-│   ├── ai_results_loader.py    # Load & score 10 AI runs per PDB
-│   ├── enriched_loader.py      # Load PDB enriched metadata
-│   ├── voting.py               # Majority-vote consensus & controversy detection
-│   ├── ground_truth.py         # Inject PDB/UniProt ground truth fields
-│   └── runner.py               # 12-step orchestration with error isolation
-├── validator/           # Algorithmic validation chain
-│   ├── chimera.py              # Fusion protein / chimera detection
-│   ├── receptor_validator.py   # Receptor identity cross-check (UniProt API)
-│   ├── ligand_validator.py     # Ligand existence check (PDB-CCD)
-│   ├── oligomer.py             # Oligomer analysis, 7TM scan, chain override
-│   ├── integrity_checker.py    # Structural consistency validation
-│   ├── api_clients.py          # UniProt / PDB API wrappers
-│   └── cache.py                # Persistent JSON cache layer
-├── csv_generator/       # Interactive curation dashboard
-│   ├── app.py                  # Main curation loop
-│   ├── review_engine.py        # Recursive review tree & controversy resolution
-│   ├── ui.py                   # Rich terminal UI panels & displays
-│   ├── validation_display.py   # Validation alert rendering
-│   ├── logic.py                # Oligomer-aware data transformations
-│   ├── csv_writer.py           # Pure data → CSV export (no UI)
-│   └── audit.py                # JSONL audit trail writer
-├── config.py            # All constants, paths, and magic strings
-├── workspace.py         # Workspace initialization & contract validation
-└── __main__.py          # CLI entry point (aggregate / curate)
+src/gpcr_tools/
+├── config.py                  # All constants, URLs, timeouts, thresholds
+├── workspace.py               # Workspace initialization & contract validation
+├── __main__.py                # CLI entry point
+│
+├── fetcher/                   # Stage 1: RCSB download + enrichment
+│   ├── rcsb_client.py         #   GraphQL query + rate-limited download
+│   ├── enricher.py            #   UniProt / PubChem / CrossRef enrichment
+│   └── cache.py               #   Atomic JSON cache with version invalidation
+│
+├── papers/                    # Stage 2: Paper acquisition
+│   ├── downloader.py          #   Tiered PDF download (Unpaywall → PMC → abstract)
+│   └── watcher.py             #   Filesystem watcher for manual PDF drops
+│
+├── annotator/                 # Stage 3: Gemini AI annotation
+│   ├── gemini_client.py       #   Rate-limited API client
+│   ├── prompt_builder.py      #   Context-rich prompt assembly
+│   ├── schema.py              #   Structured output schema (tool calling)
+│   ├── pdf_compressor.py      #   Ghostscript compression for large PDFs
+│   ├── post_processor.py      #   Response normalization
+│   └── runner.py              #   Single-call + batch modes with recovery
+│
+├── aggregator/                # Stage 4: Consensus + validation
+│   ├── voting.py              #   Majority-vote engine + controversy detection
+│   ├── ground_truth.py        #   PDB/UniProt ground truth injection
+│   └── runner.py              #   12-step orchestration with error isolation
+│
+├── validator/                 # 7-validator cross-check chain
+│   ├── chimera.py             #   Fusion protein detection (C-terminal tail matching)
+│   ├── receptor_validator.py  #   UniProt identity verification
+│   ├── ligand_validator.py    #   PDB-CCD existence check
+│   ├── oligomer.py            #   Complex classification + 7TM completeness
+│   ├─�� integrity_checker.py   #   Structural consistency validation
+│   └── api_clients.py         #   Shared API wrappers with retry + caching
+│
+└── csv_generator/             # Stage 5: Expert curation
+    ├── app.py                 #   Main curation loop
+    ├── review_engine.py       #   Recursive review tree
+    ├── ui.py                  #   Rich terminal panels
+    ├── csv_writer.py          #   Pure data → CSV export
+    └── audit.py               #   JSONL audit trail writer
 ```
 
 ### Design Principles
 
 | Principle | Implementation |
 |-----------|---------------|
-| **Atomic writes** | `tempfile` + `os.replace` + `try/finally` cleanup — no partial output files |
-| **Mutation isolation** | `deepcopy()` boundary in runner before passing data to validators |
-| **None-safety** | `(data.get(key) or {}).get(child)` everywhere — never `.get(key, {})` |
-| **No magic strings** | All cross-module strings as named constants in `config.py` |
-| **Immutability** | `frozenset`, `tuple`, `MappingProxyType` for module-level constants |
-| **Error isolation** | Each PDB wrapped in `try/except` — failures logged, never crash the batch |
+| **Atomic writes** | `tempfile` + `os.replace` + `try/finally` cleanup — no partial outputs |
+| **Mutation isolation** | `deepcopy()` boundary before validator invocations |
+| **None-safety** | `(data.get(key) or {}).get(child)` — never `.get(key, {})` on external data |
+| **Centralized configuration** | All URLs, timeouts, thresholds, and magic strings in `config.py` |
+| **Immutable constants** | `frozenset`, `tuple`, `MappingProxyType` for module-level data |
+| **Error isolation** | Each PDB wrapped in `try/except` — failures logged, pipeline continues |
+| **Timeout-guarded I/O** | Every HTTP call has an explicit timeout; sessions use `urllib3.Retry` |
 
-## Development & CI/CD
+---
 
-We enforce strict engineering standards to maintain data integrity.
+## Development
 
-### Testing & Quality Assurance
+### Prerequisites
 
 ```bash
-# Run the test suite with coverage
-pytest tests/ -v --cov=gpcr_tools --cov-report=term-missing
+pip install -e ".[dev]"
+```
 
-# Linting & Formatting (Ruff)
+### Quality Gates
+
+```bash
+# Lint + format
 ruff check src/ tests/
 ruff format src/ tests/
 
-# Static Type Checking
+# Type checking
 mypy src/
+
+# Tests
+pytest tests/ -v
 ```
 
-The test suite includes:
-* **Unit tests** for every aggregator, validator, and csv_generator module
-* **Integration tests** for the full aggregate pipeline, error isolation, and atomic write safety
-* **Real PDB fixture tests** covering 9 canonical GPCR structures (5G53, 8TII, 9AS1, 9BLW, 9EJZ, 9IQS, 9M88, 9NOR, 9O38) with 10 AI runs each
+### Test Suite
 
-### Continuous Integration
+The test suite includes 770+ tests:
 
-GitHub Actions workflows automatically run on every push and Pull Request:
-* **Code Quality:** Enforces ruff linting and formatting.
-* **Type Safety:** Validates signatures via mypy (with `ignore_missing_imports = false`).
-* **Test Matrix:** Executes pytest across Python 3.11 and 3.12.
-* **Docker Smoke Tests:** Builds the image and exercises `init-workspace`, `curate --help`, and `curate --auto-accept` against a real workspace mount.
-* **Automated Releases:** Builds and publishes the Docker image to GHCR upon semantic version tags (`v*`), gated by a smoke-test pass.
+- **Unit tests** for every module across all five pipeline stages
+- **Integration tests** for the full aggregation pipeline, error isolation, and atomic write safety
+- **Real PDB fixture tests** covering 9 canonical GPCR structures (5G53, 8TII, 9AS1, 9BLW, 9EJZ, 9IQS, 9M88, 9NOR, 9O38) with 10 AI runs each
+- **Mock HTTP** for all external APIs — no live network calls in the test suite
+
+### CI/CD
+
+GitHub Actions workflows run on every push and pull request:
+
+- **Ruff** — Enforced linting and formatting
+- **mypy** — Static type checking with `ignore_missing_imports = false`
+- **pytest** — Test matrix across Python 3.11 and 3.12
+- **Docker smoke tests** — Build + exercise `init-workspace`, `curate --help`, and `curate --auto-accept`
+- **Automated releases** — Docker image published to GHCR on semantic version tags (`v*`)
+
+---
 
 ## License
 
-This project is licensed under the Apache License 2.0.
+This project is licensed under the [Apache License 2.0](LICENSE).
