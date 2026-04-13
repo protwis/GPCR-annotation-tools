@@ -62,6 +62,7 @@ line-length = 100
 src = ["src", "tests"]
 
 [tool.ruff.lint]
+allowed-confusables = ["α", "β", "γ"]  # Greek letters used in GPCR scientific terminology
 select = [
     "E",    # pycodestyle errors
     "W",    # pycodestyle warnings

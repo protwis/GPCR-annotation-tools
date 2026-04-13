@@ -11,8 +11,10 @@ Implements the v3.1 storage contract lifecycle:
 
 from __future__ import annotations
 
+import importlib.resources
 import json
 import os
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -74,6 +76,13 @@ def init_workspace(workspace_root: Path | None = None) -> None:
         with open(contract_file, "w", encoding="utf-8") as f:
             json.dump(contract_data, f, indent=2)
             f.write("\n")
+
+    # Copy bundled default prompt file if it does not exist
+    default_prompt = workspace_root / "prompts" / "v5.txt"
+    if not default_prompt.exists():
+        src = importlib.resources.files("gpcr_tools") / "data" / "prompts" / "v5.txt"
+        with importlib.resources.as_file(src) as src_path:
+            shutil.copy2(src_path, default_prompt)
 
     # Create targets.txt (pipeline entry point) if it does not exist
     targets_file = workspace_root / "targets.txt"

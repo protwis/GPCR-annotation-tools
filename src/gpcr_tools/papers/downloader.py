@@ -173,11 +173,18 @@ def _fetch_crossref_metadata(doi: str, session: requests.Session) -> dict[str, s
     return {"pmid": None, "pmcid": None}
 
 
-def _fetch_unpaywall_pdf_url(doi: str, session: requests.Session) -> str | None:
+def _fetch_unpaywall_pdf_url(
+    doi: str,
+    session: requests.Session,
+    email: str | None = None,
+) -> str | None:
     """Tier 1: Get OA PDF URL from Unpaywall."""
     url = f"{UNPAYWALL_API_URL}/{doi}"
+    params: dict[str, str] = {}
+    if email:
+        params["email"] = email
     try:
-        response = session.get(url, timeout=TIMEOUT_UNPAYWALL)
+        response = session.get(url, params=params, timeout=TIMEOUT_UNPAYWALL)
         if response.status_code == 200:
             data = response.json()
             oa_location = data.get("best_oa_location") or {}
@@ -383,7 +390,7 @@ def download_paper_for_pdb(
     pdf_url: str | None = None
     source: str | None = None
 
-    pdf_url = _fetch_unpaywall_pdf_url(doi, sess)
+    pdf_url = _fetch_unpaywall_pdf_url(doi, sess, email=resolved_email)
     if pdf_url:
         source = "unpaywall_pdf"
 

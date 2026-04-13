@@ -24,10 +24,10 @@ from gpcr_tools.config import (
     GEMINI_DEFAULT_RUNS,
     GEMINI_MAX_RETRIES,
     GEMINI_MAX_WORKERS,
-    GEMINI_MODEL_NAME,
     SLEEP_GEMINI_429,
     TIMEOUT_BATCH_RESULT_DOWNLOAD,
     get_config,
+    get_gemini_model_name,
 )
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ def run_single_pdb(
     prompt_text: str,
     pdf_path: Path,
     num_runs: int = GEMINI_DEFAULT_RUNS,
-    model_name: str = GEMINI_MODEL_NAME,
+    model_name: str | None = None,
 ) -> None:
     """Run annotation for a single PDB entry using parallel Gemini calls.
 
@@ -47,6 +47,7 @@ def run_single_pdb(
     requests via a thread pool.  Completed runs are persisted atomically
     so the process is safely resumable.
     """
+    model_name = model_name or get_gemini_model_name()
     config = get_config()
     out_dir = config.ai_results_dir / pdb_id
 
@@ -129,7 +130,14 @@ def run_single_pdb(
                             time.sleep(SLEEP_GEMINI_429 * (2 ** (retries - 1)))
                         else:
                             time.sleep(GEMINI_BASE_BACKOFF * (2 ** (retries - 1)))
-                    except Exception:
+                    except Exception as exc:
+                        logger.warning(
+                            "[%s] Run %d attempt %d failed: %s",
+                            pdb_id,
+                            run_num,
+                            retries + 1,
+                            exc,
+                        )
                         retries += 1
                         time.sleep(GEMINI_BASE_BACKOFF * (2 ** (retries - 1)))
 
@@ -154,9 +162,10 @@ def build_and_submit_batch(
     targets: list[str],
     prompt_text: str,
     num_runs: int = GEMINI_DEFAULT_RUNS,
-    model_name: str = GEMINI_MODEL_NAME,
+    model_name: str | None = None,
 ) -> None:
     """Build a JSONL payload for all *targets* and submit it to the Gemini Batch API."""
+    model_name = model_name or get_gemini_model_name()
     config = get_config()
     client = get_client()
 
@@ -319,7 +328,8 @@ def check_batch_status() -> None:
 
             try:
                 os.makedirs(config.pipeline_runs_dir, exist_ok=True)
-                raw_out_file = config.pipeline_runs_dir / f"raw_output_{job_name}.jsonl"
+                safe_name = job_name.replace("/", "_")
+                raw_out_file = config.pipeline_runs_dir / f"raw_output_{safe_name}.jsonl"
                 logger.info("Downloading from %s to %s", job.output_uri, raw_out_file)
 
                 response = requests.get(job.output_uri, timeout=TIMEOUT_BATCH_RESULT_DOWNLOAD)
