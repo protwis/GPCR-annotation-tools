@@ -171,7 +171,7 @@ def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
         if filepath.exists():
             with open(filepath, encoding="utf-8") as f:
                 existing_header = f.readline().strip().split("\t")
-            if existing_header != expected_fields:
+            if existing_header != list(expected_fields):
                 raise CsvSchemaMismatchError(
                     filename=filename,
                     expected_fields=expected_fields,

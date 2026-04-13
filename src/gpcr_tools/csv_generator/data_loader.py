@@ -8,7 +8,7 @@ import json
 from datetime import UTC
 from typing import Any
 
-from gpcr_tools.config import get_config
+from gpcr_tools.config import AGG_STATUS_COMPLETED, AGG_STATUS_SKIPPED, get_config
 from gpcr_tools.csv_generator.ui import console
 
 
@@ -26,7 +26,7 @@ def load_processed_log() -> dict:
         return {}
 
 
-def update_processed_log(pdb_id: str, status: str = "completed") -> None:
+def update_processed_log(pdb_id: str, status: str = AGG_STATUS_COMPLETED) -> None:
     """Record a PDB as processed."""
     from datetime import datetime
 
@@ -69,9 +69,9 @@ def get_pending_pdbs() -> tuple[list[str], list[str], int]:
         entry = log.get(pid)
         if entry is None:
             pending_ids.append(pid)
-        elif entry.get("status") == "completed":
+        elif entry.get("status") == AGG_STATUS_COMPLETED:
             continue
-        elif entry.get("status") == "skipped":
+        elif entry.get("status") == AGG_STATUS_SKIPPED:
             skipped_ids.append(pid)
         else:
             pending_ids.append(pid)

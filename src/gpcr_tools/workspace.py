@@ -11,15 +11,15 @@ Implements the v3.1 storage contract lifecycle:
 
 from __future__ import annotations
 
+import importlib.resources
 import json
 import os
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from gpcr_tools.config import OVERRIDE_VARS, WorkspaceConfig, get_config
-
-SUPPORTED_CONTRACT_VERSION = 1
+from gpcr_tools.config import OVERRIDE_VARS, SUPPORTED_CONTRACT_VERSION, WorkspaceConfig, get_config
 
 # Directories created by ``init_workspace`` (relative to workspace root).
 _INIT_DIRS: list[str] = [
@@ -40,6 +40,7 @@ _INIT_DIRS: list[str] = [
     "state",
     "state/pipeline_runs",
     "tmp",
+    "prompts",
 ]
 
 
@@ -75,6 +76,25 @@ def init_workspace(workspace_root: Path | None = None) -> None:
         with open(contract_file, "w", encoding="utf-8") as f:
             json.dump(contract_data, f, indent=2)
             f.write("\n")
+
+    # Copy bundled default prompt file if it does not exist
+    default_prompt = workspace_root / "prompts" / "v5.txt"
+    if not default_prompt.exists():
+        src = importlib.resources.files("gpcr_tools") / "data" / "prompts" / "v5.txt"
+        with importlib.resources.as_file(src) as src_path:
+            shutil.copy2(src_path, default_prompt)
+
+    # Create targets.txt (pipeline entry point) if it does not exist
+    targets_file = workspace_root / "targets.txt"
+    if not targets_file.exists():
+        targets_file.write_text(
+            "# Add PDB IDs here, one per line.\n"
+            "# Lines starting with # are comments. Blank lines are ignored.\n"
+            "# Example:\n"
+            "# 7W55\n"
+            "# 8ABC\n",
+            encoding="utf-8",
+        )
 
     print(f"[workspace] initialized → {workspace_root}", file=sys.stderr)
 
@@ -243,7 +263,7 @@ def ensure_runtime_dirs(config: WorkspaceConfig | None = None) -> None:
 
     dirs = [
         config.raw_dir,
-        config.raw_dir / "pdb_json",
+        config.raw_pdb_json_dir,
         config.raw_dir / "structure_files",
         config.enriched_dir,
         config.papers_dir,

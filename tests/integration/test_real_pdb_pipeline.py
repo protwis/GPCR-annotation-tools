@@ -407,7 +407,9 @@ class TestBatchCSVIntegrity:
             with open(filepath, encoding="utf-8") as f:
                 reader = csv_mod.DictReader(f, delimiter="\t")
                 assert reader.fieldnames is not None
-                assert list(reader.fieldnames) == expected_fields, f"{filename} header mismatch"
+                assert list(reader.fieldnames) == list(expected_fields), (
+                    f"{filename} header mismatch"
+                )
                 rows = list(reader)
 
             if filename == "structures.csv":

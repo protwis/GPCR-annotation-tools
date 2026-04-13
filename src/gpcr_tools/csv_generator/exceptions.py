@@ -1,5 +1,9 @@
 """Custom exceptions for the CSV generator."""
 
+from __future__ import annotations
+
+from collections.abc import Sequence
+
 
 class CsvSchemaMismatchError(Exception):
     """Raised when an existing CSV file has headers that don't match the current schema."""
@@ -7,8 +11,8 @@ class CsvSchemaMismatchError(Exception):
     def __init__(
         self,
         filename: str,
-        expected_fields: list[str],
-        found_fields: list[str],
+        expected_fields: Sequence[str],
+        found_fields: Sequence[str],
     ):
         self.filename = filename
         self.expected_fields = expected_fields

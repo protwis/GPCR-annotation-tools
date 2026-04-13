@@ -13,7 +13,16 @@ from typing import Any
 
 import requests
 
-from gpcr_tools.config import API_MAX_RETRIES
+from gpcr_tools.config import (
+    API_MAX_RETRIES,
+    PUBCHEM_REST_URL,
+    RCSB_GRAPHQL_URL,
+    SLEEP_VALIDATION_RETRY,
+    TIMEOUT_PUBCHEM_VALIDATION,
+    TIMEOUT_RCSB_GRAPHQL_VALIDATION,
+    TIMEOUT_UNIPROT_VALIDATION,
+    UNIPROT_REST_URL,
+)
 from gpcr_tools.validator.cache import ValidationCache
 
 logger = logging.getLogger(__name__)
@@ -34,18 +43,18 @@ def check_uniprot_existence(
     if cached is not None:
         return cached
 
-    url = f"https://rest.uniprot.org/uniprotkb/{clean_name}.txt"
+    url = f"{UNIPROT_REST_URL}/{clean_name}.txt"
     for attempt in range(API_MAX_RETRIES):
         try:
-            resp = requests.head(url, timeout=5, allow_redirects=True)
-            is_valid = resp.status_code == 200
+            resp = requests.head(url, timeout=TIMEOUT_UNIPROT_VALIDATION, allow_redirects=True)
+            is_valid = bool(resp.status_code == 200)
             cache.set(key, is_valid)
             return is_valid
         except (requests.RequestException, OSError) as exc:
             if attempt == API_MAX_RETRIES - 1:
                 logger.warning("UniProt API error for '%s': %s", entry_name, exc)
                 return None
-            time.sleep(1)
+            time.sleep(SLEEP_VALIDATION_RETRY)
     return None
 
 
@@ -68,9 +77,9 @@ def check_pubchem_existence(
         return cached
 
     try:
-        url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{clean_cid}/description/JSON"
-        resp = requests.get(url, timeout=5)
-        is_valid = resp.status_code == 200
+        url = f"{PUBCHEM_REST_URL}/cid/{clean_cid}/description/JSON"
+        resp = requests.get(url, timeout=TIMEOUT_PUBCHEM_VALIDATION)
+        is_valid = bool(resp.status_code == 200)
         cache.set(key, is_valid)
         return is_valid
     except (requests.RequestException, OSError) as exc:
@@ -82,7 +91,7 @@ def check_pubchem_existence(
 # RCSB GraphQL
 # ---------------------------------------------------------------------------
 
-_GRAPHQL_URL = "https://data.rcsb.org/graphql"
+_GRAPHQL_URL = RCSB_GRAPHQL_URL
 
 GRAPHQL_POLYMER_FEATURES_QUERY: str = """\
 query structure($id: String!) {
@@ -154,7 +163,7 @@ def fetch_polymer_features(pdb_id: str) -> dict[str, Any] | None:
         "variables": {"id": pdb_id.upper()},
     }
     try:
-        resp = requests.post(_GRAPHQL_URL, json=payload, timeout=15)
+        resp = requests.post(_GRAPHQL_URL, json=payload, timeout=TIMEOUT_RCSB_GRAPHQL_VALIDATION)
         if resp.status_code != 200:
             logger.warning("[%s] GraphQL returned status %d", pdb_id, resp.status_code)
             return None
