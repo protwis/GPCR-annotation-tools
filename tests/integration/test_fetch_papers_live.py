@@ -17,8 +17,16 @@ import pytest
 
 from tests.conftest import REAL_PDB_DIR, REAL_PDB_IDS
 
+_LIVE = os.environ.get("GPCR_RUN_LIVE_TESTS")
 _EMAIL = os.environ.get("GPCR_EMAIL_FOR_APIS", "")
-_SKIP_REASON = "GPCR_EMAIL_FOR_APIS not set"
+_SKIP_REASON = (
+    "Live API tests disabled; set GPCR_RUN_LIVE_TESTS=1 and GPCR_EMAIL_FOR_APIS to enable"
+)
+
+pytestmark = pytest.mark.skipif(
+    not _LIVE,
+    reason="Live API tests disabled; set GPCR_RUN_LIVE_TESTS=1 to enable",
+)
 
 
 @pytest.fixture()
@@ -49,7 +57,7 @@ def papers_workspace(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
 class TestFetchPapersLive:
     """Live API test: download papers for canonical PDB set."""
 
-    @pytest.mark.skipif(not _EMAIL, reason=_SKIP_REASON)
+    @pytest.mark.skipif(not _EMAIL, reason="GPCR_EMAIL_FOR_APIS not set")
     def test_auto_only_downloads_some_papers(self, papers_workspace: Path) -> None:
         """Run fetch-papers --auto-only on all 9 PDBs."""
         from gpcr_tools.papers.runner import run_fetch_papers
@@ -83,7 +91,7 @@ class TestFetchPapersLive:
                 f"[{pdb_id}] unexpected status: {entry['status']}"
             )
 
-    @pytest.mark.skipif(not _EMAIL, reason=_SKIP_REASON)
+    @pytest.mark.skipif(not _EMAIL, reason="GPCR_EMAIL_FOR_APIS not set")
     def test_resumability(self, papers_workspace: Path) -> None:
         """Running fetch-papers twice should skip already-downloaded."""
         from gpcr_tools.papers.runner import run_fetch_papers
@@ -102,7 +110,7 @@ class TestFetchPapersLive:
         if log1.get("9IQS", {}).get("status") == "success_pdf_downloaded":
             assert log2["9IQS"]["status"] == "skipped_already_downloaded"
 
-    @pytest.mark.skipif(not _EMAIL, reason=_SKIP_REASON)
+    @pytest.mark.skipif(not _EMAIL, reason="GPCR_EMAIL_FOR_APIS not set")
     def test_auto_discover_finds_missing(self, papers_workspace: Path) -> None:
         """Auto-discover should only find PDBs without papers."""
         from gpcr_tools.papers.runner import _discover_missing_papers

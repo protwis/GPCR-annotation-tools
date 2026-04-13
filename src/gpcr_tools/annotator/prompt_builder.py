@@ -53,7 +53,7 @@ def generate_chain_inventory_reminder(pdb_id: str, enriched_data: dict) -> str:
 def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
     """Simplifies the enriched PDB JSON into a minimal dictionary for Gemini."""
     entry = _get_entry(enriched_data)
-    pdb_id = entry.get("id") or "UNKNOWN"
+    pdb_id = entry.get("rcsb_id") or "UNKNOWN"
 
     # Safely get structural details
     method = "Unknown"

@@ -34,7 +34,7 @@ def test_enhanced_simplify_pdb_json():
     enriched_data = {
         "data": {
             "entry": {
-                "id": "7W55",
+                "rcsb_id": "7W55",
                 "struct": {"title": "Cool Structure"},
                 "exptl": [{"method": "X-ray diffraction"}],
                 "refine": [{"ls_d_res_high": 2.5}],

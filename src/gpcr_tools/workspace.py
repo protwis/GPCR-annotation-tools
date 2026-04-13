@@ -38,6 +38,7 @@ _INIT_DIRS: list[str] = [
     "state",
     "state/pipeline_runs",
     "tmp",
+    "prompts",
 ]
 
 

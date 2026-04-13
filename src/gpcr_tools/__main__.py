@@ -263,6 +263,13 @@ def cli() -> None:
             if args.prompt:
                 prompt_text = Path(args.prompt).read_text(encoding="utf-8")
             else:
+                if not cfg.default_prompt_file.exists():
+                    print(
+                        f"Error: default prompt file not found at {cfg.default_prompt_file}\n"
+                        "Please create it or use --prompt to specify one.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
                 prompt_text = cfg.default_prompt_file.read_text(encoding="utf-8")
 
             # Resolve model name: --model flag > GPCR_GEMINI_MODEL env > config default
