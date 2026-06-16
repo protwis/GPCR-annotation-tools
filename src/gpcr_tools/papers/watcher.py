@@ -197,6 +197,19 @@ def _detect_new_pdf(papers_dir: Path, before: set[str], target: Path) -> bool:
     return False
 
 
+def _clickable(url: str) -> str:
+    """Render *url* as an OSC 8 terminal hyperlink (Cmd/Ctrl-click to open in
+    iTerm2, VS Code, and modern Terminal.app). Falls back to the plain URL when
+    stderr is not an interactive terminal, so redirected logs/pipes stay clean.
+    The visible text is the URL itself, so it stays copy-pasteable even on the
+    rare terminal/multiplexer (old tmux/screen) that doesn't pass OSC 8 through.
+    """
+    if not sys.stderr.isatty():
+        return url
+    esc = "\033"
+    return f"{esc}]8;;{url}{esc}\\{url}{esc}]8;;{esc}\\"
+
+
 def run_watcher(download_log: dict[str, Any]) -> int:
     """Run the two-phase manual paper workflow. Returns papers provided this session.
 
@@ -246,8 +259,9 @@ def run_watcher(download_log: dict[str, Any]) -> int:
             target = papers_dir / f"{primary['pdb_id']}.pdf"
             siblings = missing[1:]
             also = f"  (also covers {', '.join(s['pdb_id'] for s in siblings)})" if siblings else ""
+            doi_url = f"https://doi.org/{doi}"
             print(f"\n[{index}/{len(todo)}] {primary['pdb_id']}{also}", file=sys.stderr)
-            print(f"   open:  https://doi.org/{doi}", file=sys.stderr)
+            print(f"   open:  {_clickable(doi_url)}", file=sys.stderr)
             print("   then save the PDF into papers/ (any filename) — watching…", file=sys.stderr)
 
             before = {f.name for f in papers_dir.glob("*.pdf")}

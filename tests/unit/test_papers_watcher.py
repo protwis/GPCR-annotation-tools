@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import io
 import json
 from pathlib import Path
 from typing import Any
 
 from gpcr_tools.papers.watcher import (
     _build_doi_groups,
+    _clickable,
     _detect_new_pdf,
     _get_pending_paywalled,
     _is_valid_pdf,
@@ -15,6 +17,23 @@ from gpcr_tools.papers.watcher import (
     _wait_for_stability,
     run_watcher,
 )
+
+
+class TestClickable:
+    def test_plain_url_when_not_a_tty(self, monkeypatch) -> None:
+        monkeypatch.setattr("sys.stderr", io.StringIO())  # StringIO.isatty() -> False
+        assert _clickable("https://doi.org/10.1/x") == "https://doi.org/10.1/x"
+
+    def test_osc8_hyperlink_when_tty(self, monkeypatch) -> None:
+        class _Tty(io.StringIO):
+            def isatty(self) -> bool:
+                return True
+
+        monkeypatch.setattr("sys.stderr", _Tty())
+        out = _clickable("https://doi.org/10.1/x")
+        assert out != "https://doi.org/10.1/x"  # wrapped, not plain
+        assert "\033]8;;https://doi.org/10.1/x" in out  # OSC 8 hyperlink open
+        assert out.endswith("\033]8;;\033\\")  # OSC 8 hyperlink close
 
 
 def _sandbox(tmp_path: Path, monkeypatch) -> Any:
