@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from gpcr_tools.papers.runner import run_fetch_papers
+from gpcr_tools.papers.runner import _discover_missing_papers, run_fetch_papers
 
 
 class TestWatchOnly:
@@ -65,3 +65,36 @@ class TestWatchOnly:
         )
         run_fetch_papers(watch_only=True)
         assert called["watch"] is False  # nothing to watch -> watcher not entered
+
+
+class TestDiscoverMissingPapers:
+    def test_sibling_covered_by_canonical_is_not_missing(self, tmp_path: Path, monkeypatch) -> None:
+        """A PDB whose same-DOI sibling already downloaded the canonical paper is
+        NOT reported missing — both resolve to the shared canonical file."""
+        monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+        from gpcr_tools.config import get_config, reset_config, sanitize_doi
+
+        reset_config()
+        cfg = get_config()
+        cfg.enriched_dir.mkdir(parents=True, exist_ok=True)
+        cfg.papers_dir.mkdir(parents=True, exist_ok=True)
+        cfg.download_log_file.parent.mkdir(parents=True, exist_ok=True)
+        for pdb in ("AAA", "BBB", "CCC"):
+            (cfg.enriched_dir / f"{pdb}.json").write_text("{}")
+        cfg.download_log_file.write_text(
+            json.dumps(
+                {
+                    "AAA": {"status": "success_pdf_downloaded", "doi": "10.1/shared"},
+                    "BBB": {"status": "fallback_paywalled", "doi": "10.1/shared"},
+                    "CCC": {"status": "fallback_paywalled", "doi": "10.2/other"},
+                }
+            )
+        )
+        # Only the canonical paper for the shared DOI exists on disk.
+        (cfg.papers_dir / f"{sanitize_doi('10.1/shared')}.pdf").write_bytes(b"%PDF-x")
+
+        missing = _discover_missing_papers()
+        # AAA and BBB share the canonical paper -> not missing; CCC's paper absent.
+        assert "AAA" not in missing
+        assert "BBB" not in missing
+        assert "CCC" in missing

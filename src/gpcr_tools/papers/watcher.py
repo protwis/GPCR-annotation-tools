@@ -32,12 +32,14 @@ from pathlib import Path
 from typing import Any
 
 from gpcr_tools.config import (
+    DOI_FILENAME_STORAGE,
     WATCHER_POLL_INTERVAL,
     WATCHER_STABILITY_CHECKS,
     WATCHER_STABILITY_INTERVAL,
     get_config,
 )
 from gpcr_tools.papers.downloader import _update_download_log
+from gpcr_tools.papers.storage import canonical_pdf_name
 
 logger = logging.getLogger(__name__)
 
@@ -116,12 +118,16 @@ def _build_doi_groups(
         doi = (entry.get("doi") or "").strip() or _enriched_doi(pid, enriched_dir)
         if not doi:
             continue
+        # Under DOI storage a single canonical file covers every same-DOI sibling,
+        # so existence resolves through the shared name (with a per-PDB fallback).
         groups.setdefault(doi, []).append(
             {
                 "pdb_id": pid,
+                "doi": doi,
                 "status": entry.get("status"),
                 "entry": entry,
-                "pdf_exists": (papers_dir / f"{pid}.pdf").exists(),
+                "pdf_exists": (papers_dir / canonical_pdf_name(pid, doi)).exists()
+                or (papers_dir / f"{pid}.pdf").exists(),
             }
         )
     return groups
@@ -145,32 +151,71 @@ def _log_manual(pdb_id: str, path: Path, src_entry: dict[str, Any], source: str)
 def _replicate_to_siblings(
     source_path: Path, siblings: list[dict[str, Any]], papers_dir: Path
 ) -> int:
-    """Copy *source_path* to each sibling's ``{pdb_id}.pdf`` (same-DOI structures)."""
+    """Cover each same-DOI sibling from *source_path*.
+
+    Under DOI storage the siblings already resolve to the SAME canonical file, so
+    no bytes are copied — each sibling is just recorded as covered (the curator
+    sees it filled, and every reader resolves it via the shared canonical name).
+    Under the legacy layout the file is physically copied to ``{pdb_id}.pdf``.
+    """
     n = 0
     for sib in siblings:
         if sib["pdf_exists"]:
             continue
-        target = papers_dir / f"{sib['pdb_id']}.pdf"
-        try:
-            shutil.copyfile(source_path, target)
-        except OSError as exc:
-            logger.warning("[%s] could not replicate sibling PDF: %s", sib["pdb_id"], exc)
-            continue
+        if DOI_FILENAME_STORAGE and sib.get("doi"):
+            # Siblings share the canonical file; record coverage without copying.
+            target = papers_dir / canonical_pdf_name(sib["pdb_id"], sib["doi"])
+            if not target.exists():
+                # The canonical paper was never established (e.g. an upstream copy
+                # failed). Don't record the sibling as covered when no file exists.
+                logger.warning(
+                    "[%s] canonical paper %s missing; not marking covered",
+                    sib["pdb_id"],
+                    target.name,
+                )
+                continue
+        else:
+            target = papers_dir / f"{sib['pdb_id']}.pdf"
+            try:
+                shutil.copyfile(source_path, target)
+            except OSError as exc:
+                logger.warning("[%s] could not replicate sibling PDF: %s", sib["pdb_id"], exc)
+                continue
         sib["pdf_exists"] = True
         _log_manual(sib["pdb_id"], target, sib["entry"], "replicated_sibling")
-        print(f"    → also saved {sib['pdb_id']}.pdf (same paper)", file=sys.stderr)
+        print(f"    → also covered {sib['pdb_id']} (same paper)", file=sys.stderr)
         n += 1
     return n
 
 
 def _replicate_existing(groups: dict[str, list[dict[str, Any]]], papers_dir: Path) -> int:
-    """Phase 1: for every DOI that already has a PDF, fill its missing siblings."""
+    """Phase 1: for every DOI that already has a PDF, cover its missing siblings.
+
+    Under DOI storage the paper is established ONCE as the canonical
+    ``{sanitized_doi}.pdf`` (consolidating a legacy per-PDB source if that is all
+    that exists yet), and every sibling then resolves to that one file — no
+    physical per-sibling copies. Under the legacy layout it copies per sibling.
+    """
     replicated = 0
     for plist in groups.values():
         source = next((p for p in plist if p["pdf_exists"]), None)
         if source is None:
             continue
-        source_path = papers_dir / f"{source['pdb_id']}.pdf"
+        if DOI_FILENAME_STORAGE and source.get("doi"):
+            canonical = papers_dir / canonical_pdf_name(source["pdb_id"], source["doi"])
+            legacy = papers_dir / f"{source['pdb_id']}.pdf"
+            # Establish the canonical file once, from a legacy source if needed,
+            # so every sibling resolves to it.
+            if not canonical.exists() and legacy.exists():
+                try:
+                    shutil.copyfile(legacy, canonical)
+                except OSError as exc:
+                    logger.warning(
+                        "[%s] could not establish canonical PDF: %s", source["pdb_id"], exc
+                    )
+            source_path = canonical if canonical.exists() else legacy
+        else:
+            source_path = papers_dir / f"{source['pdb_id']}.pdf"
         siblings = [p for p in plist if not p["pdf_exists"]]
         replicated += _replicate_to_siblings(source_path, siblings, papers_dir)
     return replicated
@@ -256,7 +301,13 @@ def run_watcher(download_log: dict[str, Any]) -> int:
             if not missing:
                 continue
             primary = missing[0]
-            target = papers_dir / f"{primary['pdb_id']}.pdf"
+            # Save the dropped PDF to the canonical DOI-named file (one per paper)
+            # so every same-DOI sibling resolves to it without a physical copy.
+            target = (
+                papers_dir / canonical_pdf_name(primary["pdb_id"], doi)
+                if (DOI_FILENAME_STORAGE and doi)
+                else papers_dir / f"{primary['pdb_id']}.pdf"
+            )
             siblings = missing[1:]
             also = f"  (also covers {', '.join(s['pdb_id'] for s in siblings)})" if siblings else ""
             doi_url = f"https://doi.org/{doi}"

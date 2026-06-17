@@ -171,6 +171,54 @@ BATCH_STATUS_DOWNLOADED: str = "downloaded"
 BATCH_STATUS_RECOVERED: str = "recovered"
 BATCH_STATUS_FAILED: str = "failed"
 
+# Kill switch: delete a job's uploaded inputs (per-PDB PDFs + the JSONL source)
+# from the Files API once the job reaches a terminal state, and sweep orphaned
+# uploads older than the TTL at submit start. The 20 GB Files-API cap fills fast
+# at corpus scale without this. Set False to restore the previous never-delete
+# behaviour (uploads accumulate until they expire on their own).
+CLOUD_CLEANUP: bool = True
+
+# Kill switch: dedup the paper upload (upload each unique paper once, reference
+# its fileUri from every same-paper request) and pack same-paper PDBs adjacently
+# into batch jobs. Set False to upload one PDF per PDB (the previous behaviour).
+UPLOAD_DEDUP: bool = True
+
+# Same-paper batch packing cap (Tier 1 enqueued-token budget): a single in-flight
+# job carries at most this many requests, ~18 PDBs x GEMINI_DEFAULT_RUNS runs. A
+# paper with more PDBs than fit spans consecutive jobs; its shared upload is
+# ref-counted (deleted only when the last referencing job is terminal). Distinct
+# from GEMINI_BATCH_MAX_REQUESTS (the hard per-job ceiling) — this is the packing
+# target used when UPLOAD_DEDUP groups same-paper PDBs.
+GEMINI_BATCH_PACK_REQUESTS: int = 180
+
+# Kill switch: store one canonical paper PDF per DOI on disk, named by the
+# sanitized DOI (``papers/{sanitized_doi}.pdf``); a no-DOI PDB keeps
+# ``papers/{pdb}.pdf``. Set False to keep the per-PDB ``{pdb}.pdf`` layout (the
+# previous behaviour, with the watcher physically replicating to each sibling).
+DOI_FILENAME_STORAGE: bool = True
+
+
+# Characters kept verbatim in a sanitized DOI filename; everything else (notably
+# the DOI's ``/``, and any other filesystem-unsafe char) collapses to ``_``.
+_DOI_SAFE_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
+_DOI_UNDERSCORE_RUNS = re.compile(r"_+")
+
+
+def sanitize_doi(doi: str) -> str:
+    """Deterministic, reversible-enough filesystem-safe token for a DOI.
+
+    Rule (stable — the single source of truth shared by the downloader, watcher,
+    annotator, and reports): NFKC normalise, replace every char outside
+    ``[A-Za-z0-9._-]`` (notably ``/``) with ``_``, collapse runs of ``_`` to one,
+    strip leading/trailing ``_``, and lowercase. Two byte-variants of the same DOI
+    therefore map to ONE canonical filename. Returns ``""`` for an empty DOI.
+    """
+    text = unicodedata.normalize("NFKC", str(doi or "")).strip().lower()
+    text = _DOI_SAFE_CHARS.sub("_", text)
+    text = _DOI_UNDERSCORE_RUNS.sub("_", text)
+    return text.strip("_")
+
+
 # ---------------------------------------------------------------------------
 # Watcher polling configuration
 # ---------------------------------------------------------------------------
@@ -1174,6 +1222,17 @@ DL_STATUS_SKIPPED_NO_PAPER: str = "skipped_no_paper"
 AGG_STATUS_COMPLETED: str = "completed"
 AGG_STATUS_FAILED: str = "failed"
 AGG_STATUS_SKIPPED: str = "skipped"
+
+# ---------------------------------------------------------------------------
+# Run-manifest output filenames
+# ---------------------------------------------------------------------------
+# A comprehensive per-run record a curator reads for full situational awareness:
+# what was targeted, what never ran (and why), what ran incomplete, the quality
+# breakdown, and the provenance. Written to the workspace output/ directory in
+# both a machine (JSON) and a human (Markdown) form.
+
+RUN_MANIFEST_JSON_NAME: str = "run_manifest.json"
+RUN_MANIFEST_MD_NAME: str = "run_manifest.md"
 
 # ---------------------------------------------------------------------------
 # Alert prefix strings (used in validation reports)

@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from gpcr_tools.papers.storage import resolve_pdf_path
 from gpcr_tools.papers.watcher import (
     _build_doi_groups,
     _clickable,
@@ -134,7 +135,9 @@ class TestEnrichedDoiFallback:
         # 7W55 (DOI recovered from enriched) rejoins the group as the PDF source.
         n = _replicate_existing(groups, cfg.papers_dir)
         assert n == 1
-        assert (cfg.papers_dir / "8ABC.pdf").exists()
+        # Under DOI storage the sibling resolves to the shared canonical file
+        # (no per-PDB copy); resolve_pdf_path finds it for 8ABC.
+        assert resolve_pdf_path("8ABC", log) is not None
 
 
 class TestReplicateExisting:
@@ -148,7 +151,8 @@ class TestReplicateExisting:
         groups = _build_doi_groups(log, cfg.papers_dir)
         n = _replicate_existing(groups, cfg.papers_dir)
         assert n == 1
-        assert (cfg.papers_dir / "8ABC.pdf").exists()  # filled from the sibling
+        # The sibling is covered by the shared canonical paper (DOI storage).
+        assert resolve_pdf_path("8ABC", log) is not None
         written = json.loads(cfg.download_log_file.read_text())
         assert written["8ABC"]["status"] == "manual_user_provided"
 
@@ -160,6 +164,25 @@ class TestReplicateExisting:
         }
         groups = _build_doi_groups(log, cfg.papers_dir)
         assert _replicate_existing(groups, cfg.papers_dir) == 0
+
+    def test_doi_storage_skips_sibling_when_canonical_missing(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        """DOI storage: a sibling is NOT marked covered if the canonical paper was
+        never established (e.g. an upstream copy failed) — the manifest must not
+        over-report coverage for a file that does not exist."""
+        from gpcr_tools.papers import watcher as w
+
+        cfg = _sandbox(tmp_path, monkeypatch)
+        siblings = [
+            {"pdb_id": "8ABC", "doi": "10.1/x", "entry": {"doi": "10.1/x"}, "pdf_exists": False}
+        ]
+        n = w._replicate_to_siblings(cfg.papers_dir / "nonexistent.pdf", siblings, cfg.papers_dir)
+        assert n == 0
+        assert siblings[0]["pdf_exists"] is False
+        assert not cfg.download_log_file.exists() or "8ABC" not in json.loads(
+            cfg.download_log_file.read_text()
+        )
 
 
 class TestDetectNewPdf:
@@ -196,4 +219,5 @@ class TestRunWatcherPhase1Resolves:
         }
         provided = run_watcher(log)
         assert provided == 0  # nothing needed manual fetching
-        assert (cfg.papers_dir / "8ABC.pdf").exists()  # sibling filled in Phase 1
+        # Sibling covered in Phase 1 via the shared canonical paper (DOI storage).
+        assert resolve_pdf_path("8ABC", log) is not None

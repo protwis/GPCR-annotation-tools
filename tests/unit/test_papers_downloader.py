@@ -304,6 +304,16 @@ class TestDownloadPaperForPdb:
             result = download_paper_for_pdb("7W55", email="test@example.com")
         assert result["status"] == "success_pdf_downloaded"
         assert result["source"] == "unpaywall_pdf"
+        # The PDF is saved to the canonical DOI-named file (one per paper).
+        from gpcr_tools.config import sanitize_doi
+
+        canonical = (
+            papers_workspace
+            / "papers"
+            / f"{sanitize_doi(_ENRICHED_DATA['data']['entry']['rcsb_primary_citation']['pdbx_database_id_DOI'])}.pdf"
+        )
+        assert canonical.is_file()
+        assert result["file_path"] == str(canonical)
 
     @patch(
         "gpcr_tools.papers.downloader._fetch_unpaywall_pdf_url",

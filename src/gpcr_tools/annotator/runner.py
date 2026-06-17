@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import concurrent.futures
+import contextlib
 import json
 import logging
 import os
@@ -28,19 +29,24 @@ from gpcr_tools.config import (
     BATCH_STATUS_FAILED,
     BATCH_STATUS_RECOVERED,
     BATCH_STATUS_SUBMITTED,
+    CLOUD_CLEANUP,
     GEMINI_BASE_BACKOFF,
     GEMINI_BATCH_MAX_REQUESTS,
+    GEMINI_BATCH_PACK_REQUESTS,
     GEMINI_DEFAULT_RUNS,
     GEMINI_FILE_TTL_HOURS,
     GEMINI_MAX_RETRIES,
     GEMINI_MAX_WORKERS,
     SLEEP_GEMINI_429,
+    UPLOAD_DEDUP,
     get_config,
     get_gemini_model_name,
     model_run_subdir,
+    sanitize_doi,
 )
 from gpcr_tools.detector.signals import SEVERITY_ADVISORY
 from gpcr_tools.detector.stage import load_detect_signals
+from gpcr_tools.papers.storage import content_hash, resolve_doi, resolve_pdf_path
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +75,79 @@ def _registry_fresh_uri(entry: Any, now: datetime) -> str | None:
 def _safe_job_name(job_name: str) -> str:
     """Filesystem-safe token for a provider job name (names contain '/')."""
     return job_name.replace("/", "_")
+
+
+def _read_download_log_safe(config: Any) -> dict[str, Any]:
+    """Read the download log (DOI source for upload dedup), tolerant of absence."""
+    path = config.download_log_file
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _resolve_upload(
+    client: Any,
+    config: Any,
+    registry: dict[str, Any],
+    upload_key: str,
+    pdb_id: str,
+    pdf_file: Path,
+    doi: str,
+    now: datetime,
+) -> tuple[str | None, str | None]:
+    """Return ``(fileUri, file_name)`` for *pdf_file*, reusing a cached upload when safe.
+
+    A cached upload under *upload_key* is reused only when (a) it is within the
+    Files-API TTL AND (b) the safety gate passes — the cached entry's recorded
+    content hash equals this PDF's hash, OR (lacking a stored hash) the entry's
+    DOI matches. On a hash disagreement the cache is NOT reused: a fresh per-PDB
+    upload is made instead (fail safe — never serve the wrong bytes to a sibling),
+    and the disagreement is logged. On any upload error returns ``(None, None)``.
+    """
+    this_hash = content_hash(pdf_file)
+    cached = registry.get(upload_key)
+    cached_uri = _registry_fresh_uri(cached, now)
+    if cached_uri and isinstance(cached, dict):
+        cached_hash = cached.get("content_hash")
+        # Byte-identity is the strong gate; same-DOI is the fallback when an older
+        # entry carries no hash. A recorded hash that disagrees fails the gate.
+        if cached_hash and this_hash and cached_hash != this_hash:
+            logger.warning(
+                "[%s] Cached upload for key %s has a different content hash than this "
+                "PDF; uploading separately (fail-safe).",
+                pdb_id,
+                upload_key,
+            )
+        else:
+            return cached_uri, cached.get("name")
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_pdf = Path(tmp_dir) / f"{pdb_id}_compressed.pdf"
+        try:
+            actual_pdf = compress_pdf_if_needed(pdf_file, tmp_pdf)
+            uploaded_file = client.files.upload(
+                file=str(actual_pdf), config={"mime_type": "application/pdf"}
+            )
+        except Exception as e:
+            logger.error("[%s] Failed to upload PDF: %s", pdb_id, e)
+            return None, None
+
+    # Stamp the REAL upload time (not the submit-time ``now``) so the TTL check
+    # measures the file's actual age; record the deletable file ``name``, the DOI,
+    # and the content hash so a sibling can verify byte-identity before reuse.
+    registry[upload_key] = {
+        "uri": uploaded_file.uri,
+        "name": uploaded_file.name,
+        "uploaded_at": datetime.now(UTC).isoformat(),
+        "doi": doi or None,
+        "content_hash": this_hash,
+    }
+    logger.info("[%s] Uploaded PDF to %s (key %s)", pdb_id, uploaded_file.uri, upload_key)
+    return uploaded_file.uri, uploaded_file.name
 
 
 def _load_job_registry(config: Any) -> dict[str, Any]:
@@ -118,6 +197,113 @@ def _update_job_status(config: Any, job_name: str, **fields: Any) -> None:
     _save_job_registry(config, registry)
 
 
+def _files_referenced_by_live_jobs(registry: dict[str, Any], exclude_job: str) -> set[str]:
+    """File names still referenced by a non-terminal (live) job other than
+    *exclude_job*.
+
+    Only RECOVERED jobs are treated as released. A FAILED job's inputs are still
+    counted as "live" here, so a file it shares is not deleted by another job's
+    cleanup — it ages out later via the TTL orphan sweep. This is the ref-count
+    gate: a shared file is deleted only when no still-live job (other than the one
+    being cleaned up) references it. Conservative — it over-retains, never deletes
+    a file a live job might still need.
+    """
+    live: set[str] = set()
+    for name, entry in registry.get("jobs", {}).items():
+        if name == exclude_job:
+            continue
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("status") == BATCH_STATUS_RECOVERED:
+            continue
+        for fname in entry.get("uploaded_file_names") or []:
+            if fname:
+                live.add(str(fname))
+        src = entry.get("batch_src_file_name")
+        if src:
+            live.add(str(src))
+    return live
+
+
+def _delete_remote_file(client: Any, name: str) -> None:
+    """Best-effort delete of one Files-API file; a failure is logged, never raised."""
+
+    with contextlib.suppress(Exception):
+        client.files.delete(name=name)
+        logger.info("Deleted uploaded file %s", name)
+
+
+def _cleanup_terminal_job_uploads(config: Any, client: Any, job_name: str) -> None:
+    """Delete a terminal job's uploaded inputs, ref-counted across jobs.
+
+    The job's JSONL source is its own (never shared) so it is always deleted; each
+    per-PDB PDF upload is deleted only when no other still-live job references it.
+    Best-effort: a delete failure never propagates. No-op when cleanup is disabled.
+    """
+    if not CLOUD_CLEANUP:
+        return
+    registry = _load_job_registry(config)
+    entry = registry.get("jobs", {}).get(job_name)
+    if not isinstance(entry, dict):
+        return
+    # Idempotent: a job whose uploads were already released is skipped, so a
+    # repeated poll does not re-issue deletes for the same (now-gone) files.
+    if entry.get("uploads_cleaned"):
+        return
+    still_referenced = _files_referenced_by_live_jobs(registry, exclude_job=job_name)
+    for fname in entry.get("uploaded_file_names") or []:
+        if fname and str(fname) not in still_referenced:
+            _delete_remote_file(client, str(fname))
+    src = entry.get("batch_src_file_name")
+    if src:
+        _delete_remote_file(client, str(src))
+    _update_job_status(config, job_name, uploads_cleaned=True)
+
+
+def _sweep_orphan_uploads(config: Any, client: Any) -> None:
+    """Best-effort sweep of orphaned Files-API uploads at submit start.
+
+    Deletes only files older than the TTL AND not referenced by any non-terminal
+    job, so a file an in-flight job still needs is never removed. Guarded so any
+    failure (listing or deleting) never aborts the submission that follows.
+    """
+
+    registry = _load_job_registry(config)
+    referenced = _files_referenced_by_live_jobs(registry, exclude_job="")
+    now = datetime.now(UTC)
+    try:
+        files = list(client.files.list())
+    except Exception as exc:
+        logger.warning("Orphan sweep skipped — could not list uploaded files: %s", exc)
+        return
+    for f in files:
+        name = getattr(f, "name", None)
+        if not name or str(name) in referenced:
+            continue
+        created = getattr(f, "create_time", None)
+        # Only delete a file we can prove is past the TTL; an unknown age is left
+        # alone (fail safe — never delete a file that might still be in use).
+        if created is None:
+            continue
+        try:
+            created_dt = (
+                created if isinstance(created, datetime) else datetime.fromisoformat(str(created))
+            )
+            # A naive timestamp would make the aware-`now` subtraction raise — and
+            # the sweep must never abort the submission, so normalise and keep the
+            # comparison inside the guard.
+            if created_dt.tzinfo is None:
+                created_dt = created_dt.replace(tzinfo=UTC)
+            within_ttl = now - created_dt < timedelta(hours=GEMINI_FILE_TTL_HOURS)
+        except (ValueError, TypeError):
+            continue
+        if within_ttl:
+            continue
+        with contextlib.suppress(Exception):
+            client.files.delete(name=str(name))
+            logger.info("Swept orphaned upload %s", name)
+
+
 def _chunk_request_groups(
     groups: list[list[dict[str, Any]]], max_per_chunk: int
 ) -> list[list[dict[str, Any]]]:
@@ -141,6 +327,54 @@ def _chunk_request_groups(
     return chunks
 
 
+def _chunk_group_metas(
+    groups: list[dict[str, Any]], max_per_chunk: int
+) -> list[list[dict[str, Any]]]:
+    """Pack per-PDB group *metas* (``{pdb_id, requests, file_name}``) into chunks
+    of at most *max_per_chunk* requests.
+
+    Same invariant as :func:`_chunk_request_groups` — a single PDB's runs are
+    never split, an over-cap group becomes its own chunk — but it preserves each
+    group's metadata (the uploaded file name) so a chunk carries the names of the
+    inputs its job references.
+    """
+    chunks: list[list[dict[str, Any]]] = []
+    chunk: list[dict[str, Any]] = []
+    chunk_size = 0
+    for group in groups:
+        n = len(group["requests"])
+        if chunk and chunk_size + n > max_per_chunk:
+            chunks.append(chunk)
+            chunk = []
+            chunk_size = 0
+        chunk.append(group)
+        chunk_size += n
+        if chunk_size >= max_per_chunk:
+            chunks.append(chunk)
+            chunk = []
+            chunk_size = 0
+    if chunk:
+        chunks.append(chunk)
+    return chunks
+
+
+def _order_groups_by_paper(groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Order per-PDB groups so same-paper PDBs are adjacent (packed into one job).
+
+    Same-paper PDBs share an uploaded fileUri (see the upload-dedup path), so
+    placing them adjacently lets the chunker keep them in one job, which keeps a
+    shared upload referenced by the fewest jobs. Groups are keyed by the shared
+    fileUri's file ``name`` (the dedup key); a group with no recorded name keeps
+    its original relative order. Order within a paper is preserved (stable).
+    """
+    order: dict[str, int] = {}
+    for group in groups:
+        key = group.get("file_name") or group["pdb_id"]
+        if key not in order:
+            order[key] = len(order)
+    return sorted(groups, key=lambda g: order[g.get("file_name") or g["pdb_id"]])
+
+
 def _submit_batch_chunk(
     config: Any,
     client: Any,
@@ -152,11 +386,15 @@ def _submit_batch_chunk(
     chunk_count: int,
     detect_advisory_by_pdb: dict[str, list[str]],
     created_at: str,
+    uploaded_file_names: list[str] | None = None,
 ) -> str:
     """Submit one chunk as a batch job and register it; return the job name.
 
     Raises on upload/create failure so the caller can isolate a single chunk's
-    failure; the temp JSONL is always cleaned up.
+    failure; the temp JSONL is always cleaned up. The job entry records the
+    Files-API names of the inputs this job references (the per-PDB PDF uploads in
+    *uploaded_file_names* plus the JSONL source), so terminal cleanup can delete
+    them once no non-terminal job still references them.
     """
     os.makedirs(config.pipeline_runs_dir, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", delete=False, suffix=".jsonl") as f:
@@ -201,6 +439,10 @@ def _submit_batch_chunk(
                 "raw_output_file": None,
                 "recovered_at": None,
                 "detect_advisory": detect_advisory_by_pdb,
+                # Uploaded inputs to delete once the job is terminal (ref-counted):
+                # the per-PDB PDF uploads + this job's JSONL source.
+                "uploaded_file_names": sorted(uploaded_file_names or []),
+                "batch_src_file_name": batch_src_file.name,
             },
         )
 
@@ -363,8 +605,6 @@ def run_single_pdb(
                 list(executor.map(do_run, range(1, num_runs + 1)))
 
         finally:
-            import contextlib
-
             with contextlib.suppress(Exception):
                 if uploaded_file.name:
                     client.files.delete(name=uploaded_file.name)
@@ -384,9 +624,18 @@ def build_and_submit_batch(
     config = get_config()
     client = get_client()
 
+    # Best-effort sweep of orphaned Files-API uploads before adding more, so a
+    # long-running corpus submission doesn't accumulate past the 20 GB cap. Never
+    # aborts submission (guarded inside the helper).
+    if CLOUD_CLEANUP:
+        _sweep_orphan_uploads(config, client)
+
     # Prepare batch requests
     now = datetime.now(UTC)
-    request_groups: list[list[dict[str, Any]]] = []
+    # Each group carries the PDB id, its requests, and the Files-API file *name*
+    # of the PDF it references (None for a TTL-cached reuse whose name predates
+    # this field), so terminal cleanup can delete a job's uploaded inputs.
+    request_groups: list[dict[str, Any]] = []
     registry = {}
 
     # Check if uploaded files registry exists
@@ -398,14 +647,17 @@ def build_and_submit_batch(
         except json.JSONDecodeError:
             pass
 
+    # The download log resolves a PDB's DOI (so same-paper PDBs share one upload).
+    download_log = _read_download_log_safe(config)
+
     # Per-PDB advisory signal kinds, recorded into the job provenance so
     # recover_batch can stamp each result with the advisories active at submit.
     detect_advisory_by_pdb: dict[str, list[str]] = {}
     for pdb_id in targets:
         enriched_file = config.enriched_dir / f"{pdb_id}.json"
-        pdf_file = config.papers_dir / f"{pdb_id}.pdf"
+        pdf_file = resolve_pdf_path(pdb_id, download_log)
 
-        if not enriched_file.exists() or not pdf_file.exists():
+        if not enriched_file.exists() or pdf_file is None:
             logger.warning("[%s] Missing enriched data or PDF, skipping batch prep.", pdb_id)
             continue
 
@@ -425,22 +677,17 @@ def build_and_submit_batch(
         if not runs_to_do:
             continue
 
-        # Reuse a cached upload only if it is still within the Files-API TTL.
-        pdf_uri = _registry_fresh_uri(registry.get(pdb_id), now)
+        # Dedup the upload by canonical paper: same-DOI PDBs share one fileUri.
+        # The registry key is the sanitized DOI when dedup is on and a DOI exists,
+        # else the PDB id (reproducing the per-PDB behaviour byte-for-byte).
+        doi = resolve_doi(pdb_id, download_log) if UPLOAD_DEDUP else ""
+        upload_key = f"doi:{sanitize_doi(doi)}" if (UPLOAD_DEDUP and doi) else pdb_id
+
+        pdf_uri, pdf_file_name = _resolve_upload(
+            client, config, registry, upload_key, pdb_id, pdf_file, doi, now
+        )
         if not pdf_uri:
-            with tempfile.TemporaryDirectory() as tmp_dir:
-                tmp_pdf = Path(tmp_dir) / f"{pdb_id}_compressed.pdf"
-                try:
-                    actual_pdf = compress_pdf_if_needed(pdf_file, tmp_pdf)
-                    uploaded_file = client.files.upload(
-                        file=str(actual_pdf), config={"mime_type": "application/pdf"}
-                    )
-                    pdf_uri = uploaded_file.uri
-                    registry[pdb_id] = {"uri": pdf_uri, "uploaded_at": now.isoformat()}
-                    logger.info("[%s] Uploaded PDF to %s", pdb_id, pdf_uri)
-                except Exception as e:
-                    logger.error("[%s] Failed to upload PDF: %s", pdb_id, e)
-                    continue
+            continue
 
         detect_signals = load_detect_signals(pdb_id)
         detect_advisory_by_pdb[pdb_id] = sorted(
@@ -505,7 +752,9 @@ def build_and_submit_batch(
             pdb_requests.append({"key": req_id, "request": request_payload})
 
         if pdb_requests:
-            request_groups.append(pdb_requests)
+            request_groups.append(
+                {"pdb_id": pdb_id, "requests": pdb_requests, "file_name": pdf_file_name}
+            )
 
     # Save updated registry
     tmp_reg = reg_file.with_suffix(".tmp")
@@ -513,28 +762,51 @@ def build_and_submit_batch(
         json.dump(registry, f, indent=2)
     os.replace(tmp_reg, reg_file)
 
-    total_requests = sum(len(group) for group in request_groups)
+    total_requests = sum(len(group["requests"]) for group in request_groups)
     if not total_requests:
         logger.info("No batch requests to submit. All done!")
         return
 
-    # Shard into jobs of at most GEMINI_BATCH_MAX_REQUESTS requests so one
-    # oversized submission can't be rejected wholesale or sit in the queue past
-    # the provider's 48-hour expiry. Each PDB's runs stay within a single job.
-    chunks = _chunk_request_groups(request_groups, GEMINI_BATCH_MAX_REQUESTS)
+    # When dedup is on, pack same-paper PDBs adjacently so they share a job (and a
+    # single upload reference). The cap is the packing target; over-large papers
+    # still span consecutive jobs. With dedup off, preserve target order and the
+    # hard per-job ceiling, reproducing the previous behaviour.
+    if UPLOAD_DEDUP:
+        request_groups = _order_groups_by_paper(request_groups)
+        pack_cap = GEMINI_BATCH_PACK_REQUESTS
+    else:
+        pack_cap = GEMINI_BATCH_MAX_REQUESTS
+
+    # Shard into jobs so one oversized submission can't be rejected wholesale or
+    # sit in the queue past the provider's 48-hour expiry. Each PDB's runs stay
+    # within a single job; the file names a chunk references travel with it so
+    # terminal cleanup can delete the job's uploaded inputs.
+    chunks = _chunk_group_metas(request_groups, pack_cap)
     submitted = 0
     for chunk_index, chunk in enumerate(chunks):
+        chunk_requests = [req for group in chunk for req in group["requests"]]
+        chunk_file_names = sorted({group["file_name"] for group in chunk if group.get("file_name")})
+        # Scope the advisory map to THIS chunk's PDBs, so each job entry records
+        # only the PDBs that job actually contains — letting the run manifest
+        # attribute an incomplete PDB to the specific job that failed (not blame
+        # every submitted PDB whenever any one job fails).
+        chunk_advisory = {
+            g["pdb_id"]: detect_advisory_by_pdb.get(g["pdb_id"], [])
+            for g in chunk
+            if g.get("pdb_id")
+        }
         try:
             _submit_batch_chunk(
                 config,
                 client,
                 model_name=model_name,
                 prompt_id=prompt_id,
-                chunk_requests=chunk,
+                chunk_requests=chunk_requests,
                 chunk_index=chunk_index,
                 chunk_count=len(chunks),
-                detect_advisory_by_pdb=detect_advisory_by_pdb,
+                detect_advisory_by_pdb=chunk_advisory,
                 created_at=now.isoformat(),
+                uploaded_file_names=chunk_file_names,
             )
             submitted += 1
         except Exception as exc:
@@ -616,6 +888,10 @@ def check_batch_status() -> None:
                 job.error,
             )
             _update_job_status(config, job_name, status=BATCH_STATUS_FAILED)
+            # A failed/expired job will never produce results — release its
+            # uploaded inputs now (ref-counted so a shared file a live job still
+            # needs is kept).
+            _cleanup_terminal_job_uploads(config, client, job_name)
             continue
 
         if state not in succeeded_states:
@@ -651,6 +927,15 @@ def check_batch_status() -> None:
     ):
         logger.info("Download(s) complete. Running recovery to parse results.")
         recover_batch()
+
+    # After recovery, release the uploaded inputs of every now-recovered job whose
+    # results are safely on disk. Ref-counted, so a PDF shared with a still-live
+    # job is kept until that job is terminal too.
+    if CLOUD_CLEANUP:
+        registry = _load_job_registry(config)
+        for entry in registry["jobs"].values():
+            if entry.get("status") == BATCH_STATUS_RECOVERED:
+                _cleanup_terminal_job_uploads(config, client, entry["job_name"])
 
 
 def recover_batch() -> None:
@@ -891,6 +1176,7 @@ def run_annotation_stage(
         )
         return
 
+    download_log = _read_download_log_safe(config)
     for pid in pdb_ids:
         enriched_path = config.enriched_dir / f"{pid}.json"
         if not enriched_path.exists():
@@ -902,9 +1188,12 @@ def run_annotation_stage(
         except (json.JSONDecodeError, OSError) as exc:
             logger.warning("Skipping %s: unreadable enriched JSON: %s", pid, exc)
             continue
-        pdf_path = config.papers_dir / f"{pid}.pdf"
-        if not pdf_path.exists():
-            logger.warning("Skipping %s: no PDF at %s", pid, pdf_path)
+        # Resolve the PDF via the canonical DOI-named file (with a per-PDB
+        # fallback), passing the download log so single-mode can resolve a paper
+        # whose DOI lives only in the log (a same-DOI sibling's virtual coverage).
+        pdf_path = resolve_pdf_path(pid, download_log)
+        if pdf_path is None:
+            logger.warning("Skipping %s: no PDF found in %s", pid, config.papers_dir)
             continue
         run_single_pdb(
             pdb_id=pid,

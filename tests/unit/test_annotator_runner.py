@@ -599,8 +599,11 @@ def test_build_and_submit_batch_shards_into_multiple_jobs(tmp_path, monkeypatch)
     each registered in the job registry; the single-file pointer alone could
     not have tracked them."""
     config, client = _setup_multi_pdb_batch(tmp_path, monkeypatch, ["1ABC", "2DEF", "3GHI"])
-    # cap 2; 3 PDBs x 1 run = 3 requests, never splitting a PDB -> 2 jobs.
+    # cap 2; 3 PDBs x 1 run = 3 requests, never splitting a PDB -> 2 jobs. Patch
+    # both the hard ceiling and the dedup packing cap so the test is independent
+    # of which one is active under the current flags.
     monkeypatch.setattr("gpcr_tools.annotator.runner.GEMINI_BATCH_MAX_REQUESTS", 2)
+    monkeypatch.setattr("gpcr_tools.annotator.runner.GEMINI_BATCH_PACK_REQUESTS", 2)
     job0, job1 = MagicMock(), MagicMock()
     job0.name = "batchJobs/j0"
     job1.name = "batchJobs/j1"
@@ -615,6 +618,13 @@ def test_build_and_submit_batch_shards_into_multiple_jobs(tmp_path, monkeypatch)
     assert registry["jobs"]["batchJobs/j0"]["status"] == "submitted"
     # The deprecated single-file pointer mirrors the most recent job.
     assert config.current_batch_job_file.read_text() == "batchJobs/j1"
+    # Each job records ONLY its own PDBs in detect_advisory (scoped per chunk), so
+    # the run manifest can attribute a failure to the specific job rather than
+    # blaming every submitted PDB when any one job fails.
+    adv0 = {k.upper() for k in registry["jobs"]["batchJobs/j0"]["detect_advisory"]}
+    adv1 = {k.upper() for k in registry["jobs"]["batchJobs/j1"]["detect_advisory"]}
+    assert adv0 and adv1 and adv0.isdisjoint(adv1)
+    assert adv0 | adv1 == {"1ABC", "2DEF", "3GHI"}
 
 
 def test_build_and_submit_batch_chunk_failure_isolated(tmp_path, monkeypatch):
@@ -622,6 +632,7 @@ def test_build_and_submit_batch_chunk_failure_isolated(tmp_path, monkeypatch):
     call does not crash."""
     config, client = _setup_multi_pdb_batch(tmp_path, monkeypatch, ["1ABC", "2DEF", "3GHI"])
     monkeypatch.setattr("gpcr_tools.annotator.runner.GEMINI_BATCH_MAX_REQUESTS", 2)
+    monkeypatch.setattr("gpcr_tools.annotator.runner.GEMINI_BATCH_PACK_REQUESTS", 2)
     job0 = MagicMock()
     job0.name = "batchJobs/j0"
     client.batches.create.side_effect = [job0, RuntimeError("boom")]
@@ -918,3 +929,395 @@ def test_build_tool_config_temperature_override():
 
     assert build_tool_config([]).temperature is None
     assert build_tool_config([], temperature=0.7).temperature == 0.7
+
+
+# ---------------------------------------------------------------------------
+# Phase 2: uploaded_at real-time stamp + cloud cleanup / ref-counting / sweep
+# ---------------------------------------------------------------------------
+
+
+def test_uploaded_at_is_real_upload_time_not_submit_time(tmp_path, monkeypatch):
+    """The TTL freshness check must measure the file's real upload time, so the
+    registry stamps the moment of upload (and the deletable file name), not the
+    submit-time 'now'."""
+    config, client = _setup_multi_pdb_batch(tmp_path, monkeypatch, ["7W55"])
+    client.batches.create.return_value.name = "batchJobs/j0"
+    # The PDF upload returns a name; capture how the registry records it.
+    upl = MagicMock()
+    upl.uri = "u"
+    upl.name = "files/pdf-7w55"
+    client.files.upload.return_value = upl
+
+    runner.build_and_submit_batch(["7W55"], "Prompt", num_runs=1)
+
+    registry = json.loads(config.uploaded_files_registry_file.read_text())
+    entry = registry["7W55"]
+    assert entry["uri"] == "u"
+    assert entry["name"] == "files/pdf-7w55"
+    # A parseable ISO timestamp (the real upload time) is recorded.
+    datetime.fromisoformat(entry["uploaded_at"])
+
+
+def test_job_records_uploaded_inputs_for_cleanup(tmp_path, monkeypatch):
+    """A submitted job records the file names of its uploaded inputs (per-PDB PDF
+    + JSONL source) so terminal cleanup can delete them."""
+    config, client = _setup_multi_pdb_batch(tmp_path, monkeypatch, ["7W55"])
+    client.batches.create.return_value.name = "batchJobs/j0"
+
+    def _upload(*, file, **kwargs):
+        m = MagicMock()
+        if str(file).endswith(".jsonl"):
+            m.name, m.uri = "files/jsonl-src", "src"
+        else:
+            m.name, m.uri = "files/pdf-7w55", "u"
+        return m
+
+    client.files.upload.side_effect = _upload
+
+    runner.build_and_submit_batch(["7W55"], "Prompt", num_runs=1)
+
+    job = json.loads(config.batch_jobs_registry_file.read_text())["jobs"]["batchJobs/j0"]
+    assert job["uploaded_file_names"] == ["files/pdf-7w55"]
+    assert job["batch_src_file_name"] == "files/jsonl-src"
+
+
+def _seed_job(config, job_name, *, status, file_names, src):
+    reg = (
+        json.loads(config.batch_jobs_registry_file.read_text())
+        if (config.batch_jobs_registry_file.exists())
+        else {"version": 1, "jobs": {}}
+    )
+    reg["jobs"][job_name] = {
+        "job_name": job_name,
+        "status": status,
+        "uploaded_file_names": file_names,
+        "batch_src_file_name": src,
+    }
+    config.batch_jobs_registry_file.parent.mkdir(parents=True, exist_ok=True)
+    config.batch_jobs_registry_file.write_text(json.dumps(reg))
+
+
+def test_cleanup_deletes_terminal_job_uploads(tmp_path, monkeypatch):
+    """A terminal job's PDF uploads and JSONL source are deleted from the Files API."""
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+    _seed_job(
+        config, "batchJobs/j0", status="recovered", file_names=["files/pdf-a"], src="files/src"
+    )
+    client = MagicMock()
+
+    runner._cleanup_terminal_job_uploads(config, client, "batchJobs/j0")
+
+    deleted = {c.kwargs["name"] for c in client.files.delete.call_args_list}
+    assert deleted == {"files/pdf-a", "files/src"}
+    # Idempotent: a second call deletes nothing more.
+    client.files.delete.reset_mock()
+    runner._cleanup_terminal_job_uploads(config, client, "batchJobs/j0")
+    client.files.delete.assert_not_called()
+
+
+def test_cleanup_refcounts_shared_pdf_across_jobs(tmp_path, monkeypatch):
+    """A PDF shared by a still-live job is NOT deleted when one referencing job
+    becomes terminal; only the terminal job's own JSONL source is released."""
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+    _seed_job(
+        config, "batchJobs/done", status="recovered", file_names=["files/shared"], src="files/src0"
+    )
+    _seed_job(
+        config, "batchJobs/live", status="submitted", file_names=["files/shared"], src="files/src1"
+    )
+    client = MagicMock()
+
+    runner._cleanup_terminal_job_uploads(config, client, "batchJobs/done")
+
+    deleted = {c.kwargs["name"] for c in client.files.delete.call_args_list}
+    assert "files/shared" not in deleted  # kept: a live job still references it
+    assert "files/src0" in deleted  # the terminal job's own source is released
+
+
+def test_cleanup_failed_job_path(tmp_path, monkeypatch):
+    """A failed/expired job releases its uploads in check_batch_status."""
+    config = _setup_batch_state(tmp_path, monkeypatch, job_name="batchJobs/f0")
+    _seed_job(
+        config, "batchJobs/f0", status="submitted", file_names=["files/pdf-f"], src="files/srcf"
+    )
+    # current_batch_job adoption is bypassed because the registry already has it.
+    client = MagicMock()
+    client.batches.get.return_value = _mock_batch_job("JOB_STATE_FAILED", error="boom")
+    monkeypatch.setattr("gpcr_tools.annotator.runner.get_client", lambda: client)
+
+    runner.check_batch_status()
+
+    deleted = {c.kwargs["name"] for c in client.files.delete.call_args_list}
+    assert {"files/pdf-f", "files/srcf"} <= deleted
+
+
+def test_cleanup_disabled_by_kill_switch(tmp_path, monkeypatch):
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+    _seed_job(
+        config, "batchJobs/j0", status="recovered", file_names=["files/pdf-a"], src="files/src"
+    )
+    monkeypatch.setattr("gpcr_tools.annotator.runner.CLOUD_CLEANUP", False)
+    client = MagicMock()
+
+    runner._cleanup_terminal_job_uploads(config, client, "batchJobs/j0")
+
+    client.files.delete.assert_not_called()
+
+
+def test_orphan_sweep_deletes_only_old_unreferenced(tmp_path, monkeypatch):
+    """The sweep deletes a TTL-expired, unreferenced upload but keeps a recent one
+    and one referenced by a live job."""
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+    _seed_job(
+        config, "batchJobs/live", status="submitted", file_names=["files/keep-ref"], src="files/src"
+    )
+
+    now = datetime.now(UTC)
+    old = MagicMock(name="files/old", create_time=now - timedelta(hours=100))
+    old.name = "files/old"
+    recent = MagicMock(create_time=now - timedelta(hours=1))
+    recent.name = "files/recent"
+    referenced = MagicMock(create_time=now - timedelta(hours=100))
+    referenced.name = "files/keep-ref"
+
+    client = MagicMock()
+    client.files.list.return_value = [old, recent, referenced]
+
+    runner._sweep_orphan_uploads(config, client)
+
+    deleted = {c.kwargs["name"] for c in client.files.delete.call_args_list}
+    assert deleted == {"files/old"}
+
+
+def test_orphan_sweep_handles_naive_create_time_without_aborting(tmp_path, monkeypatch):
+    """A naive (tz-less) create_time from the Files API must not raise out of the
+    sweep; it is normalized to UTC so the TTL decision still applies."""
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+
+    naive_old = MagicMock(create_time=datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=100))
+    naive_old.name = "files/naive-old"
+    client = MagicMock()
+    client.files.list.return_value = [naive_old]
+
+    runner._sweep_orphan_uploads(config, client)  # must not raise
+
+    deleted = {c.kwargs["name"] for c in client.files.delete.call_args_list}
+    assert deleted == {"files/naive-old"}
+
+
+def test_orphan_sweep_never_aborts_on_list_failure(tmp_path, monkeypatch):
+    """A failure to list files must not raise — submission must proceed."""
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True, exist_ok=True)
+    client = MagicMock()
+    client.files.list.side_effect = RuntimeError("network down")
+
+    runner._sweep_orphan_uploads(config, client)  # no raise
+    client.files.delete.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# Phase 3: upload dedup keyed by canonical paper + same-paper packing
+# ---------------------------------------------------------------------------
+
+
+def _setup_dedup_batch(tmp_path, monkeypatch, pdb_doi: dict[str, str], pdf_bytes=None):
+    """A batch workspace with per-PDB DOIs in the download log and distinct PDF
+    bytes per PDB (so the content hash differs unless explicitly shared)."""
+    monkeypatch.setenv("GPCR_ENRICHED_PATH", str(tmp_path / "enriched"))
+    monkeypatch.setenv("GPCR_PAPERS_PATH", str(tmp_path / "papers"))
+    monkeypatch.setenv("GPCR_AI_RESULTS_PATH", str(tmp_path / "ai_results"))
+    monkeypatch.setenv("GPCR_STATE_PATH", str(tmp_path / "state"))
+    reset_config()
+    config = get_config()
+    config.state_dir.mkdir(parents=True)
+    config.enriched_dir.mkdir()
+    config.papers_dir.mkdir()
+    log = {}
+    for pdb, doi in pdb_doi.items():
+        (config.enriched_dir / f"{pdb}.json").write_text("{}")
+        body = pdf_bytes.get(pdb) if pdf_bytes else f"%PDF-{doi}".encode()
+        (config.papers_dir / f"{pdb}.pdf").write_bytes(body)
+        log[pdb] = {"status": "success_pdf_downloaded", "doi": doi}
+    config.download_log_file.write_text(json.dumps(log))
+
+    # Distinct uploaded file name per uploaded *path* so we can see dedup.
+    counter = {"n": 0}
+
+    def _upload(*, file, **kwargs):
+        m = MagicMock()
+        if str(file).endswith(".jsonl"):
+            m.name, m.uri = "files/jsonl", "srcuri"
+        else:
+            counter["n"] += 1
+            m.name, m.uri = f"files/pdf-{counter['n']}", f"uri-{counter['n']}"
+        return m
+
+    client = MagicMock()
+    client.files.upload.side_effect = _upload
+    client.files.list.side_effect = RuntimeError("no sweep")  # keep the sweep out of the way
+    client.batches.create.return_value.name = "batchJobs/j0"
+    monkeypatch.setattr("gpcr_tools.annotator.runner.get_client", lambda: client)
+    monkeypatch.setattr("gpcr_tools.annotator.runner.compress_pdf_if_needed", lambda a, b: a)
+    return config, client
+
+
+def _captured_jsonl(client):
+    captured = {}
+
+    real = client.files.upload.side_effect
+
+    def _wrap(*, file, **kwargs):
+        if str(file).endswith(".jsonl"):
+            captured["jsonl"] = Path(file).read_text()
+        return real(file=file, **kwargs)
+
+    client.files.upload.side_effect = _wrap
+    return captured
+
+
+def test_dedup_uploads_same_paper_once(tmp_path, monkeypatch):
+    """Two PDBs sharing one DOI (byte-identical PDFs) upload the paper ONCE and
+    reference the same fileUri from both PDBs' requests."""
+    config, client = _setup_dedup_batch(
+        tmp_path,
+        monkeypatch,
+        {"1ABC": "10.1/shared", "2DEF": "10.1/shared"},
+        pdf_bytes={"1ABC": b"%PDF-same", "2DEF": b"%PDF-same"},
+    )
+    captured = _captured_jsonl(client)
+
+    runner.build_and_submit_batch(["1ABC", "2DEF"], "Prompt", num_runs=1)
+
+    pdf_uploads = [
+        c
+        for c in client.files.upload.call_args_list
+        if not str(c.kwargs["file"]).endswith(".jsonl")
+    ]
+    assert len(pdf_uploads) == 1  # the shared paper uploaded once
+    # Both PDB requests reference the same fileUri.
+    reg = json.loads(config.uploaded_files_registry_file.read_text())
+    assert any(k.startswith("doi:") for k in reg)
+    uris = {
+        line_obj["request"]["contents"][-1]["parts"][0]["fileData"]["fileUri"]
+        for line_obj in (json.loads(line) for line in captured["jsonl"].splitlines())
+    }
+    assert len(uris) == 1
+
+
+def test_no_doi_falls_back_to_per_pdb_upload(tmp_path, monkeypatch):
+    """A PDB with no DOI keys the upload by its PDB id (per-PDB upload), so two
+    no-DOI PDBs upload separately."""
+    config, client = _setup_dedup_batch(tmp_path, monkeypatch, {"1ABC": "", "2DEF": ""})
+    runner.build_and_submit_batch(["1ABC", "2DEF"], "Prompt", num_runs=1)
+    pdf_uploads = [
+        c
+        for c in client.files.upload.call_args_list
+        if not str(c.kwargs["file"]).endswith(".jsonl")
+    ]
+    assert len(pdf_uploads) == 2
+    reg = json.loads(config.uploaded_files_registry_file.read_text())
+    assert set(reg) == {"1ABC", "2DEF"}  # keyed per PDB, not by DOI
+
+
+def test_same_doi_different_bytes_uploads_twice_failsafe(tmp_path, monkeypatch):
+    """Two PDBs claim the same DOI but their PDF bytes differ: the content-hash
+    safety gate refuses to share a fileUri and uploads each separately."""
+    _config, client = _setup_dedup_batch(
+        tmp_path,
+        monkeypatch,
+        {"1ABC": "10.1/shared", "2DEF": "10.1/shared"},
+        pdf_bytes={"1ABC": b"%PDF-aaaa", "2DEF": b"%PDF-bbbb"},
+    )
+    runner.build_and_submit_batch(["1ABC", "2DEF"], "Prompt", num_runs=1)
+    pdf_uploads = [
+        c
+        for c in client.files.upload.call_args_list
+        if not str(c.kwargs["file"]).endswith(".jsonl")
+    ]
+    assert len(pdf_uploads) == 2  # fail-safe: never serve the wrong bytes
+
+
+def test_dedup_off_reproduces_per_pdb(tmp_path, monkeypatch):
+    """With UPLOAD_DEDUP off, even same-DOI byte-identical PDBs upload per-PDB."""
+    config, client = _setup_dedup_batch(
+        tmp_path,
+        monkeypatch,
+        {"1ABC": "10.1/shared", "2DEF": "10.1/shared"},
+        pdf_bytes={"1ABC": b"%PDF-same", "2DEF": b"%PDF-same"},
+    )
+    monkeypatch.setattr("gpcr_tools.annotator.runner.UPLOAD_DEDUP", False)
+    runner.build_and_submit_batch(["1ABC", "2DEF"], "Prompt", num_runs=1)
+    pdf_uploads = [
+        c
+        for c in client.files.upload.call_args_list
+        if not str(c.kwargs["file"]).endswith(".jsonl")
+    ]
+    assert len(pdf_uploads) == 2
+    reg = json.loads(config.uploaded_files_registry_file.read_text())
+    assert set(reg) == {"1ABC", "2DEF"}
+
+
+def test_packing_keeps_same_paper_pdbs_together(tmp_path, monkeypatch):
+    """Same-paper PDBs are ordered adjacently so the chunker packs them into one
+    job (interleaved input order is regrouped by paper)."""
+    _config, client = _setup_dedup_batch(
+        tmp_path,
+        monkeypatch,
+        {
+            "AAA": "10.1/p1",
+            "BBB": "10.2/p2",
+            "CCC": "10.1/p1",  # same paper as AAA, but listed after BBB
+        },
+        pdf_bytes={"AAA": b"%PDF-p1", "BBB": b"%PDF-p2", "CCC": b"%PDF-p1"},
+    )
+    captured = _captured_jsonl(client)
+    # Pack cap large enough to hold everything in one job.
+    monkeypatch.setattr("gpcr_tools.annotator.runner.GEMINI_BATCH_PACK_REQUESTS", 100)
+    runner.build_and_submit_batch(["AAA", "BBB", "CCC"], "Prompt", num_runs=1)
+
+    keys = [json.loads(line)["key"].split("__")[0] for line in captured["jsonl"].splitlines()]
+    # AAA and CCC (same paper) are adjacent, not split by BBB.
+    assert keys.index("CCC") - keys.index("AAA") == 1 or keys.index("AAA") - keys.index("CCC") == 1
+
+
+def test_storage_helpers(tmp_path, monkeypatch):
+    """resolve_doi / canonical_pdf_name / sanitize_doi behave as documented."""
+    from gpcr_tools.config import sanitize_doi
+    from gpcr_tools.papers import storage
+
+    monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+    reset_config()
+    cfg = get_config()
+    cfg.enriched_dir.mkdir(parents=True)
+    (cfg.enriched_dir / "7W55.json").write_text(
+        json.dumps(
+            {"data": {"entry": {"rcsb_primary_citation": {"pdbx_database_id_DOI": "10.1/AbC"}}}}
+        )
+    )
+    assert sanitize_doi("10.1038/s41586-021-04001-4") == "10.1038_s41586-021-04001-4"
+    # DOI recovered from enriched when the log lacks it.
+    assert storage.resolve_doi("7W55", {}) == "10.1/AbC"
+    # Log DOI wins over enriched.
+    assert storage.resolve_doi("7W55", {"7W55": {"doi": "10.9/log"}}) == "10.9/log"
+    # Canonical name is the sanitized DOI when storage is DOI-keyed.
+    assert storage.canonical_pdf_name("7W55", "10.1/AbC") == "10.1_abc.pdf"
+    # No DOI -> per-PDB name.
+    assert storage.canonical_pdf_name("7W55", "") == "7W55.pdf"

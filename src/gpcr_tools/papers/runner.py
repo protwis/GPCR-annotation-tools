@@ -20,24 +20,31 @@ from gpcr_tools.papers.downloader import (
     _update_download_log,
     download_paper_for_pdb,
 )
+from gpcr_tools.papers.storage import resolve_pdf_path
 from gpcr_tools.papers.watcher import _get_pending_paywalled, run_watcher
 
 logger = logging.getLogger(__name__)
 
 
 def _discover_missing_papers() -> list[str]:
-    """Scan enriched/ for PDB IDs without a corresponding papers/{pdb_id}.pdf."""
+    """Scan enriched/ for PDB IDs with no resolvable paper PDF.
+
+    A PDB is NOT missing when its canonical DOI-named file (shared by same-DOI
+    siblings) or its legacy per-PDB file is present — :func:`resolve_pdf_path`
+    tolerates both layouts, so a paper downloaded once for a sibling already
+    covers this PDB.
+    """
     cfg = get_config()
     enriched_dir = cfg.enriched_dir
-    papers_dir = cfg.papers_dir
 
     if not enriched_dir.exists():
         return []
 
+    log = _read_download_log()
     pdb_ids: list[str] = []
     for f in sorted(enriched_dir.glob("*.json")):
         pdb_id = f.stem.upper()
-        if not (papers_dir / f"{pdb_id}.pdf").exists():
+        if resolve_pdf_path(pdb_id, log) is None:
             pdb_ids.append(pdb_id)
     return pdb_ids
 

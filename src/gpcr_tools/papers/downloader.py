@@ -58,6 +58,7 @@ from gpcr_tools.config import (
     UNPAYWALL_API_URL,
     get_config,
 )
+from gpcr_tools.papers.storage import canonical_pdf_path, resolve_pdf_path
 
 logger = logging.getLogger(__name__)
 
@@ -327,7 +328,6 @@ def download_paper_for_pdb(
     """
     cfg = get_config()
     pdb_id = pdb_id.upper()
-    final_pdf = cfg.papers_dir / f"{pdb_id}.pdf"
     enriched_path = cfg.enriched_dir / f"{pdb_id}.json"
 
     now = datetime.now(UTC).isoformat()
@@ -347,8 +347,11 @@ def download_paper_for_pdb(
         _update_download_log(pdb_id, entry)
         return entry
 
-    # Resumability
-    if final_pdf.exists() and not force:
+    # Resumability — a paper already on disk under EITHER the canonical DOI name
+    # (shared by same-DOI siblings) or the legacy per-PDB name counts as present,
+    # so a sibling's already-downloaded canonical file is not re-fetched.
+    existing_pdf = resolve_pdf_path(pdb_id, _read_download_log())
+    if existing_pdf is not None and not force:
         logger.info("[%s] PDF already exists, skipping", pdb_id)
         # Preserve any identifiers a prior run already resolved -- the log is
         # full-replace, so nulling them here would lose the DOI that same-paper
@@ -358,7 +361,7 @@ def download_paper_for_pdb(
         entry = {
             "status": DL_STATUS_SKIPPED_EXISTS,
             "source": None,
-            "file_path": str(final_pdf),
+            "file_path": str(existing_pdf),
             "doi": prior.get("doi"),
             "pmid": prior.get("pmid"),
             "pmcid": prior.get("pmcid"),
@@ -429,12 +432,32 @@ def download_paper_for_pdb(
         _update_download_log(pdb_id, entry)
         return entry
 
+    # Save to the canonical DOI-named file (one per paper, shared by every
+    # same-DOI sibling) when DOI storage is on; otherwise the per-PDB name. The
+    # DOI is confirmed present above, so siblings collapse onto one physical file.
+    final_pdf = canonical_pdf_path(pdb_id, doi)
+
     # Tier 0: CrossRef metadata (the article's PMID + a direct publisher PDF link).
     crossref = _fetch_crossref_metadata(doi, sess)
     pmid = crossref.get("pmid") or pmid
 
     cfg.papers_dir.mkdir(parents=True, exist_ok=True)
     temp_pdf = cfg.papers_dir / f"{pdb_id}_temp.pdf"
+
+    # A sibling may already have downloaded this paper to the same canonical file
+    # while this PDB was being processed; if so, don't re-download (idempotent).
+    if final_pdf.exists() and not force:
+        entry = {
+            "status": DL_STATUS_SKIPPED_EXISTS,
+            "source": None,
+            "file_path": str(final_pdf),
+            "doi": doi,
+            "pmid": pmid,
+            "pmcid": pmcid,
+            "timestamp": now,
+        }
+        _update_download_log(pdb_id, entry)
+        return entry
 
     # Ordered candidate resolvers, tried as a TRUE fallback chain: a URL that
     # resolves but yields a non-PDF (e.g. an HTML bot challenge) or a 403/404 does

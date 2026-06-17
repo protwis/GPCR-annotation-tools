@@ -311,6 +311,16 @@ def cli() -> None:
         help="Skip UniProt/PubChem/chimera validation in the aggregate stage.",
     )
 
+    # migrate-papers ---------------------------------------------------
+    subparsers.add_parser(
+        "migrate-papers",
+        help=(
+            "One-time, idempotent consolidation of per-PDB paper PDFs into "
+            "DOI-named canonical files (safe to re-run; never deletes a source "
+            "until its canonical exists and validates)."
+        ),
+    )
+
     # report -----------------------------------------------------------
     report_parser = subparsers.add_parser(
         "report",
@@ -318,11 +328,12 @@ def cli() -> None:
     )
     report_parser.add_argument(
         "kind",
-        choices=["pdf-coverage", "full-audit", "tail-analysis"],
+        choices=["pdf-coverage", "full-audit", "tail-analysis", "run-manifest"],
         help=(
             "pdf-coverage: paper-PDF outcomes; "
             "full-audit: validation warnings + chimera conflicts across PDBs; "
-            "tail-analysis: G-protein chimera score distribution."
+            "tail-analysis: G-protein chimera score distribution; "
+            "run-manifest: write a full run record (output/run_manifest.{json,md})."
         ),
     )
 
@@ -462,6 +473,16 @@ def cli() -> None:
             skip_api_checks=args.skip_api_checks,
         )
 
+    elif args.command == "migrate-papers":
+        from gpcr_tools.papers.migrate import migrate_papers_to_doi_storage
+
+        migration = migrate_papers_to_doi_storage()
+        print(
+            f"Paper migration complete: {migration.consolidated} consolidated, "
+            f"{migration.redundant_removed} redundant removed, "
+            f"{migration.no_doi_kept} no-DOI kept, {migration.skipped_invalid} invalid skipped."
+        )
+
     elif args.command == "report":
         from gpcr_tools import reports
 
@@ -469,6 +490,7 @@ def cli() -> None:
             "pdf-coverage": reports.report_pdf_coverage,
             "full-audit": reports.report_full_audit,
             "tail-analysis": reports.report_tail_analysis,
+            "run-manifest": reports.report_run_manifest,
         }
         print(report_funcs[args.kind]())
 
