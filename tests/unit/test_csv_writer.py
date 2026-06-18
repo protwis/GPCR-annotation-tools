@@ -484,6 +484,67 @@ class TestGhostLigandExport:
         assert {r["Name"] for r in rows} == {"Matched", "NoStatus"}
 
 
+class TestNonFunctionalLigandExport:
+    """A dual-use molecule the model judged to be a non-functional, incidental
+    species (e.g. a structural lipid or covalent PTM such as palmitate in
+    rhodopsin) must not be recorded as a bound ligand. The skip gates on the
+    model's explicit negative verdict only — a missing or null check is unaffected."""
+
+    def test_non_functional_ligand_excluded(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Retinal",
+                "chem_comp_id": "RET",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+            },
+            {
+                "name": "Palmitate",
+                "chem_comp_id": "PLM",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Cofactor"},
+                "pharmacological_role_check": {
+                    "is_functional_ligand": False,
+                    "evidence": "Covalent palmitoylation site, not a bound ligand.",
+                },
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Retinal"]
+
+    def test_functional_ligand_kept(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Sphingosine-1-phosphate",
+                "chem_comp_id": "S1P",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+                "pharmacological_role_check": {
+                    "is_functional_ligand": True,
+                    "evidence": "Endogenous agonist of the S1P receptor.",
+                },
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Sphingosine-1-phosphate"]
+
+    def test_ligand_without_role_check_unaffected(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Adenosine",
+                "chem_comp_id": "ADN",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Adenosine"]
+
+
 class TestLigandLabelAsymId:
     """A ligand's label_asym_id is its OWN mmCIF instance label(s): one copy ->
     its label, several -> comma-joined, unindexed -> blank. The polymer chain

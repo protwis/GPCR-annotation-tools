@@ -134,6 +134,16 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
             or sanitize_value((lig.get("role") or {}).get("value")) == "Apo (no ligand)"
         ):
             continue
+        # A dual-use molecule (e.g. palmitate, cholesterol) is presented to the
+        # model as an incidental-candidate; the model judges whether it is a real
+        # functional ligand here or merely a structural lipid / covalent PTM. When
+        # the model's verdict is explicitly negative, leave the row out so an
+        # incidental molecule (e.g. a palmitoylation site in rhodopsin) is not
+        # recorded as a bound ligand. Gate on the model's verdict only: a missing
+        # or null field means "not assessed" and must not trigger the skip.
+        prc = lig.get("pharmacological_role_check")
+        if isinstance(prc, dict) and prc.get("is_functional_ligand") is False:
+            continue
         smiles = lig.get("SMILES_stereo") or lig.get("SMILES") or ""
         lig_chain = sanitize_value(lig.get("chain_id"))
         # A non-polymer ligand's label_asym_id is its OWN mmCIF instance label(s).
