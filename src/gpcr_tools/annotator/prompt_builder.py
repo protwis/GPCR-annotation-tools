@@ -1,12 +1,34 @@
 from __future__ import annotations
 
 import json
+import logging
 from collections import defaultdict
 from typing import Any
 
 from gpcr_tools.annotator.detect_orchestrator import assemble_detect_block
-from gpcr_tools.config import INCIDENTAL_CANDIDATES, LIGAND_EXCLUDE_LIST
+from gpcr_tools.config import (
+    INCIDENTAL_CANDIDATES,
+    LIGAND_EXCLUDE_LIST,
+    POLYMER_FEATURES_CACHE_NAME,
+    get_config,
+)
 from gpcr_tools.detector.signals import DetectSignal
+from gpcr_tools.validator.cache import PolymerFeaturesCache
+from gpcr_tools.validator.oligomer import (
+    format_7tm_status,
+    get_sequence_length,
+    scan_all_chains_7tm,
+)
+
+logger = logging.getLogger(__name__)
+
+# Sentinel meaning "the whole-PDB transmembrane fetch failed, so no chain has a
+# known 7TM status". It is distinct from an empty map (the fetch succeeded but a
+# chain genuinely carries no TM annotation, e.g. a peptide). When the table is
+# built with this sentinel, the ``7tm_status`` column is OMITTED rather than
+# asserting a false ``UNKNOWN 0/0`` for a real receptor (the "don't fail open on
+# a fetch failure" rule applied to the prompt side).
+TM_FETCH_FAILED = object()
 
 
 def _get_entry(enriched_data: dict) -> dict:
@@ -52,8 +74,29 @@ def generate_chain_inventory_reminder(pdb_id: str, enriched_data: dict) -> str:
     return "\n".join(lines)
 
 
-def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
-    """Simplifies the enriched PDB JSON into a minimal dictionary for Gemini."""
+def enhanced_simplify_pdb_json(
+    enriched_data: dict,
+    tm_by_chain: dict[str, dict[str, Any]] | object | None = None,
+) -> dict:
+    """Simplifies the enriched PDB JSON into a minimal dictionary for Gemini.
+
+    *tm_by_chain* maps an ``auth_asym_id`` to its 7TM analysis dict; when given,
+    every polymer chain gains two factual columns (its 7TM status and residue
+    length) so the model can tell a 7TM receptor (``COMPLETE 7/7``) from a
+    peptide ligand or partner (``UNKNOWN 0/0``) without the code pre-judging
+    which chains are receptors. A chain absent from the map reads ``UNKNOWN 0/0``
+    -- a real fact (the fetch succeeded; this chain has no TM annotation).
+
+    When the whole-PDB transmembrane fetch failed entirely, pass the
+    ``TM_FETCH_FAILED`` sentinel: the ``7tm_status`` column is then OMITTED for
+    every chain rather than asserting a false ``UNKNOWN 0/0`` that would make a
+    genuine receptor look identical to a peptide. The ``residue_length`` column
+    does not depend on the fetch and is always emitted.
+    """
+    tm_fetch_failed = tm_by_chain is TM_FETCH_FAILED
+    tm_map: dict[str, dict[str, Any]] = (
+        {} if (tm_fetch_failed or not isinstance(tm_by_chain, dict)) else tm_by_chain
+    )
     entry = _get_entry(enriched_data)
     pdb_id = entry.get("rcsb_id") or "UNKNOWN"
 
@@ -107,16 +150,27 @@ def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
         if source:
             organism = source[0].get("scientific_name") or "Unknown"
 
-        simplified["polymer_components"].append(
-            {
-                "chain_ids": chains,
-                "description": desc,
-                "type": poly_type,
-                "organism": organism,
-                "uniprot_accessions": uniprot_accessions,
-                "entry_names": entry_names,
-            }
-        )
+        # Two factual columns per chain, neutral for every polymer (receptor, G
+        # protein, peptide, antibody): the 7TM status (resolved/total) and the
+        # residue length. A 7TM receptor reads COMPLETE 6-7/7; a peptide ligand or
+        # partner reads UNKNOWN 0/0. Keyed per chain so the model is told the facts
+        # rather than which chains the code thinks are receptors. When the whole
+        # fetch failed (TM_FETCH_FAILED) the 7TM column is omitted entirely so a
+        # real receptor is never asserted as a false UNKNOWN 0/0; residue_length
+        # is independent of the fetch and is always emitted.
+        component: dict[str, Any] = {
+            "chain_ids": chains,
+            "description": desc,
+            "type": poly_type,
+            "organism": organism,
+            "uniprot_accessions": uniprot_accessions,
+            "entry_names": entry_names,
+            "residue_length": get_sequence_length(poly),
+        }
+        if not tm_fetch_failed:
+            component["7tm_status"] = {c: format_7tm_status(tm_map.get(c)) for c in chains}
+
+        simplified["polymer_components"].append(component)
 
     # Extract nonpolymers
     nonpolymers = entry.get("nonpolymer_entities") or []
@@ -159,6 +213,53 @@ def enhanced_simplify_pdb_json(enriched_data: dict) -> dict:
     return simplified
 
 
+def _collect_polymer_chain_ids(enriched_data: dict) -> set[str]:
+    """Collect every polymer chain's ``auth_asym_id`` from enriched JSON."""
+    entry = _get_entry(enriched_data)
+    chain_ids: set[str] = set()
+    for poly in entry.get("polymer_entities") or []:
+        chains = (poly.get("rcsb_polymer_entity_container_identifiers") or {}).get(
+            "auth_asym_ids"
+        ) or []
+        chain_ids.update(c for c in chains if c)
+    return chain_ids
+
+
+def _polymer_tm_by_chain(pdb_id: str, enriched_data: dict) -> dict[str, dict[str, Any]] | object:
+    """Fetch per-chain 7TM analysis for every polymer chain (best-effort).
+
+    Reuses the oligomer classifier's cached TM-data path so the prompt table and
+    the classifier warm one another off the same cache file. Returns a per-chain
+    map on success (a chain genuinely lacking a TM annotation is simply absent ->
+    renders ``UNKNOWN 0/0``). Returns the ``TM_FETCH_FAILED`` sentinel when the
+    whole-PDB fetch failed entirely (or no cache directory exists), so the caller
+    OMITS the 7TM column rather than asserting a false ``UNKNOWN 0/0`` for a real
+    receptor.
+    """
+    chain_ids = _collect_polymer_chain_ids(enriched_data)
+    if not chain_ids:
+        return {}
+    try:
+        cfg = get_config()
+        cache = PolymerFeaturesCache(cfg.cache_dir / POLYMER_FEATURES_CACHE_NAME)
+        results, graphql_entry = scan_all_chains_7tm(pdb_id, chain_ids, cache=cache)
+        if graphql_entry is None:
+            # The whole-PDB feature fetch returned nothing: omit the column rather
+            # than assert a false UNKNOWN 0/0 for every chain (a real receptor must
+            # never be made to look like a peptide).
+            return TM_FETCH_FAILED
+        # Persist the successful fetch so subsequent runs / the aggregate stage hit
+        # the cache instead of re-issuing 10 live RCSB requests per PDB.
+        try:
+            cache.save()
+        except OSError as exc:
+            logger.warning("[%s] Failed to save polymer-features cache: %s", pdb_id, exc)
+        return results
+    except Exception as exc:
+        logger.warning("[%s] 7TM scan for polymer table unavailable: %s", pdb_id, exc)
+        return TM_FETCH_FAILED
+
+
 def build_prompt_parts(
     pdb_id: str,
     enriched_data: dict,
@@ -196,8 +297,9 @@ def build_prompt_parts(
     # 4. PDB Metadata header
     parts.append(f"--- PDB METADATA FOR {pdb_id} ---\n")
 
-    # 5. Simplified enriched JSON
-    simplified = enhanced_simplify_pdb_json(enriched_data)
+    # 5. Simplified enriched JSON, with each polymer chain's 7TM status + length
+    tm_by_chain = _polymer_tm_by_chain(pdb_id, enriched_data)
+    simplified = enhanced_simplify_pdb_json(enriched_data, tm_by_chain=tm_by_chain)
     parts.append(json.dumps(simplified, indent=2))
     parts.append("\n\n")
 

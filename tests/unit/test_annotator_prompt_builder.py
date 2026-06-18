@@ -142,3 +142,154 @@ def test_build_prompt_parts_injects_advisory_block_between_metadata_and_paper():
     assert "DETECTOR EVIDENCE" in joined
     assert joined.index("PDB METADATA") < joined.index("DETECTOR EVIDENCE")
     assert joined.index("DETECTOR EVIDENCE") < joined.index("--- FULL PAPER ---")
+
+
+def test_enhanced_simplify_adds_7tm_status_and_residue_length():
+    # Every polymer chain gains two factual columns, listed neutrally with no
+    # "this structure has X receptors" framing: a 7TM receptor reads COMPLETE,
+    # a peptide ligand reads UNKNOWN 0/0.
+    enriched_data = {
+        "data": {
+            "entry": {
+                "polymer_entities": [
+                    {
+                        "rcsb_polymer_entity_container_identifiers": {"auth_asym_ids": ["R"]},
+                        "rcsb_polymer_entity": {"pdbx_description": "Receptor"},
+                        "entity_poly": {
+                            "rcsb_entity_polymer_type": "Protein",
+                            "rcsb_sample_sequence_length": 350,
+                        },
+                        "uniprots": [{"rcsb_id": "P1", "gpcrdb_entry_name_slug": "rec_human"}],
+                    },
+                    {
+                        "rcsb_polymer_entity_container_identifiers": {"auth_asym_ids": ["P"]},
+                        "rcsb_polymer_entity": {"pdbx_description": "Peptide agonist"},
+                        "entity_poly": {
+                            "rcsb_entity_polymer_type": "Protein",
+                            "rcsb_sample_sequence_length": 34,
+                        },
+                        "uniprots": [{"rcsb_id": "Q2"}],
+                    },
+                ]
+            }
+        }
+    }
+    tm_by_chain = {"R": {"status": "COMPLETE", "resolved_tms": 7, "total_tms": 7}}
+    simplified = prompt_builder.enhanced_simplify_pdb_json(enriched_data, tm_by_chain=tm_by_chain)
+    comps = {c["chain_ids"][0]: c for c in simplified["polymer_components"]}
+
+    assert comps["R"]["7tm_status"] == {"R": "COMPLETE 7/7"}
+    assert comps["R"]["residue_length"] == 350
+    # Peptide: absent from the TM map -> UNKNOWN, and visibly short.
+    assert comps["P"]["7tm_status"] == {"P": "UNKNOWN 0/0"}
+    assert comps["P"]["residue_length"] == 34
+
+
+def test_enhanced_simplify_columns_present_without_tm_data():
+    # Both columns are ALWAYS emitted; without TM data the status is UNKNOWN 0/0,
+    # never invented, and the length still comes from the sequence.
+    enriched_data = {
+        "data": {
+            "entry": {
+                "polymer_entities": [
+                    {
+                        "rcsb_polymer_entity_container_identifiers": {"auth_asym_ids": ["R"]},
+                        "rcsb_polymer_entity": {"pdbx_description": "Receptor"},
+                        "entity_poly": {
+                            "rcsb_entity_polymer_type": "Protein",
+                            "rcsb_sample_sequence_length": 350,
+                        },
+                        "uniprots": [{"rcsb_id": "P1", "gpcrdb_entry_name_slug": "rec_human"}],
+                    }
+                ]
+            }
+        }
+    }
+    simplified = prompt_builder.enhanced_simplify_pdb_json(enriched_data)
+    comp = simplified["polymer_components"][0]
+    assert comp["7tm_status"] == {"R": "UNKNOWN 0/0"}
+    assert comp["residue_length"] == 350
+
+
+def _receptor_plus_peptide_enriched() -> dict:
+    # Chain R is a genuine 7TM receptor (350 aa); chain P is a short peptide
+    # agonist (34 aa). Byte-identically shaped, the two differ only in their
+    # 7TM facts -- exactly what the fetch must distinguish.
+    return {
+        "data": {
+            "entry": {
+                "rcsb_id": "9JR3",
+                "polymer_entities": [
+                    {
+                        "rcsb_polymer_entity_container_identifiers": {"auth_asym_ids": ["R"]},
+                        "rcsb_polymer_entity": {"pdbx_description": "Receptor"},
+                        "entity_poly": {
+                            "rcsb_entity_polymer_type": "Protein",
+                            "rcsb_sample_sequence_length": 350,
+                        },
+                        "uniprots": [{"rcsb_id": "P1", "gpcrdb_entry_name_slug": "rec_human"}],
+                    },
+                    {
+                        "rcsb_polymer_entity_container_identifiers": {"auth_asym_ids": ["P"]},
+                        "rcsb_polymer_entity": {"pdbx_description": "Peptide agonist"},
+                        "entity_poly": {
+                            "rcsb_entity_polymer_type": "Protein",
+                            "rcsb_sample_sequence_length": 34,
+                        },
+                        "uniprots": [{"rcsb_id": "Q2"}],
+                    },
+                ],
+            }
+        }
+    }
+
+
+def test_enhanced_simplify_omits_7tm_column_when_fetch_failed():
+    # FETCH FAILED ENTIRELY: the 7TM column is omitted for EVERY chain so a real
+    # receptor is never asserted as a false "UNKNOWN 0/0" (which would be
+    # byte-identical to a 34-aa peptide). residue_length is fetch-independent and
+    # stays, so the receptor is still visibly the long chain.
+    enriched_data = _receptor_plus_peptide_enriched()
+    simplified = prompt_builder.enhanced_simplify_pdb_json(
+        enriched_data, tm_by_chain=prompt_builder.TM_FETCH_FAILED
+    )
+    comps = {c["chain_ids"][0]: c for c in simplified["polymer_components"]}
+    assert "7tm_status" not in comps["R"]
+    assert "7tm_status" not in comps["P"]
+    assert comps["R"]["residue_length"] == 350
+    assert comps["P"]["residue_length"] == 34
+
+
+def test_build_prompt_parts_fetch_failure_does_not_make_receptor_look_like_peptide():
+    # End-to-end at prompt-build time: the whole-PDB TM fetch fails. The real
+    # receptor must NOT render "UNKNOWN 0/0" (the confidently-wrong trap). The
+    # column is omitted instead, so the receptor is never made to look like the
+    # peptide.
+    from unittest.mock import patch
+
+    enriched_data = _receptor_plus_peptide_enriched()
+    with patch(
+        "gpcr_tools.annotator.prompt_builder.scan_all_chains_7tm",
+        return_value=({}, None),  # fetch failed entirely
+    ):
+        parts = prompt_builder.build_prompt_parts("9JR3", enriched_data, "TEMPLATE")
+    joined = "".join(parts)
+    assert "UNKNOWN 0/0" not in joined
+    assert "7tm_status" not in joined
+
+
+def test_build_prompt_parts_fetch_success_distinguishes_receptor_from_peptide():
+    # When the fetch SUCCEEDS, the column is present: the receptor reads
+    # COMPLETE 7/7 and the peptide legitimately reads UNKNOWN 0/0 (a real fact).
+    from unittest.mock import patch
+
+    enriched_data = _receptor_plus_peptide_enriched()
+    tm_results = {"R": {"status": "COMPLETE", "resolved_tms": 7, "total_tms": 7}}
+    with patch(
+        "gpcr_tools.annotator.prompt_builder.scan_all_chains_7tm",
+        return_value=(tm_results, {"polymer_entities": []}),
+    ):
+        parts = prompt_builder.build_prompt_parts("9JR3", enriched_data, "TEMPLATE")
+    joined = "".join(parts)
+    assert '"R": "COMPLETE 7/7"' in joined
+    assert '"P": "UNKNOWN 0/0"' in joined

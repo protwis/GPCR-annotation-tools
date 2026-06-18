@@ -820,6 +820,14 @@ CHIMERA_A5_ANCHOR_MIN_SCORE: int = 8
 # that drifts upstream is eventually refetched instead of persisting forever.
 SEQUENCE_CACHE_TTL_DAYS: int = 30
 
+# Cached RCSB polymer-feature responses (transmembrane-helix annotations used by
+# the oligomer 7TM analysis) expire after this many days. A released entry's
+# features are near-immutable but can be revised upstream, so the same TTL
+# pattern as the sequence cache keeps a stale copy from persisting forever while
+# letting the 7TM count survive a transient RCSB outage.
+POLYMER_FEATURES_CACHE_TTL_DAYS: int = 30
+POLYMER_FEATURES_CACHE_NAME: str = "polymer_features_cache.json"
+
 # Top-level marker stamped on a detect output that was written while a
 # sequence-based detector transiently failed to fetch a UniProt reference (a
 # timeout or 5xx -- NOT a definitive 404). The detect resume skip recomputes a
@@ -1094,6 +1102,12 @@ ALERT_ASSEMBLY_MISMATCH: str = "ASSEMBLY_MISMATCH"
 # unresolved/missing UniProt mapping, not a true absence). Promoted to a gating
 # warning, unlike the other advisory oligomer alerts.
 ALERT_NO_GPCR: str = "NO_GPCR"
+# The transmembrane-helix annotation fetch (RCSB) failed and no cached copy was
+# available, so a chain carrying a GPCR slug could not be transmembrane-verified.
+# Rather than fail open (count an unverified peptide/partner as a receptor
+# protomer), the chain's receptor status is treated as low-confidence and routed
+# to a curator. Promoted to a gating warning.
+ALERT_TM_DATA_UNAVAILABLE: str = "TM_DATA_UNAVAILABLE"
 
 # ---------------------------------------------------------------------------
 # 7TM statuses & detection constants

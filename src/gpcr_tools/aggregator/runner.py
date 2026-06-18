@@ -58,6 +58,7 @@ from gpcr_tools.config import (
     EMPTY_VALUES,
     FULL_G_ALPHA_CANDIDATES,
     LOW_CONFIDENCE_LEVELS,
+    POLYMER_FEATURES_CACHE_NAME,
     get_config,
 )
 from gpcr_tools.detector.signals import (
@@ -68,7 +69,11 @@ from gpcr_tools.detector.signals import (
 from gpcr_tools.detector.stage import load_detect_signals
 from gpcr_tools.fetcher.cache import JsonCache
 from gpcr_tools.validator.api_clients import SynonymCache
-from gpcr_tools.validator.cache import SequenceCache, ValidationCache
+from gpcr_tools.validator.cache import (
+    PolymerFeaturesCache,
+    SequenceCache,
+    ValidationCache,
+)
 from gpcr_tools.validator.chimera import get_chimera_analysis
 from gpcr_tools.validator.integrity_checker import validate_all
 from gpcr_tools.validator.ligand_validator import validate_and_enrich_ligands
@@ -466,6 +471,7 @@ def aggregate_pdb(
     validation_cache: ValidationCache | None = None,
     sequence_cache: SequenceCache | None = None,
     synonym_cache: SynonymCache | None = None,
+    polymer_features_cache: PolymerFeaturesCache | None = None,
 ) -> AggregateResult:
     """Run the full aggregation + validation pipeline for a single PDB.
 
@@ -493,7 +499,19 @@ def aggregate_pdb(
     # Fail fast on a stale / missing storage contract before doing real work.
     from gpcr_tools.workspace import validate_contract
 
-    validate_contract(get_config())
+    cfg = get_config()
+    validate_contract(cfg)
+
+    # The single-PDB paths (CLI `aggregate <PDB>` and the pipeline) pass no
+    # polymer-features cache. Lazily construct one from the same cache file the
+    # batch path uses, so single-PDB runs get the same fail-open protection (a
+    # genuine TM-fetch failure routes to a curator instead of silently counting a
+    # peptide as a receptor) and warm the shared cache for later runs. A
+    # locally-built cache is saved at the end of this call; a caller-supplied one
+    # is owned and saved by that caller (aggregate_all).
+    owns_polymer_cache = polymer_features_cache is None
+    if owns_polymer_cache:
+        polymer_features_cache = PolymerFeaturesCache(cfg.cache_dir / POLYMER_FEATURES_CACHE_NAME)
 
     # 1. Load AI runs
     runs = load_ai_runs(pdb_id)
@@ -553,7 +571,21 @@ def aggregate_pdb(
         # 8. Oligomer analysis (mutates best_run_data — may override chain_id). The
         # detect stage's geometric coupling-protomer signal, when present, selects the
         # primary protomer (the G-protein coupler) over the AI's chain guess.
-        analyze_oligomer(pdb_id, best_run_data, enriched, coupling_chain=_coupling_protomer(pdb_id))
+        analyze_oligomer(
+            pdb_id,
+            best_run_data,
+            enriched,
+            coupling_chain=_coupling_protomer(pdb_id),
+            polymer_features_cache=polymer_features_cache,
+        )
+
+        # Persist a locally-built cache (single-PDB path) so the warmed TM fetch
+        # survives to the next run; a caller-supplied cache is saved by the caller.
+        if owns_polymer_cache and polymer_features_cache is not None:
+            try:
+                polymer_features_cache.save()
+            except OSError as exc:
+                logger.warning("[%s] Failed to save polymer-features cache: %s", pdb_id, exc)
 
         # 9. Compute discrepancies
         discrepancies = find_discrepancies(best_run_data, majority_votes, all_votes)
@@ -663,6 +695,7 @@ def aggregate_all(
         validation_cache = ValidationCache(cfg.cache_dir / "id_validation_cache.json")
         sequence_cache = SequenceCache(cfg.cache_dir / "uniprot_sequence_cache.json")
         synonym_cache = JsonCache(cfg.cache_dir / "pubchem_synonym_cache.json")
+        polymer_features_cache = PolymerFeaturesCache(cfg.cache_dir / POLYMER_FEATURES_CACHE_NAME)
     except Exception as exc:
         logger.error("Failed to initialize caches: %s", exc)
         return []
@@ -701,6 +734,7 @@ def aggregate_all(
                 validation_cache=validation_cache,
                 sequence_cache=sequence_cache,
                 synonym_cache=synonym_cache,
+                polymer_features_cache=polymer_features_cache,
             )
             results.append(result)
             status = AGG_STATUS_COMPLETED if result.success else AGG_STATUS_FAILED
@@ -735,5 +769,9 @@ def aggregate_all(
         synonym_cache.save()
     except OSError as exc:
         logger.warning("Failed to save synonym cache: %s", exc)
+    try:
+        polymer_features_cache.save()
+    except OSError as exc:
+        logger.warning("Failed to save polymer-features cache: %s", exc)
 
     return results

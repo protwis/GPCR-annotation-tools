@@ -26,6 +26,7 @@ from gpcr_tools.config import (
     ALERT_NO_GPCR,
     ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
     OLIGOMER_MONOMER,
@@ -49,6 +50,7 @@ from gpcr_tools.validator.oligomer import (
     analyze_oligomer,
     build_nonpolymer_instance_index,
     find_multi_copy_components,
+    format_7tm_status,
     get_sequence_length,
     is_gpcr_slug,
     map_uniprot_to_entity,
@@ -1909,3 +1911,212 @@ class TestNoGpcrGating:
             analyze_oligomer("TEST", data, enriched)
         oligo = data["oligomer_analysis"]
         assert not any(a["type"] == ALERT_NO_GPCR for a in oligo["alerts"])
+
+
+# ===================================================================
+# format_7tm_status
+# ===================================================================
+
+
+class TestFormat7tmStatus:
+    def test_complete(self) -> None:
+        assert (
+            format_7tm_status({"status": TM_STATUS_COMPLETE, "resolved_tms": 7, "total_tms": 7})
+            == "COMPLETE 7/7"
+        )
+
+    def test_none_renders_unknown(self) -> None:
+        assert format_7tm_status(None) == "UNKNOWN 0/0"
+
+    def test_incomplete(self) -> None:
+        assert (
+            format_7tm_status({"status": TM_STATUS_INCOMPLETE, "resolved_tms": 4, "total_tms": 7})
+            == "INCOMPLETE_7TM 4/7"
+        )
+
+
+# ===================================================================
+# Polymer-chain 7TM scan (item B data path) + TM-fetch reliability
+# ===================================================================
+
+
+def _gql_entity_with_tm(auth_id: str, *, tm_count: int) -> dict[str, Any]:
+    """A GraphQL polymer entity carrying *tm_count* transmembrane helices.
+
+    ``tm_count == 0`` models a peptide / partner chain (no TM annotation), which
+    reads UNKNOWN; a full receptor uses 7.
+    """
+    features = []
+    if tm_count > 0:
+        features = [
+            {
+                "type": "TRANSMEMBRANE",
+                "name": "TM",
+                "feature_positions": [
+                    {"beg_seq_id": i * 30, "end_seq_id": i * 30 + 20}
+                    for i in range(1, tm_count + 1)
+                ],
+            }
+        ]
+    return {
+        "rcsb_polymer_entity_feature": features,
+        "rcsb_polymer_entity_align": [],
+        "uniprots": [],
+        "polymer_entity_instances": [
+            {
+                "rcsb_polymer_entity_instance_container_identifiers": {"auth_asym_id": auth_id},
+                "rcsb_polymer_instance_feature": [],
+            }
+        ],
+    }
+
+
+class _FakePolymerFeaturesCache:
+    """Dict-valued cache double; ``preload`` seeds a fresh entry."""
+
+    def __init__(self) -> None:
+        self._d: dict[str, dict[str, Any]] = {}
+
+    def preload(self, key: str, value: dict[str, Any]) -> None:
+        self._d[key] = value
+
+    def get(self, key: str) -> dict[str, Any] | None:
+        return self._d.get(key)
+
+    def set(self, key: str, value: dict[str, Any]) -> None:
+        self._d[key] = value
+
+
+class TestTmFetchReliability:
+    """The receptor count stays clean when the live TM-helix fetch fails."""
+
+    def _enriched_receptor_plus_peptide(self) -> dict[str, Any]:
+        # Both chains carry a GPCR slug in the roster; only the real receptor is a
+        # 7TM bundle. The peptide (a short agonist) must NOT count as a receptor.
+        return _make_enriched_with_entities(
+            [
+                _make_entity("pth1r_human", "A", length=420),
+                _make_entity("pthy_human", "P", length=34),
+            ]
+        )
+
+    def test_cached_tm_data_keeps_peptide_out_and_yields_monomer(self) -> None:
+        # With TM data available (cache hit), the transmembrane gate drops the
+        # peptide so the receptor count is 1 -> MONOMER, and no route alert fires.
+        enriched = self._enriched_receptor_plus_peptide()
+        cache = _FakePolymerFeaturesCache()
+        cache.preload(
+            "9JR3",
+            {
+                "polymer_entities": [
+                    _gql_entity_with_tm("A", tm_count=7),
+                    _gql_entity_with_tm("P", tm_count=0),
+                ]
+            },
+        )
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["classification"] == OLIGOMER_MONOMER
+        assert oligo["receptor_count"] == 1
+        assert oligo["tm_data_available"] is True
+        assert not any(a["type"] == ALERT_TM_DATA_UNAVAILABLE for a in oligo["alerts"])
+        # The peptide is shown as a non-7TM chain in the per-chain facts.
+        by_chain = {c["chain_id"]: c for c in oligo["all_gpcr_chains"]}
+        assert by_chain["A"]["7tm_status"] == TM_STATUS_COMPLETE
+        assert by_chain["P"]["7tm_status"] == TM_STATUS_UNKNOWN
+
+    def test_fetch_failure_routes_to_human_not_failed_open(self) -> None:
+        # The live fetch fails and nothing is cached: the peptide must NOT be
+        # silently counted as a receptor. Instead the classification is flagged
+        # low-confidence and a route-to-human alert fires.
+        enriched = self._enriched_receptor_plus_peptide()
+        cache = _FakePolymerFeaturesCache()  # empty -> miss
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["tm_data_available"] is False
+        assert any(a["type"] == ALERT_TM_DATA_UNAVAILABLE for a in oligo["alerts"])
+
+    def test_route_alert_is_gating(self) -> None:
+        # The route-to-human alert must disable one-click accept via the gating path.
+        enriched = self._enriched_receptor_plus_peptide()
+        cache = _FakePolymerFeaturesCache()
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        validation_data: dict[str, Any] = {}
+        inject_oligomer_alerts(data["oligomer_analysis"], validation_data)
+        assert any(
+            ALERT_TM_DATA_UNAVAILABLE in w for w in validation_data.get("critical_warnings") or []
+        )
+
+    def test_no_cache_preserves_legacy_no_route(self) -> None:
+        # Without a cache wired (e.g. offline single-PDB path), behavior is the
+        # legacy fallback: no route alert, no failure flag.
+        enriched = self._enriched_receptor_plus_peptide()
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        with patch(
+            "gpcr_tools.validator.oligomer.scan_all_chains_7tm",
+            return_value=({}, None),
+        ):
+            analyze_oligomer("9JR3", data, enriched)
+        oligo = data["oligomer_analysis"]
+        assert oligo["tm_data_available"] is True
+        assert not any(a["type"] == ALERT_TM_DATA_UNAVAILABLE for a in oligo["alerts"])
+
+    def test_fetch_failure_does_not_falsely_accuse_real_receptors(self) -> None:
+        # On a fetch failure every GPCR chain falls back to UNKNOWN status, but
+        # that is a data gap -- NOT evidence the chains are not GPCRs. The
+        # "are you sure these are GPCRs?" alert must NOT fire; only the
+        # data-unavailable route alert is correct.
+        enriched = self._enriched_receptor_plus_peptide()
+        cache = _FakePolymerFeaturesCache()  # empty -> miss
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert not any(a["type"] == ALERT_SUSPICIOUS_7TM for a in oligo["alerts"])
+        assert any(a["type"] == ALERT_TM_DATA_UNAVAILABLE for a in oligo["alerts"])
+
+    def test_suspicious_7tm_still_fires_when_fetch_succeeded(self) -> None:
+        # Sanity guard for the FIX 4 condition: when the fetch SUCCEEDS but a
+        # GPCR-slug chain genuinely has no TM helices, the suspicious-7TM alert
+        # still fires (the data gap was the only reason to suppress it).
+        enriched = _make_enriched_with_entities([_make_entity("rec_human", "A", length=350)])
+        cache = _FakePolymerFeaturesCache()
+        cache.preload("9JR3", {"polymer_entities": [_gql_entity_with_tm("A", tm_count=0)]})
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["tm_data_available"] is True
+        assert any(a["type"] == ALERT_SUSPICIOUS_7TM for a in oligo["alerts"])
+
+    def test_receptor_count_under_failure_is_unfiltered_roster(self) -> None:
+        # FIX 7 documentation guard: when tm_data_available is False the
+        # receptor_count is the UNFILTERED roster (the TM gate could not run), so
+        # a peptide carrying a GPCR slug is still counted. A consumer (e.g. a
+        # future receptor-level cross-check) MUST check tm_data_available before
+        # trusting receptor_count. Here both the receptor and the peptide carry a
+        # slug, so the unverified count is 2 -- not the true receptor count of 1.
+        enriched = self._enriched_receptor_plus_peptide()
+        cache = _FakePolymerFeaturesCache()  # empty -> miss
+        data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            analyze_oligomer("9JR3", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["tm_data_available"] is False
+        assert oligo["receptor_count"] == 2  # unfiltered: receptor + peptide both have slugs

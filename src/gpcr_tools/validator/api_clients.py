@@ -365,6 +365,40 @@ def fetch_polymer_features(pdb_id: str) -> dict[str, Any] | None:
     return None
 
 
+class PolymerFeaturesCacheLike(Protocol):
+    """Structural cache contract for the polymer-features response.
+
+    A PDB id maps to its GraphQL ``entry`` dict. ``get`` returns ``None`` on a
+    miss or expiry; ``set`` stores only successful fetches. The concrete
+    ``PolymerFeaturesCache`` in ``validator.cache`` satisfies this.
+    """
+
+    def get(self, key: str) -> dict[str, Any] | None: ...
+
+    def set(self, key: str, value: dict[str, Any]) -> None: ...
+
+
+def fetch_polymer_features_cached(
+    pdb_id: str,
+    cache: PolymerFeaturesCacheLike,
+) -> dict[str, Any] | None:
+    """Fetch polymer features, served from *cache* when fresh.
+
+    A cache hit short-circuits the live request. On a miss the live fetch runs;
+    a successful response is cached, while a failed (``None``) fetch is NOT
+    cached, so a transient RCSB outage is never frozen as a fact and a later run
+    re-probes. ``None`` is propagated on failure exactly as
+    :func:`fetch_polymer_features`, so callers keep their fail-safe handling.
+    """
+    cached = cache.get(pdb_id)
+    if cached is not None:
+        return cached
+    entry = fetch_polymer_features(pdb_id)
+    if entry is not None:
+        cache.set(pdb_id, entry)
+    return entry
+
+
 GRAPHQL_POLYMER_ALIGNMENT_QUERY: str = """\
 query structure($id: String!) {
   entry(entry_id: $id) {

@@ -21,7 +21,53 @@ from gpcr_tools.validator.api_clients import (
     check_pubchem_existence,
     check_pubchem_synonym_match,
     check_uniprot_existence,
+    fetch_polymer_features_cached,
 )
+
+
+class _FakePolymerFeaturesCache:
+    """Minimal dict-valued cache mirroring PolymerFeaturesCache's get/set."""
+
+    def __init__(self) -> None:
+        self._d: dict[str, dict] = {}
+
+    def get(self, key: str) -> dict | None:
+        return self._d.get(key)
+
+    def set(self, key: str, value: dict) -> None:
+        self._d[key] = value
+
+
+class TestFetchPolymerFeaturesCached:
+    def test_cache_hit_short_circuits_live_fetch(self) -> None:
+        cache = _FakePolymerFeaturesCache()
+        cache.set("7RKF", {"polymer_entities": ["cached"]})
+        with patch("gpcr_tools.validator.api_clients.fetch_polymer_features") as mock_fetch:
+            result = fetch_polymer_features_cached("7RKF", cache)
+        assert result == {"polymer_entities": ["cached"]}
+        mock_fetch.assert_not_called()
+
+    def test_miss_fetches_live_and_stores(self) -> None:
+        cache = _FakePolymerFeaturesCache()
+        entry = {"polymer_entities": ["live"]}
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=entry,
+        ):
+            result = fetch_polymer_features_cached("7RKF", cache)
+        assert result == entry
+        assert cache.get("7RKF") == entry
+
+    def test_failed_fetch_is_not_cached(self) -> None:
+        # A transient failure (None) must never be frozen as a cached fact.
+        cache = _FakePolymerFeaturesCache()
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            result = fetch_polymer_features_cached("7RKF", cache)
+        assert result is None
+        assert cache.get("7RKF") is None
 
 
 class _FakeCache:

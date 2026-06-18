@@ -29,6 +29,7 @@ from gpcr_tools.config import (
     ALERT_PREFIX_MISSED_POLYMER,
     ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
     APO_SENTINEL,
     CRYSTALLIZATION_FUSION_KEYWORDS,
     CRYSTALLIZATION_FUSION_SLUGS,
@@ -46,7 +47,11 @@ from gpcr_tools.config import (
     TM_STATUS_UNKNOWN,
     TM_UNIPROT_FEATURE_TYPES,
 )
-from gpcr_tools.validator.api_clients import fetch_polymer_features
+from gpcr_tools.validator.api_clients import (
+    PolymerFeaturesCacheLike,
+    fetch_polymer_features,
+    fetch_polymer_features_cached,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -208,14 +213,23 @@ def scan_all_chains_7tm(
     pdb_id: str,
     gpcr_chain_ids: set[str],
     graphql_entry: dict[str, Any] | None = None,
+    cache: PolymerFeaturesCacheLike | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[str, Any] | None]:
     """Scan all GPCR chains for 7TM completeness.
 
     Returns ``(results, graphql_entry)`` where *results* maps
     ``auth_asym_id`` to TM analysis dicts.
+
+    When *graphql_entry* is not supplied it is fetched live; passing *cache*
+    serves a fresh copy from disk and stores a successful fetch, so the 7TM
+    count survives a transient RCSB outage.
     """
     if graphql_entry is None:
-        graphql_entry = fetch_polymer_features(pdb_id)
+        graphql_entry = (
+            fetch_polymer_features_cached(pdb_id, cache)
+            if cache is not None
+            else fetch_polymer_features(pdb_id)
+        )
     if not graphql_entry:
         return {}, None
 
@@ -230,6 +244,20 @@ def scan_all_chains_7tm(
             results[auth_id] = _analyze_tm_for_entity_instance(entity, inst)
 
     return results, graphql_entry
+
+
+def format_7tm_status(tm: dict[str, Any] | None) -> str:
+    """Render a TM analysis dict as a ``"STATUS resolved/total"`` string.
+
+    ``None`` (no analysis available) renders as ``"UNKNOWN 0/0"`` -- the same
+    shape a chain with no transmembrane annotation produces, so a missing fetch
+    and a genuine non-7TM chain read identically as "not a 7TM receptor".
+    """
+    tm = tm or {}
+    status = tm.get("status") or TM_STATUS_UNKNOWN
+    resolved = tm.get("resolved_tms", 0)
+    total = tm.get("total_tms", 0)
+    return f"{status} {resolved}/{total}"
 
 
 # ---------------------------------------------------------------------------
@@ -1159,6 +1187,7 @@ def analyze_oligomer(
     best_run_data: dict[str, Any],
     enriched_entry: dict[str, Any],
     coupling_chain: str | None = None,
+    polymer_features_cache: PolymerFeaturesCacheLike | None = None,
 ) -> None:
     """Run oligomer analysis on *best_run_data* against *enriched_entry*.
 
@@ -1168,15 +1197,35 @@ def analyze_oligomer(
 
     *coupling_chain* is the detect stage's geometric G-protein-coupling protomer (or
     ``None``); when set it is the highest-priority primary-protomer choice.
+
+    *polymer_features_cache*, when supplied, serves the transmembrane-helix
+    annotations from disk and stores a successful fetch, so the 7TM count
+    survives a transient RCSB outage. When the fetch still fails and no cached
+    copy is available, the receptor count cannot be transmembrane-verified; the
+    classification is then flagged low-confidence and routed (TM_DATA_UNAVAILABLE)
+    rather than failing open into counting an unverified peptide/partner as a
+    receptor protomer.
     """
     # 1. Build GPCR roster
     gpcr_roster = _build_gpcr_roster(enriched_entry)
 
-    # 2. Scan all GPCR chains for 7TM
+    # 2. Scan all GPCR chains for 7TM. A cache (when supplied) lets the fetch
+    # survive a transient outage; a genuine fetch failure is detected so the
+    # count is not silently failed open below.
     tm_roster: dict[str, dict[str, Any]] = {}
     graphql_entry: dict[str, Any] | None = None
+    tm_fetch_failed = False
     if gpcr_roster:
-        tm_roster, graphql_entry = scan_all_chains_7tm(pdb_id, set(gpcr_roster.keys()))
+        tm_roster, graphql_entry = scan_all_chains_7tm(
+            pdb_id, set(gpcr_roster.keys()), cache=polymer_features_cache
+        )
+        # The transmembrane gate could not run: there are GPCR-slug chains to
+        # verify but the feature fetch returned nothing. Distinguish this from a
+        # structure whose chains genuinely carry no TM annotation by re-probing
+        # only when a cache is wired (the path that owns the fetch); without a
+        # cache the legacy behavior is preserved byte-for-byte.
+        if polymer_features_cache is not None and graphql_entry is None:
+            tm_fetch_failed = True
 
     # 3. Refine fusion slugs using per-UniProt TM features
     _refine_fusion_slugs(gpcr_roster, enriched_entry, graphql_entry)
@@ -1267,8 +1316,12 @@ def analyze_oligomer(
             }
         )
 
+    # When the transmembrane fetch failed, every GPCR chain falls back to UNKNOWN
+    # status -- but that is a data gap, NOT evidence the chains are not GPCRs.
+    # Suppress the "are you sure these are GPCRs?" accusation in that case;
+    # ALERT_TM_DATA_UNAVAILABLE below is the only correct signal.
     unknown_chains = [c for c in all_gpcr_chains if c["7tm_status"] == TM_STATUS_UNKNOWN]
-    if unknown_chains:
+    if unknown_chains and not tm_fetch_failed:
         slugs = [f"Chain {c['chain_id']} ({c['slug']})" for c in unknown_chains]
         alerts.append(
             {
@@ -1278,6 +1331,25 @@ def analyze_oligomer(
                     f"{', '.join(slugs)}: NO transmembrane helices detected. "
                     "Are you sure these are GPCRs? (e.g. they might be large soluble ligands, antibodies). "
                     "If NOT, notify authors to add their prefixes to GPCR_SLUG_NEGATIVE_PREFIXES in config.py."
+                ),
+            }
+        )
+
+    # The transmembrane gate could not run (feature fetch failed, no cached copy),
+    # so the classification used the unfiltered roster: a peptide ligand or
+    # single-pass partner carrying a GPCR slug may have been counted as a receptor
+    # protomer. Rather than let that pass silently, route to a curator. Promoted to
+    # a gating warning by inject_oligomer_alerts.
+    if tm_fetch_failed:
+        alerts.append(
+            {
+                "type": ALERT_TM_DATA_UNAVAILABLE,
+                "message": (
+                    f"[{ALERT_TM_DATA_UNAVAILABLE}] at 'receptor_info': transmembrane-helix "
+                    f"data could not be fetched, so the receptor-chain count is unverified "
+                    f"and the oligomer classification ({classification}) is low-confidence. "
+                    f"A peptide ligand or partner chain may be miscounted as a receptor; "
+                    f"confirm the receptor chains manually."
                 ),
             }
         )
@@ -1348,9 +1420,13 @@ def analyze_oligomer(
     if assembly_alert:
         alerts.append(assembly_alert)
 
-    # 10. Write output
+    # 10. Write output. ``receptor_count`` and ``tm_data_available`` expose the
+    # transmembrane-gated count and whether it could be verified, so the report
+    # and any future receptor-level cross-check read one clean path.
     best_run_data["oligomer_analysis"] = {
         "classification": classification,
+        "receptor_count": len(classify_roster),
+        "tm_data_available": not tm_fetch_failed,
         "all_gpcr_chains": all_gpcr_chains,
         "primary_protomer_suggestion": suggestion,
         "assembly_cross_check": assembly_info,
