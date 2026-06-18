@@ -692,6 +692,22 @@ class TestLowConfidenceConsensus:
         best = {"structure_info": {"state": {"value": "active", "confidence": "High"}}}
         assert flag_low_confidence_consensus(best, frozenset({"Low"})) == []
 
+    def test_low_confidence_oligomeric_state_flagged(self) -> None:
+        from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
+
+        best = {"receptor_info": {"oligomeric_state": {"value": "homo-dimer", "confidence": "Low"}}}
+        flags = flag_low_confidence_consensus(best, frozenset({"Low"}))
+        assert any(
+            f["path"] == "receptor_info.oligomeric_state.value" and f.get("needs_review")
+            for f in flags
+        )
+
+    def test_high_confidence_oligomeric_state_not_flagged(self) -> None:
+        from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
+
+        best = {"receptor_info": {"oligomeric_state": {"value": "monomer", "confidence": "High"}}}
+        assert flag_low_confidence_consensus(best, frozenset({"Low"})) == []
+
     def test_low_confidence_ligand_role_flagged(self) -> None:
         from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
 

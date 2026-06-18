@@ -414,6 +414,10 @@ def flag_low_confidence_consensus(
     if _is_low(state):
         flags.append(_record("structure_info.state.value", state))
 
+    oligomeric_state = (best_run_data.get("receptor_info") or {}).get("oligomeric_state")
+    if _is_low(oligomeric_state):
+        flags.append(_record("receptor_info.oligomeric_state.value", oligomeric_state))
+
     for idx, lig in enumerate(best_run_data.get("ligands") or []):
         if isinstance(lig, dict) and _is_low(lig.get("role")):
             key = _list_item_identity(lig, "chem_comp_id", idx)

@@ -16,6 +16,7 @@ from gpcr_tools.config import (
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
     ALERT_NO_GPCR,
+    ALERT_OLIGOMER_DISAGREEMENT,
     ALERT_SUSPICIOUS_7TM,
     ALERT_TM_DATA_UNAVAILABLE,
     TM_STATUS_INCOMPLETE,
@@ -57,6 +58,7 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
             ALERT_SUSPICIOUS_7TM,
             ALERT_NO_GPCR,
             ALERT_TM_DATA_UNAVAILABLE,
+            ALERT_OLIGOMER_DISAGREEMENT,
         ):
             # The "at 'receptor_info'" prefix is a routing anchor so this alert
             # buckets under the receptor block during review. ensure_alert_prefix

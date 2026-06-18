@@ -293,3 +293,100 @@ def test_build_prompt_parts_fetch_success_distinguishes_receptor_from_peptide():
     joined = "".join(parts)
     assert '"R": "COMPLETE 7/7"' in joined
     assert '"P": "UNKNOWN 0/0"' in joined
+
+
+def _enriched_with_assemblies(assemblies):
+    return {"data": {"entry": {"rcsb_id": "TEST", "assemblies": assemblies}}}
+
+
+def test_author_assembly_reference_single_author_defined():
+    enriched = _enriched_with_assemblies(
+        [
+            {
+                "rcsb_assembly_container_identifiers": {"assembly_id": "1"},
+                "pdbx_struct_assembly": {
+                    "rcsb_details": "author_defined_assembly",
+                    "method_details": None,
+                    "rcsb_candidate_assembly": "Y",
+                },
+                "rcsb_struct_symmetry": [
+                    {
+                        "kind": "Global Symmetry",
+                        "oligomeric_state": "Hetero 5-mer",
+                        "stoichiometry": ["A1", "B1", "C1", "D1", "E1"],
+                    }
+                ],
+            }
+        ]
+    )
+    ref = prompt_builder.generate_author_assembly_reference("TEST", enriched)
+    assert "AUTHOR-DEPOSITED BIOLOGICAL ASSEMBLY" in ref
+    assert "reference only, NOT authoritative" in ref.replace("not", "NOT")
+    assert "Hetero 5-mer" in ref
+    assert "author-defined" in ref
+    # Stoichiometry renders as a clean [A1, B1, ...] list, not a Python list repr.
+    assert "[A1, B1, C1, D1, E1]" in ref
+    assert "['A1'" not in ref
+    # The reference block warns that a software-predicted / homo-N-mer assembly may
+    # reflect crystallographic packing rather than a biological oligomer, and that
+    # the model should defer to the paper.
+    assert "crystallographic packing" in ref
+    assert "defer to the paper" in ref
+
+
+def test_author_assembly_reference_lists_conflicting_assemblies():
+    # An author-defined monomer alongside a software (PISA) homo-dimer: BOTH must
+    # be listed, each labeled, so the model sees the conflict and judges itself.
+    enriched = _enriched_with_assemblies(
+        [
+            {
+                "rcsb_assembly_container_identifiers": {"assembly_id": "1"},
+                "pdbx_struct_assembly": {
+                    "rcsb_details": "author_defined_assembly",
+                    "method_details": None,
+                },
+                "rcsb_struct_symmetry": [
+                    {
+                        "kind": "Global Symmetry",
+                        "oligomeric_state": "Monomer",
+                        "stoichiometry": ["A1"],
+                    }
+                ],
+            },
+            {
+                "rcsb_assembly_container_identifiers": {"assembly_id": "2"},
+                "pdbx_struct_assembly": {
+                    "rcsb_details": "software_defined_assembly",
+                    "method_details": "PISA",
+                },
+                "rcsb_struct_symmetry": [
+                    {
+                        "kind": "Global Symmetry",
+                        "oligomeric_state": "Homo 2-mer",
+                        "stoichiometry": ["A2"],
+                    }
+                ],
+            },
+        ]
+    )
+    ref = prompt_builder.generate_author_assembly_reference("TEST", enriched)
+    assert "Monomer" in ref
+    assert "Homo 2-mer" in ref
+    assert "author-defined" in ref
+    assert "software-defined (PISA)" in ref
+
+
+def test_author_assembly_reference_empty_when_no_symmetry():
+    # No symmetry block -> nothing to show, so the prompt does not grow.
+    enriched = _enriched_with_assemblies(
+        [
+            {
+                "rcsb_assembly_container_identifiers": {"assembly_id": "1"},
+                "pdbx_struct_assembly": {"rcsb_details": "author_defined_assembly"},
+                "rcsb_struct_symmetry": [],
+            }
+        ]
+    )
+    assert prompt_builder.generate_author_assembly_reference("TEST", enriched) == ""
+    # Absent assemblies key entirely -> also empty.
+    assert prompt_builder.generate_author_assembly_reference("TEST", {}) == ""

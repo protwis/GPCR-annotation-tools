@@ -1085,6 +1085,40 @@ OLIGOMER_HOMOMER: str = "HOMOMER"
 OLIGOMER_HETEROMER: str = "HETEROMER"
 
 # ---------------------------------------------------------------------------
+# AI receptor-oligomeric-state enum (annotator/schema.py) -> receptor-level
+# (count, homo/hetero) expectation, used by the receptor-level cross-check.
+# ---------------------------------------------------------------------------
+
+# The AI enum values for the receptor's OWN oligomeric state (counts ONLY GPCR
+# receptor copies, not G-protein/arrestin/nanobody/peptide/ligand partners).
+# Mirrors annotator/schema.py receptor_info.oligomeric_state.value.enum.
+AI_OLIGOMER_MONOMER: str = "monomer"
+AI_OLIGOMER_HOMO_DIMER: str = "homo-dimer"
+AI_OLIGOMER_HOMO_TRIMER: str = "homo-trimer"
+AI_OLIGOMER_HOMO_TETRAMER: str = "homo-tetramer"
+AI_OLIGOMER_HETERO_DIMER: str = "hetero-dimer"
+AI_OLIGOMER_UNKNOWN: str = "unknown"
+
+# Kind labels for the receptor-level comparison: how many DISTINCT receptors.
+OLIGOMER_KIND_HOMO: str = "homo"
+OLIGOMER_KIND_HETERO: str = "hetero"
+
+# Each AI enum value maps to the receptor-level fact it asserts: the receptor
+# copy count and (for >=2 copies) whether the copies are the same receptor
+# (homo) or different receptors (hetero). ``monomer`` has a single copy so its
+# kind is irrelevant (None). ``unknown`` is intentionally absent -- it makes no
+# claim, so the cross-check never raises a disagreement against it.
+AI_OLIGOMER_TO_RECEPTOR_LEVEL: MappingProxyType[str, tuple[int, str | None]] = MappingProxyType(
+    {
+        AI_OLIGOMER_MONOMER: (1, None),
+        AI_OLIGOMER_HOMO_DIMER: (2, OLIGOMER_KIND_HOMO),
+        AI_OLIGOMER_HOMO_TRIMER: (3, OLIGOMER_KIND_HOMO),
+        AI_OLIGOMER_HOMO_TETRAMER: (4, OLIGOMER_KIND_HOMO),
+        AI_OLIGOMER_HETERO_DIMER: (2, OLIGOMER_KIND_HETERO),
+    }
+)
+
+# ---------------------------------------------------------------------------
 # Oligomer alert types
 # ---------------------------------------------------------------------------
 
@@ -1108,6 +1142,14 @@ ALERT_NO_GPCR: str = "NO_GPCR"
 # protomer), the chain's receptor status is treated as low-confidence and routed
 # to a curator. Promoted to a gating warning.
 ALERT_TM_DATA_UNAVAILABLE: str = "TM_DATA_UNAVAILABLE"
+# The AI's receptor oligomeric-state call disagrees with the deterministic
+# receptor-level classifier AT THE RECEPTOR LEVEL (both count GPCR receptors
+# only, never G-protein/peptide/ligand partners): e.g. the AI says 'monomer'
+# while the classifier resolved >=2 receptor chains (a possible crystallographic
+# copy vs a true oligomer), or the two disagree on copy count or homo/hetero.
+# The classification cannot be settled mechanically here, so route to a curator.
+# Promoted to a gating warning.
+ALERT_OLIGOMER_DISAGREEMENT: str = "OLIGOMER_DISAGREEMENT"
 
 # ---------------------------------------------------------------------------
 # 7TM statuses & detection constants

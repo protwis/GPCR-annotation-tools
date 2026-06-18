@@ -106,8 +106,71 @@ ANNOTATION_TOOL = types.Tool(
                                     "type": "string",
                                     "description": "The chain ID of the GPCR.",
                                 },
+                                "oligomeric_state": {
+                                    "type": "object",
+                                    "description": "Inferred oligomeric state of the GPCR RECEPTOR(S) themselves, with confidence and evidence.",
+                                    "properties": {
+                                        "value": {
+                                            "type": "string",
+                                            "description": (
+                                                "How many GPCR receptor copies form the biological unit, and whether they are the same or different receptors. "
+                                                "Count ONLY the GPCR receptor(s); do NOT count G-protein, arrestin, nanobody, antibody, peptide, or ligand partners — "
+                                                "they are not receptor protomers. Use the per-chain 7TM status and residue length in the polymer table to tell a true "
+                                                "7TM receptor from a non-receptor partner, and weigh the paper and the (reference-only) author biological assembly.\n"
+                                                "'monomer' = one receptor copy (a single receptor with a G-protein heterotrimer is still 'monomer' — the Gα/β/γ are partners, "
+                                                "not receptor copies, even when the author assembly is reported as a 'Hetero 5-mer').\n"
+                                                "'homo-dimer' / 'homo-trimer' / 'homo-tetramer' = two / three / four copies of the SAME receptor (e.g. a mGlu2 or CaSR receptor dimer is 'homo-dimer').\n"
+                                                "'hetero-dimer' = two DIFFERENT receptor subunits forming one obligate receptor (e.g. the GABA-B receptor, GBR1 + GBR2).\n"
+                                                "'unknown' = the receptor oligomeric state cannot be established from the paper or metadata — do not guess.\n"
+                                                "Distinguish a genuine biological oligomer from incidental crystallographic copies of a monomer; when the evidence does not settle it, prefer 'unknown' over a guess."
+                                            ),
+                                            "enum": [
+                                                "monomer",
+                                                "homo-dimer",
+                                                "homo-trimer",
+                                                "homo-tetramer",
+                                                "hetero-dimer",
+                                                "unknown",
+                                            ],
+                                        },
+                                        "confidence": {
+                                            "type": "string",
+                                            "description": "Confidence level of this inference.",
+                                            "enum": ["High", "Medium", "Low"],
+                                        },
+                                        "evidence": {
+                                            "type": "object",
+                                            "description": "The justification for the oligomeric-state assignment.",
+                                            "properties": {
+                                                "source": {
+                                                    "type": "string",
+                                                    "description": "The source of the evidence.",
+                                                    "enum": [
+                                                        "Paper",
+                                                        "PDB Metadata",
+                                                        "Both Paper and PDB Metadata",
+                                                    ],
+                                                },
+                                                "quote_or_path": {
+                                                    "type": "string",
+                                                    "description": "A direct quote from the paper or a JSON path from the metadata.",
+                                                },
+                                                "reasoning": {
+                                                    "type": "string",
+                                                    "description": "A brief defense explaining why the evidence supports the conclusion.",
+                                                },
+                                            },
+                                            "required": [
+                                                "source",
+                                                "quote_or_path",
+                                                "reasoning",
+                                            ],
+                                        },
+                                    },
+                                    "required": ["value", "confidence", "evidence"],
+                                },
                             },
-                            "required": ["uniprot_entry_name", "chain_id"],
+                            "required": ["uniprot_entry_name", "chain_id", "oligomeric_state"],
                         },
                         "ligands": {
                             "type": "array",

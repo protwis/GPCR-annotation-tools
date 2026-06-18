@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
+from types import MappingProxyType
 from typing import Any
 
 from gpcr_tools.annotator.detect_orchestrator import assemble_detect_block
@@ -72,6 +73,98 @@ def generate_chain_inventory_reminder(pdb_id: str, enriched_data: dict) -> str:
         lines.append(f"- Chain(s) {chain_str}: {desc}")
 
     return "\n".join(lines)
+
+
+# Human-readable origin labels for an assembly's ``pdbx_struct_assembly.rcsb_details``.
+# Anything not listed (or absent) renders with the raw value so an unexpected
+# origin is still shown rather than silently dropped.
+_ASSEMBLY_ORIGIN_LABELS: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "author_defined_assembly": "author-defined",
+        "author_and_software_defined_assembly": "author- and software-defined",
+        "software_defined_assembly": "software-defined",
+    }
+)
+
+
+def _assembly_origin_label(pdbx_struct_assembly: dict) -> str:
+    """Render an assembly's origin (author vs software) for the reference line.
+
+    Appends the software method (e.g. ``PISA``) when present so a conflicting
+    software-predicted assembly is visibly distinguished from the author's.
+    """
+    details = pdbx_struct_assembly.get("rcsb_details")
+    label = _ASSEMBLY_ORIGIN_LABELS.get(details) if isinstance(details, str) else None
+    if not label:
+        label = str(details) if details else "unspecified origin"
+    method = pdbx_struct_assembly.get("method_details")
+    if method:
+        return f"{label} ({method})"
+    return label
+
+
+def generate_author_assembly_reference(pdb_id: str, enriched_data: dict) -> str:
+    """Render the author-deposited biological assembly as a reference line.
+
+    One structure-level block (not per chain) listing every deposited biological
+    assembly with its oligomeric state, stoichiometry, and origin label
+    (author-defined vs software, e.g. PISA). ALL assemblies are listed -- when
+    they genuinely conflict (an author-defined monomer alongside a software
+    homo-dimer) the model sees the conflict and judges for itself, rather than
+    being handed a single pre-chosen answer.
+
+    Framed explicitly as reference-only and NOT authoritative: the assembly
+    counts every chain (so a receptor + G-protein complex reads as a higher-order
+    "Hetero N-mer" even though the receptor itself is a monomer). All data comes
+    from the enriched JSON -- no network call. Returns ``""`` when no assembly
+    with a symmetry block is present, so an ordinary structure's prompt only
+    grows when there is something to show.
+    """
+    entry = _get_entry(enriched_data)
+    assemblies = [a for a in (entry.get("assemblies") or []) if isinstance(a, dict)]
+
+    rows: list[str] = []
+    for asm in assemblies:
+        symmetry_blocks = [
+            s for s in (asm.get("rcsb_struct_symmetry") or []) if isinstance(s, dict)
+        ]
+        if not symmetry_blocks:
+            continue
+        origin = _assembly_origin_label(asm.get("pdbx_struct_assembly") or {})
+        for sym in symmetry_blocks:
+            state = sym.get("oligomeric_state")
+            if not state:
+                continue
+            stoich = sym.get("stoichiometry")
+            kind = sym.get("kind")
+            parts = [f"{state}"]
+            if stoich:
+                # ``stoichiometry`` is a list[str] (e.g. ['A1','B1']) -- render it
+                # as ``[A1, B1]`` rather than the raw Python list repr.
+                if isinstance(stoich, list):
+                    parts.append("[" + ", ".join(str(s) for s in stoich) + "]")
+                else:
+                    parts.append(f"{stoich}")
+            if kind:
+                parts.append(f"{kind}")
+            rows.append(f"- {', '.join(parts)} [{origin}]")
+
+    if not rows:
+        return ""
+
+    header = (
+        "### AUTHOR-DEPOSITED BIOLOGICAL ASSEMBLY (reference only, NOT authoritative)\n"
+        f"From the structure authors' biological assembly deposited in the PDB for {pdb_id}. "
+        "This is reference information to inform your own judgment, not the answer. It counts "
+        "ALL chains (so a receptor + G-protein complex is reported as a higher-order complex "
+        "even though the receptor itself is a monomer), and it can be wrong in either "
+        "direction. A 'Homo N-mer' or software-predicted (e.g. PISA) assembly often "
+        "reflects crystallographic packing rather than a true biological oligomer, so do "
+        "NOT treat it as evidence that the receptor is an oligomer — defer to the paper. "
+        "When more than one assembly is listed and they conflict, weigh them "
+        "against the polymer table and the paper and decide for yourself:"
+    )
+    return header + "\n" + "\n".join(rows)
 
 
 def enhanced_simplify_pdb_json(
@@ -302,6 +395,15 @@ def build_prompt_parts(
     simplified = enhanced_simplify_pdb_json(enriched_data, tm_by_chain=tm_by_chain)
     parts.append(json.dumps(simplified, indent=2))
     parts.append("\n\n")
+
+    # 5a. Author-deposited biological assembly, as a structure-level reference line
+    # for the receptor oligomeric-state call (reference only, not authoritative).
+    # Nothing is appended when no assembly carries a symmetry block, so an ordinary
+    # structure's prompt only grows when there is something to show.
+    assembly_reference = generate_author_assembly_reference(pdb_id, enriched_data)
+    if assembly_reference:
+        parts.append(assembly_reference)
+        parts.append("\n\n")
 
     # 5b. Detector evidence (advisory detect signals only). No advisory signals
     # -> nothing appended, so an ordinary structure's prompt is byte-identical.

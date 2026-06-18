@@ -71,6 +71,11 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 
     receptor_chain = sanitize_value(r_info.get("chain_id"))
     receptor_uniprot = sanitize_value(r_info.get("uniprot_entry_name"))
+    # NOTE: receptor_info.oligomeric_state is captured in the aggregated JSON but is
+    # intentionally NOT yet exported to any CSV column or structure note. Adding it
+    # requires the four-place CSV schema lockstep (CSV_SCHEMA in config.py,
+    # transform_for_csv here, test_csv_writer.py, and the README output table); it is
+    # deferred to a dedicated change so this stays a minimal addition.
 
     # ── Truncation + orphaned-ligand radar ─────────────────────────
     ligand_chains = collect_ligand_chains(data.get("ligands") or [])

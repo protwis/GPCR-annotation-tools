@@ -74,6 +74,15 @@
     },
     "receptor_info": {
         "uniprot_entry_name": "ts1r2_human",
-        "chain_id": "A"
+        "chain_id": "A",
+        "oligomeric_state": {
+            "value": "hetero-dimer",
+            "confidence": "High",
+            "evidence": {
+                "source": "Both Paper and PDB Metadata",
+                "quote_or_path": "the structure of the human sweet receptor, an obligate heterodimer of the taste receptor subunits TAS1R2 and TAS1R3.",
+                "reasoning": "The sweet taste receptor is an obligate heterodimer of two DIFFERENT receptor subunits, TAS1R2 (chain A) and TAS1R3 (chain B); both are complete 7TM receptor chains, so the receptor oligomeric state is hetero-dimer."
+            }
+        }
     }
 }

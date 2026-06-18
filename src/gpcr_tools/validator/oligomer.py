@@ -17,6 +17,7 @@ import re
 from typing import Any
 
 from gpcr_tools.config import (
+    AI_OLIGOMER_TO_RECEPTOR_LEVEL,
     ALERT_7TM_UPGRADE,
     ALERT_ASSEMBLY_MISMATCH,
     ALERT_CHAIN_ID_OVERRIDDEN,
@@ -25,6 +26,7 @@ from gpcr_tools.config import (
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
     ALERT_NO_GPCR,
+    ALERT_OLIGOMER_DISAGREEMENT,
     ALERT_PREFIX_FUSION_NOTE,
     ALERT_PREFIX_MISSED_POLYMER,
     ALERT_PROTOMER_IN_AUXILIARY,
@@ -38,6 +40,8 @@ from gpcr_tools.config import (
     GPCR_SLUG_NEGATIVE_PREFIXES,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
+    OLIGOMER_KIND_HETERO,
+    OLIGOMER_KIND_HOMO,
     OLIGOMER_MONOMER,
     OLIGOMER_NO_GPCR,
     TM_COVERAGE_THRESHOLD,
@@ -798,6 +802,102 @@ def _reconcile_assembly_consistency(
 
 
 # ---------------------------------------------------------------------------
+# AI-vs-classifier receptor-level cross-check
+# ---------------------------------------------------------------------------
+
+
+def _classifier_receptor_level(
+    classification: str,
+    receptor_count: int,
+) -> tuple[int, str | None] | None:
+    """Reduce the deterministic classifier to a (count, kind) receptor-level fact.
+
+    Counts GPCR RECEPTORS only -- the classifier already excludes
+    G-protein/peptide/ligand partners via the transmembrane gate, so this never
+    leaks a partner into the count. ``MONOMER`` -> ``(1, None)``;
+    ``HOMOMER`` -> ``(count, "homo")``; ``HETEROMER`` -> ``(count, "hetero")``.
+    Returns ``None`` for ``NO_GPCR`` (an empty roster already routes via its own
+    alert -- comparing it here would double-flag).
+    """
+    if classification == OLIGOMER_MONOMER:
+        return (1, None)
+    if classification == OLIGOMER_HOMOMER:
+        return (receptor_count, OLIGOMER_KIND_HOMO)
+    if classification == OLIGOMER_HETEROMER:
+        return (receptor_count, OLIGOMER_KIND_HETERO)
+    return None
+
+
+def _reconcile_ai_oligomer(
+    ai_value: Any,
+    classification: str,
+    receptor_count: int,
+    tm_data_available: bool,
+) -> dict[str, Any] | None:
+    """Cross-check the AI's receptor oligomeric state against the classifier.
+
+    Compares RECEPTOR-LEVEL fact to RECEPTOR-LEVEL fact ONLY: both sides count
+    GPCR receptor copies, never G-protein/arrestin/nanobody/peptide/ligand
+    partners. (The whole RCSB biological assembly -- "Hetero 5-mer" for a
+    receptor+G-protein complex -- is deliberately NOT used here; comparing
+    against it would flag every receptor+transducer complex.)
+
+    Returns a routing alert dict when the two disagree, else ``None``. Stays
+    silent (returns ``None``) in three cases so it never floods the curator:
+
+    * The AI value is ``unknown`` or unrecognised -- it makes no receptor-level
+      claim, so there is nothing to contradict.
+    * ``tm_data_available`` is ``False`` -- the classifier's receptor count is
+      itself unverified (it already routes via ``TM_DATA_UNAVAILABLE``); raising
+      a second disagreement off an untrustworthy count would be a spurious flag.
+    * The classifier found ``NO_GPCR`` -- the empty roster already routes.
+
+    Agreement is exact on the receptor-level fact: same copy count, and (for
+    >=2 copies) same homo/hetero kind. Examples that AGREE (no route): AI
+    ``monomer`` with classifier MONOMER (a receptor + Gabg complex); AI
+    ``homo-dimer`` with classifier HOMOMER count 2 (a Class C receptor dimer);
+    AI ``hetero-dimer`` with classifier HETEROMER count 2 (GABA-B). Example that
+    ROUTES: AI ``monomer`` while the classifier resolved >=2 receptor chains
+    (a possible crystallographic copy vs a true oligomer -- a real ambiguity a
+    human should settle).
+    """
+    if not tm_data_available:
+        return None
+
+    expected = AI_OLIGOMER_TO_RECEPTOR_LEVEL.get(ai_value if isinstance(ai_value, str) else "")
+    if expected is None:
+        # ``unknown`` / missing / unrecognised: the AI asserts no receptor count.
+        return None
+
+    classifier_level = _classifier_receptor_level(classification, receptor_count)
+    if classifier_level is None:
+        # NO_GPCR (or an unmodelled classification): handled by its own alert.
+        return None
+
+    ai_count, ai_kind = expected
+    cls_count, cls_kind = classifier_level
+
+    # Receptor-level agreement: same copy count, and for >=2 copies the same
+    # homo/hetero kind. For a single copy the kind is irrelevant on both sides.
+    counts_match = ai_count == cls_count
+    kinds_match = ai_count < 2 or ai_kind == cls_kind
+    if counts_match and kinds_match:
+        return None
+
+    return {
+        "type": ALERT_OLIGOMER_DISAGREEMENT,
+        "message": (
+            f"[{ALERT_OLIGOMER_DISAGREEMENT}] at 'receptor_info': the annotated receptor "
+            f"oligomeric state ('{ai_value}') disagrees with the receptor-level classifier "
+            f"({classification}, {receptor_count} receptor chain(s)). Both count GPCR "
+            f"receptors only -- this is a true receptor-level discrepancy (e.g. a possible "
+            f"crystallographic copy vs a biological oligomer); confirm the receptor "
+            f"oligomeric state manually."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Protomer suggestion (5-rank framework)
 # ---------------------------------------------------------------------------
 
@@ -1419,6 +1519,23 @@ def analyze_oligomer(
     )
     if assembly_alert:
         alerts.append(assembly_alert)
+
+    # 9c. Receptor-level cross-check: compare the AI's receptor oligomeric state
+    # against the deterministic classifier AT THE RECEPTOR LEVEL (both count GPCR
+    # receptors only -- never the whole RCSB assembly, which would flag every
+    # receptor+G-protein complex). A disagreement (e.g. AI 'monomer' but the
+    # classifier resolved >=2 receptor chains) is a real ambiguity, so route it.
+    # Silent when the AI says 'unknown', when the count is TM-unverified (that
+    # already routes via TM_DATA_UNAVAILABLE), and in the normal agreeing case.
+    ai_oligomer_value = (receptor_info.get("oligomeric_state") or {}).get("value")
+    oligomer_disagreement = _reconcile_ai_oligomer(
+        ai_oligomer_value,
+        classification,
+        len(classify_roster),
+        tm_data_available=not tm_fetch_failed,
+    )
+    if oligomer_disagreement:
+        alerts.append(oligomer_disagreement)
 
     # 10. Write output. ``receptor_count`` and ``tm_data_available`` expose the
     # transmembrane-gated count and whether it could be verified, so the report

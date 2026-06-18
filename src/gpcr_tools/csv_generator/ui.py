@@ -21,8 +21,10 @@ from gpcr_tools.config import (
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
+    ALERT_OLIGOMER_DISAGREEMENT,
     ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
     OLIGOMER_MONOMER,
@@ -283,6 +285,8 @@ def _should_highlight_oligomer(oligo: dict, receptor_chain: str) -> bool:
         ALERT_MISSED_PROTOMER,
         ALERT_CHAIN_ID_OVERRIDDEN,
         ALERT_SUSPICIOUS_7TM,
+        ALERT_OLIGOMER_DISAGREEMENT,
+        ALERT_TM_DATA_UNAVAILABLE,
     }:
         return True
     if oligo.get("classification") in (OLIGOMER_HOMOMER, OLIGOMER_HETEROMER):
@@ -394,6 +398,8 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
                 ALERT_SUSPICIOUS_7TM: "bold yellow on red",
                 ALERT_MULTI_COPY_LIGAND: "bold yellow",
                 ALERT_PROTOMER_IN_AUXILIARY: "bold yellow",
+                ALERT_OLIGOMER_DISAGREEMENT: "bold red",
+                ALERT_TM_DATA_UNAVAILABLE: "bold red",
             }.get(atype) or "white"
             # Keep the "[TYPE]" label present exactly once and use the type
             # only to pick a style. Current validator messages already carry the

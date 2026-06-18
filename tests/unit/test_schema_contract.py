@@ -12,7 +12,7 @@ import importlib.resources
 from google.genai import types
 
 from gpcr_tools.annotator.schema import ANNOTATION_TOOL
-from gpcr_tools.config import SITE_REF_VALUES
+from gpcr_tools.config import AI_OLIGOMER_TO_RECEPTOR_LEVEL, AI_OLIGOMER_UNKNOWN, SITE_REF_VALUES
 
 
 def _ligand_item_properties() -> dict:
@@ -25,6 +25,12 @@ def _g_protein_properties() -> dict:
     """The g_protein object schema's properties, from the live tool object."""
     params = ANNOTATION_TOOL.function_declarations[0].parameters
     return params.properties["signaling_partners"].properties["g_protein"].properties
+
+
+def _receptor_info():
+    """The receptor_info object schema, from the live tool object."""
+    params = ANNOTATION_TOOL.function_declarations[0].parameters
+    return params.properties["receptor_info"]
 
 
 def _v5_prompt_text() -> str:
@@ -81,6 +87,60 @@ def test_g_protein_note_carries_sourcing_constraint() -> None:
     assert "sourcing requirement" in note_desc
     assert "specific composition details" in note_desc
     assert "paper or pdb metadata" in note_desc
+
+
+def test_receptor_oligomeric_state_enum_matches_config() -> None:
+    # The receptor oligomeric-state enum is the model-facing list; the
+    # AI-vs-classifier cross-check keys on these exact strings. The non-unknown
+    # members must equal the cross-check's mapping keys, plus 'unknown' (which the
+    # mapping intentionally omits because it asserts no count). A drift would make
+    # a model value the cross-check silently never recognises.
+    props = _receptor_info().properties
+    assert "oligomeric_state" in props
+    enum = props["oligomeric_state"].properties["value"].enum
+    assert enum is not None
+    assert len(enum) == len(set(enum))  # no duplicate members
+    assert set(enum) == set(AI_OLIGOMER_TO_RECEPTOR_LEVEL) | {AI_OLIGOMER_UNKNOWN}
+
+
+def test_receptor_oligomeric_state_mirrors_state_evidence_shape() -> None:
+    # The new field must mirror the structure_info.state shape: a value/confidence/
+    # evidence object, all three required, so it votes and renders like state.
+    oligo = _receptor_info().properties["oligomeric_state"]
+    assert oligo.type == types.Type.OBJECT
+    assert set(oligo.required or []) == {"value", "confidence", "evidence"}
+    assert oligo.properties["evidence"].type == types.Type.OBJECT
+    assert set(oligo.properties["evidence"].required or []) == {
+        "source",
+        "quote_or_path",
+        "reasoning",
+    }
+
+
+def test_receptor_oligomeric_state_description_counts_only_receptors() -> None:
+    # The field description must hardcode "count only the receptor(s)" with the
+    # baked-in examples, so the model never folds partners into the count.
+    desc = _receptor_info().properties["oligomeric_state"].properties["value"].description or ""
+    lower = desc.lower()
+    assert "do not count" in lower
+    assert "g-protein" in lower
+    # The three baked-in examples: receptor+G-protein -> monomer; GABA-B -> hetero;
+    # mGlu2/CaSR -> homo.
+    assert "monomer" in lower
+    assert "gaba-b" in lower
+    assert "hetero-dimer" in lower
+    assert ("mglu2" in lower) or ("casr" in lower)
+    assert "homo-dimer" in lower
+
+
+def test_v5_prompt_asks_for_receptor_oligomeric_state() -> None:
+    # The prompt must instruct the model to output the receptor's own oligomeric
+    # state counting only receptors, and surface the author assembly as reference.
+    lower = _v5_prompt_text().lower()
+    assert "oligomeric_state" in lower or "oligomeric state" in lower
+    assert "do not count" in lower
+    assert "author-deposited biological assembly" in lower
+    assert "reference" in lower
 
 
 def test_v5_note_carries_sourcing_constraint() -> None:

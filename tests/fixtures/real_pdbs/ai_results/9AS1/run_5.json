@@ -45,6 +45,15 @@
     },
     "receptor_info": {
         "uniprot_entry_name": "5ht2a_human",
-        "chain_id": "A"
+        "chain_id": "A",
+        "oligomeric_state": {
+            "value": "monomer",
+            "confidence": "High",
+            "evidence": {
+                "source": "Both Paper and PDB Metadata",
+                "quote_or_path": "we determined seven active state cryo-EM structures of the agonist-bound 5-HT2AR in complex with heterotrimeric Gq.",
+                "reasoning": "A single 5-HT2A receptor chain is bound to a Gq heterotrimer. The Galpha/beta/gamma subunits are signaling partners, not receptor protomers, so the receptor itself is a monomer even though the whole assembly counts several chains."
+            }
+        }
     }
 }

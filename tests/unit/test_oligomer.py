@@ -16,6 +16,12 @@ from typing import Any
 from unittest.mock import patch
 
 from gpcr_tools.config import (
+    AI_OLIGOMER_HETERO_DIMER,
+    AI_OLIGOMER_HOMO_DIMER,
+    AI_OLIGOMER_HOMO_TETRAMER,
+    AI_OLIGOMER_HOMO_TRIMER,
+    AI_OLIGOMER_MONOMER,
+    AI_OLIGOMER_UNKNOWN,
     ALERT_7TM_UPGRADE,
     ALERT_ASSEMBLY_MISMATCH,
     ALERT_CHAIN_ID_OVERRIDDEN,
@@ -24,6 +30,7 @@ from gpcr_tools.config import (
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
     ALERT_NO_GPCR,
+    ALERT_OLIGOMER_DISAGREEMENT,
     ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
     ALERT_TM_DATA_UNAVAILABLE,
@@ -45,6 +52,7 @@ from gpcr_tools.validator.oligomer import (
     _generate_alerts,
     _get_assembly_cross_check,
     _parse_oligomeric_count,
+    _reconcile_ai_oligomer,
     _reconcile_assembly_consistency,
     _suggest_primary_protomer,
     analyze_oligomer,
@@ -2120,3 +2128,270 @@ class TestTmFetchReliability:
         oligo = data["oligomer_analysis"]
         assert oligo["tm_data_available"] is False
         assert oligo["receptor_count"] == 2  # unfiltered: receptor + peptide both have slugs
+
+
+# ===================================================================
+# _reconcile_ai_oligomer — receptor-level AI-vs-classifier cross-check
+# ===================================================================
+
+
+class TestReconcileAiOligomer:
+    """Pure receptor-level cross-check: the AI's receptor oligomeric state vs the
+    deterministic classifier. Compares receptor count + homo/hetero kind ONLY --
+    never the whole RCSB assembly -- so a receptor + G-protein complex never
+    routes. Routes only on a true receptor-level disagreement."""
+
+    # --- The explicit mapping table: AI enum <-> classifier => agree (no alert) ---
+
+    def test_monomer_vs_monomer_agrees(self) -> None:
+        # Receptor + Gabg complex: classifier MONOMER (count 1), AI 'monomer'.
+        assert (
+            _reconcile_ai_oligomer(AI_OLIGOMER_MONOMER, OLIGOMER_MONOMER, 1, tm_data_available=True)
+            is None
+        )
+
+    def test_homo_dimer_vs_homomer_count_2_agrees(self) -> None:
+        # A Class C receptor dimer (mGlu2 / CaSR): classifier HOMOMER count 2.
+        assert (
+            _reconcile_ai_oligomer(
+                AI_OLIGOMER_HOMO_DIMER, OLIGOMER_HOMOMER, 2, tm_data_available=True
+            )
+            is None
+        )
+
+    def test_hetero_dimer_vs_heteromer_count_2_agrees(self) -> None:
+        # GABA-B (GBR1 + GBR2): classifier HETEROMER count 2.
+        assert (
+            _reconcile_ai_oligomer(
+                AI_OLIGOMER_HETERO_DIMER, OLIGOMER_HETEROMER, 2, tm_data_available=True
+            )
+            is None
+        )
+
+    def test_homo_trimer_vs_homomer_count_3_agrees(self) -> None:
+        assert (
+            _reconcile_ai_oligomer(
+                AI_OLIGOMER_HOMO_TRIMER, OLIGOMER_HOMOMER, 3, tm_data_available=True
+            )
+            is None
+        )
+
+    def test_homo_tetramer_vs_homomer_count_4_agrees(self) -> None:
+        assert (
+            _reconcile_ai_oligomer(
+                AI_OLIGOMER_HOMO_TETRAMER, OLIGOMER_HOMOMER, 4, tm_data_available=True
+            )
+            is None
+        )
+
+    # --- Disagreements that MUST route ---
+
+    def test_monomer_but_classifier_counts_two_routes(self) -> None:
+        # The crystallographic-copy case: AI says 'monomer' but the classifier
+        # resolved 2 receptor chains -> a real ambiguity, route it.
+        alert = _reconcile_ai_oligomer(
+            AI_OLIGOMER_MONOMER, OLIGOMER_HOMOMER, 2, tm_data_available=True
+        )
+        assert alert is not None
+        assert alert["type"] == ALERT_OLIGOMER_DISAGREEMENT
+        assert "receptor_info" in alert["message"]
+
+    def test_monomer_but_classifier_counts_four_routes(self) -> None:
+        # Four crystallographic copies of one receptor read as a monomer in biology.
+        alert = _reconcile_ai_oligomer(
+            AI_OLIGOMER_MONOMER, OLIGOMER_HOMOMER, 4, tm_data_available=True
+        )
+        assert alert is not None
+        assert alert["type"] == ALERT_OLIGOMER_DISAGREEMENT
+
+    def test_count_mismatch_routes(self) -> None:
+        # AI homo-dimer (2) vs classifier homomer count 3.
+        alert = _reconcile_ai_oligomer(
+            AI_OLIGOMER_HOMO_DIMER, OLIGOMER_HOMOMER, 3, tm_data_available=True
+        )
+        assert alert is not None
+        assert alert["type"] == ALERT_OLIGOMER_DISAGREEMENT
+
+    def test_kind_mismatch_same_count_routes(self) -> None:
+        # Same count (2) but the AI says hetero-dimer while the classifier read
+        # two copies of the SAME slug (HOMOMER) -> a real receptor-level conflict.
+        alert = _reconcile_ai_oligomer(
+            AI_OLIGOMER_HETERO_DIMER, OLIGOMER_HOMOMER, 2, tm_data_available=True
+        )
+        assert alert is not None
+        assert alert["type"] == ALERT_OLIGOMER_DISAGREEMENT
+
+    # --- Guards that MUST stay silent (never route) ---
+
+    def test_unknown_never_routes(self) -> None:
+        # The AI makes no receptor-level claim -> nothing to contradict.
+        assert (
+            _reconcile_ai_oligomer(AI_OLIGOMER_UNKNOWN, OLIGOMER_HOMOMER, 4, tm_data_available=True)
+            is None
+        )
+
+    def test_tm_data_unavailable_never_routes(self) -> None:
+        # The classifier count is itself unverified (it already routes via
+        # TM_DATA_UNAVAILABLE); a second disagreement off it would be spurious.
+        assert (
+            _reconcile_ai_oligomer(
+                AI_OLIGOMER_MONOMER, OLIGOMER_HOMOMER, 2, tm_data_available=False
+            )
+            is None
+        )
+
+    def test_no_gpcr_never_routes(self) -> None:
+        # The empty roster already routes via its own NO_GPCR alert.
+        assert (
+            _reconcile_ai_oligomer(AI_OLIGOMER_MONOMER, OLIGOMER_NO_GPCR, 0, tm_data_available=True)
+            is None
+        )
+
+    def test_missing_ai_value_never_routes(self) -> None:
+        # A null / unrecognised AI value asserts no count -> silent.
+        assert _reconcile_ai_oligomer(None, OLIGOMER_HOMOMER, 2, tm_data_available=True) is None
+        assert (
+            _reconcile_ai_oligomer("garbage", OLIGOMER_HOMOMER, 2, tm_data_available=True) is None
+        )
+
+
+class TestAnalyzeOligomerAiCrossCheck:
+    """End-to-end: the AI's receptor oligomeric state flows through analyze_oligomer
+    and the receptor-level cross-check attaches (or withholds) a routing alert."""
+
+    def _data_with_ai_oligomer(self, chain_id: str, value: str) -> dict[str, Any]:
+        return {
+            "receptor_info": {
+                "chain_id": chain_id,
+                "oligomeric_state": {"value": value, "confidence": "High"},
+            }
+        }
+
+    def _has_disagreement(self, oligo: dict[str, Any]) -> bool:
+        return any(a["type"] == ALERT_OLIGOMER_DISAGREEMENT for a in oligo["alerts"])
+
+    def test_receptor_plus_gprotein_monomer_does_not_route(self) -> None:
+        # The dominant corpus case: one receptor + Gabg. Classifier MONOMER, AI
+        # 'monomer' -> agree, no route. (This is the ~90% that MUST NOT route.)
+        enriched = _make_enriched_with_entities(
+            [
+                _make_entity("drd2_human", "A", length=400),
+                _make_entity("gnai1_human", "B", length=350),
+                _make_entity("gbb1_human", "C", length=340),
+                _make_entity("gbg2_human", "D", length=70),
+            ]
+        )
+        cache = _FakePolymerFeaturesCache()
+        cache.preload(
+            "TEST",
+            {
+                "polymer_entities": [
+                    _gql_entity_with_tm("A", tm_count=7),
+                    _gql_entity_with_tm("B", tm_count=0),
+                    _gql_entity_with_tm("C", tm_count=0),
+                    _gql_entity_with_tm("D", tm_count=0),
+                ]
+            },
+        )
+        data = self._data_with_ai_oligomer("A", AI_OLIGOMER_MONOMER)
+        analyze_oligomer("TEST", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["classification"] == OLIGOMER_MONOMER
+        assert oligo["receptor_count"] == 1
+        assert not self._has_disagreement(oligo)
+
+    def test_homodimer_agreement_does_not_route(self) -> None:
+        # Class C receptor homodimer; AI 'homo-dimer', classifier HOMOMER count 2.
+        enriched = _make_enriched_with_entities(
+            [
+                _make_entity("grm2_human", "A", length=400),
+                _make_entity("grm2_human", "B", length=400),
+            ]
+        )
+        cache = _FakePolymerFeaturesCache()
+        cache.preload(
+            "TEST",
+            {
+                "polymer_entities": [
+                    _gql_entity_with_tm("A", tm_count=7),
+                    _gql_entity_with_tm("B", tm_count=7),
+                ]
+            },
+        )
+        data = self._data_with_ai_oligomer("A", AI_OLIGOMER_HOMO_DIMER)
+        analyze_oligomer("TEST", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["classification"] == OLIGOMER_HOMOMER
+        assert oligo["receptor_count"] == 2
+        assert not self._has_disagreement(oligo)
+
+    def test_monomer_vs_two_receptor_chains_routes(self) -> None:
+        # The crystallographic-copy case: two real 7TM receptor chains of the same
+        # slug, but the AI read the biology as a single monomer -> route.
+        enriched = _make_enriched_with_entities(
+            [
+                _make_entity("opsd_bovin", "A", length=350),
+                _make_entity("opsd_bovin", "B", length=350),
+            ]
+        )
+        cache = _FakePolymerFeaturesCache()
+        cache.preload(
+            "TEST",
+            {
+                "polymer_entities": [
+                    _gql_entity_with_tm("A", tm_count=7),
+                    _gql_entity_with_tm("B", tm_count=7),
+                ]
+            },
+        )
+        data = self._data_with_ai_oligomer("A", AI_OLIGOMER_MONOMER)
+        analyze_oligomer("TEST", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["classification"] == OLIGOMER_HOMOMER
+        assert oligo["receptor_count"] == 2
+        assert self._has_disagreement(oligo)
+
+    def test_tm_data_unavailable_does_not_spuriously_route(self) -> None:
+        # receptor + peptide (both slug-bearing); the TM fetch fails so the
+        # classifier count is the unfiltered 2. The AI says 'monomer'. The count
+        # is untrustworthy and already routes via TM_DATA_UNAVAILABLE, so the
+        # cross-check must NOT add a second (spurious) disagreement.
+        enriched = _make_enriched_with_entities(
+            [
+                _make_entity("pth1r_human", "A", length=420),
+                _make_entity("pthy_human", "P", length=34),
+            ]
+        )
+        cache = _FakePolymerFeaturesCache()  # empty -> miss
+        data = self._data_with_ai_oligomer("A", AI_OLIGOMER_MONOMER)
+        with patch(
+            "gpcr_tools.validator.api_clients.fetch_polymer_features",
+            return_value=None,
+        ):
+            analyze_oligomer("TEST", data, enriched, polymer_features_cache=cache)
+        oligo = data["oligomer_analysis"]
+        assert oligo["tm_data_available"] is False
+        assert not self._has_disagreement(oligo)
+        # The TM_DATA_UNAVAILABLE alert is the correct (and only) routing signal here.
+        assert any(a["type"] == ALERT_TM_DATA_UNAVAILABLE for a in oligo["alerts"])
+
+    def test_disagreement_promotes_to_gating_warning(self) -> None:
+        # The routing alert must reach critical_warnings (block one-click accept)
+        # through the same inject path the other oligomer alerts use.
+        oligo = {
+            "alerts": [
+                {
+                    "type": ALERT_OLIGOMER_DISAGREEMENT,
+                    "message": (
+                        f"[{ALERT_OLIGOMER_DISAGREEMENT}] at 'receptor_info': "
+                        "receptor oligomeric state disagrees with the classifier."
+                    ),
+                }
+            ],
+            "all_gpcr_chains": [],
+        }
+        validation_data: dict[str, Any] = {}
+        inject_oligomer_alerts(oligo, validation_data)
+        warnings = validation_data["critical_warnings"]
+        assert any(ALERT_OLIGOMER_DISAGREEMENT in w for w in warnings)
+        assert any("receptor_info" in w for w in warnings)
