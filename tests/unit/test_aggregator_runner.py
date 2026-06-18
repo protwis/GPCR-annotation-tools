@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
-from gpcr_tools.aggregator.runner import _build_validation_report, _coupling_protomer
+from gpcr_tools.aggregator.runner import (
+    _build_validation_report,
+    _coupling_protomer,
+    _write_outputs,
+)
 from gpcr_tools.config import (
     CHIMERA_STATUS_NO_G_PROTEIN,
     CHIMERA_STATUS_NO_VALID_COMPARISONS,
@@ -430,3 +436,33 @@ class TestDetectReviewSignalsRouted:
         )
         report = self._report_with_signals([sig], monkeypatch)
         assert not any("cannot distinguish the subtype" in w for w in report["critical_warnings"])
+
+
+class TestVotingLogAlwaysWritten:
+    """The voting log is written for every PDB, including those with no
+    discrepancies, so aggregation always leaves an audit trace of the vote."""
+
+    def test_log_written_when_no_discrepancies(self, configure_paths):
+        report = {"critical_warnings": [], "algo_conflicts": [], "detector_notes": []}
+        result = _write_outputs("TEST1", {"receptor_info": {}}, [], report)
+        assert result.voting_log_path is not None
+        assert result.voting_log_path.is_file()
+        # A clean PDB's log is an explicit empty list (not a missing file), which
+        # yields an empty controversy map downstream -- so it never gates accept-all.
+        assert json.loads(result.voting_log_path.read_text()) == []
+
+    def test_log_carries_discrepancy_records_when_present(self, configure_paths):
+        report = {"critical_warnings": [], "algo_conflicts": [], "detector_notes": []}
+        discrepancies = [
+            {
+                "path": "ligands[RET]",
+                "best_run_value": None,
+                "majority_vote_value": {"chem_comp_id": "RET"},
+                "all_votes": {"role": {"agonist": 2}},
+                "needs_review": True,
+            }
+        ]
+        result = _write_outputs("TEST1", {"receptor_info": {}}, discrepancies, report)
+        assert result.voting_log_path is not None
+        logged = json.loads(result.voting_log_path.read_text())
+        assert logged == discrepancies

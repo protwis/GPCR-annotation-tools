@@ -110,6 +110,19 @@ def coerce_type(original: Any, new_str: str) -> Any:
 # ── Controversy Detection ───────────────────────────────────────────────
 
 
+def has_gating_controversy(controversies: dict) -> bool:
+    """Whether any controversy should disable the one-click accept-all gate.
+
+    Minority-omission advisories (records tagged ``gating=False``: an entity some
+    runs reported but the chosen run omitted) are surfaced to the curator for
+    review but are advisory only -- they do not block accept-all. Every other
+    controversy (a near-tie / genuine disagreement) still gates. The advisory
+    records remain in the controversy map so they stay visible during review;
+    this helper only excludes them from the accept-all gating decision.
+    """
+    return any(c.get("gating", True) for c in controversies.values())
+
+
 def has_downstream_controversy(path_prefix: str, controversies: dict) -> bool:
     """Check whether any controversy exists at or below the given path."""
     if not path_prefix:

@@ -160,6 +160,32 @@ class TestLoadPdbData:
         assert len(controversies) == 2
         assert "receptor_info.uniprot_entry_name" in controversies
 
+    def test_omission_advisory_kept_in_controversy_map(self, configure_paths):
+        """A minority-omission advisory (gating=False) must remain in the
+        controversy map so the curator still sees the omitted entity during
+        review -- it is advisory, not hidden. (The accept-all gate excludes it
+        separately, via has_gating_controversy.)"""
+        data_dir, _ = configure_paths
+
+        advisory = {
+            "path": "ligands[RET]",
+            "best_run_value": None,
+            "majority_vote_value": {"chem_comp_id": "RET"},
+            "all_votes": {"role": {"agonist": 2}},
+            "needs_review": True,
+            "gating": False,
+        }
+        log_dir = data_dir / "logs"
+        log_dir.mkdir(exist_ok=True)
+        with open(log_dir / "TEST1_voting_log.json", "w") as f:
+            json.dump([advisory], f)
+
+        from gpcr_tools.csv_generator.data_loader import load_pdb_data
+
+        _main, controversies, _validation = load_pdb_data("TEST1")
+        assert "ligands[RET]" in controversies
+        assert controversies["ligands[RET]"]["gating"] is False
+
 
 class TestUpdateProcessedLog:
     def test_creates_log(self, configure_paths):

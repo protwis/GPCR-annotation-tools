@@ -21,7 +21,10 @@ from gpcr_tools.csv_generator.data_loader import (
     update_processed_log,
 )
 from gpcr_tools.csv_generator.exceptions import CsvSchemaMismatchError
-from gpcr_tools.csv_generator.review_engine import review_toplevel_blocks
+from gpcr_tools.csv_generator.review_engine import (
+    has_gating_controversy,
+    review_toplevel_blocks,
+)
 from gpcr_tools.csv_generator.ui import (
     console,
     create_display_copy,
@@ -133,7 +136,10 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
             choices = ["r", "s", "f"]
             prompt_txt = "Select mode ([bold]r[/]eview, [bold]s[/]kip, [bold]f[/]ix issues only"
 
-            if not has_crit_issues and not controversies:
+            # Minority-omission advisories stay in `controversies` (so review mode
+            # still shows them) but must not block accept-all -- only gating
+            # controversies (near-ties / real disagreements) do.
+            if not has_crit_issues and not has_gating_controversy(controversies):
                 choices.insert(0, "a")
                 prompt_txt += ", [bold]a[/]ccept all"
 

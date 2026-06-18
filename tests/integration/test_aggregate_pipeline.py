@@ -275,11 +275,18 @@ class TestAggregatePdb:
 
 
 class TestVotingLog:
-    def test_no_voting_log_when_no_discrepancies(self, aggregate_workspace: Path) -> None:
-        """Identical runs -> no discrepancies -> no voting log."""
+    def test_voting_log_written_even_without_discrepancies(self, aggregate_workspace: Path) -> None:
+        """Identical runs -> no discrepancies -> the voting log is still written.
+
+        The log is an explicit empty-list record that aggregation ran and found no
+        disagreement (an audit trace, distinct from a missing file). An empty list
+        yields an empty controversy map downstream, so the clean PDB is not gated.
+        """
         with patch("gpcr_tools.validator.oligomer.scan_all_chains_7tm", return_value=({}, None)):
             result = aggregate_pdb("TEST1", skip_api_checks=True)
-        assert result.voting_log_path is None
+        assert result.voting_log_path is not None
+        assert result.voting_log_path.is_file()
+        assert json.loads(result.voting_log_path.read_text()) == []
 
     def test_voting_log_written_on_discrepancy(self, aggregate_workspace: Path) -> None:
         """Different runs -> discrepancies -> voting log written."""

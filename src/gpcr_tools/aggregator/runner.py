@@ -353,7 +353,14 @@ def _write_outputs(
     voting_log_dir.mkdir(parents=True, exist_ok=True)
     validation_dir.mkdir(parents=True, exist_ok=True)
 
-    voting_log_path = voting_log_dir / f"{pdb_id}_voting_log.json" if discrepancies else None
+    # The voting log is written for every PDB, not only when discrepancies exist.
+    # A clean PDB's log is an empty list -- an explicit, audit-friendly record that
+    # aggregation ran and found no disagreement, distinct from a missing file. Each
+    # discrepancy record already carries its per-field vote tallies (all_votes), so
+    # the log preserves the vote shape that drove every flagged field. The payload
+    # stays a list of records to honour the curate loader's contract; an empty list
+    # yields an empty controversy map downstream, so a clean PDB is not gated.
+    voting_log_path = voting_log_dir / f"{pdb_id}_voting_log.json"
     validation_path = validation_dir / f"{pdb_id}_validation.json"
 
     tmp_paths: list[str] = []
@@ -365,16 +372,13 @@ def _write_outputs(
         tmp_val = _write_temp_json(validation_path.parent, validation_report)
         tmp_paths.append(tmp_val)
 
-        tmp_log: str | None = None
-        if voting_log_path is not None:
-            tmp_log = _write_temp_json(voting_log_path.parent, discrepancies)
-            tmp_paths.append(tmp_log)
+        tmp_log = _write_temp_json(voting_log_path.parent, discrepancies)
+        tmp_paths.append(tmp_log)
 
         # Commit all at once
         os.replace(tmp_agg, str(aggregated_path))
         os.replace(tmp_val, str(validation_path))
-        if voting_log_path is not None and tmp_log is not None:
-            os.replace(tmp_log, str(voting_log_path))
+        os.replace(tmp_log, str(voting_log_path))
 
         # Clear committed paths from cleanup list
         tmp_paths.clear()

@@ -333,6 +333,33 @@ def find_discrepancies(
                     else {}
                 )
                 new_path = f"{path}[{item_key}]"
+                # A voted/majority list entity that the best run does not carry is
+                # dropped silently by the deepcopy aggregation: recursing on a None
+                # run item against a dict majority falls straight through and the
+                # omission leaves no trace. Surface it as an advisory record (a
+                # review marker, like the near-tie case below) so a curator can see
+                # an entity some runs reported but the chosen run omitted -- e.g. a
+                # ligand only a minority of runs found, or a minority site-label
+                # variant. Advisory only: this records but does not gate, and it
+                # never enters the validation report's critical_warnings.
+                #
+                # gating=False distinguishes this minority-omission advisory from a
+                # near-tie disagreement: both carry needs_review=True (so both stay
+                # visible to the curator), but only the near-tie record should
+                # disable one-click accept-all. The curator-side gate filters on this
+                # marker so the advisory is shown without blocking accept-all.
+                if run_item is None:
+                    discrepancies.append(
+                        {
+                            "path": new_path,
+                            "best_run_value": None,
+                            "majority_vote_value": maj_item,
+                            "all_votes": votes_item,
+                            "needs_review": True,
+                            "gating": False,
+                        }
+                    )
+                    continue
                 discrepancies.extend(find_discrepancies(run_item, maj_item, votes_item, new_path))
         return discrepancies
 

@@ -36,6 +36,12 @@ class TestFixtureFilesExist:
         sorted(set(REAL_PDB_IDS) - REAL_PDB_VOTING_LOG_IDS),
     )
     def test_voting_log_absent_where_expected(self, pdb_id: str) -> None:
+        # These assertions describe the committed static fixtures as they exist
+        # today, not freshly produced output. The aggregator now writes a voting
+        # log for EVERY PDB (a clean PDB's log is an explicit empty list, not a
+        # missing file). When these fixtures are regenerated through the pipeline,
+        # every PDB will gain a voting log, so REAL_PDB_VOTING_LOG_IDS and this
+        # absent/empty split must be updated to match the always-write convention.
         path = REAL_PDB_DIR / "logs" / f"{pdb_id}_voting_log.json"
         assert not path.exists(), f"Unexpected voting log found: {path}"
 
@@ -104,6 +110,11 @@ class TestWorkspaceFixtureLoading:
     def test_controversy_map_empty_for_fixtures_without_voting_logs(
         self, pdb_id: str, real_pdb_workspace: Path
     ) -> None:
+        # As above: this reflects the committed static fixtures, where these PDBs
+        # have no voting-log sidecar. Under the always-write convention a clean
+        # PDB's log is an empty list -> still an empty controversy map, so the
+        # downstream contract (empty map => not gated) is unchanged; only the set
+        # of fixtures that ship a log file will change on regeneration.
         from gpcr_tools.csv_generator.data_loader import load_pdb_data
 
         _, controversies, _ = load_pdb_data(pdb_id)

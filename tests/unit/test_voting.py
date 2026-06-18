@@ -550,6 +550,50 @@ class TestDiscrepancies:
         discs = find_discrepancies("string", {"a": 1}, {})
         assert discs == []
 
+    def test_majority_list_item_absent_from_best_run_is_advisory(self) -> None:
+        # A voted/majority ligand the best run does not carry must not vanish: the
+        # omission is surfaced as an advisory review marker (e.g. a ligand only a
+        # minority of runs reported, or a minority-only entity that the chosen run
+        # dropped). best_run_value is None and the majority item is preserved.
+        best = {"ligands": [{"chem_comp_id": "ATP", "role": "agonist"}]}
+        majority = {
+            "ligands": [
+                {"chem_comp_id": "ATP", "role": "agonist"},
+                {"chem_comp_id": "RET", "role": "agonist"},
+            ]
+        }
+        votes = {
+            "ligands": [
+                {"role": {"agonist": 10}},
+                {"role": {"agonist": 2}},
+            ]
+        }
+        discs = find_discrepancies(best, majority, votes)
+        advisory = [d for d in discs if d["path"] == "ligands[RET]"]
+        assert len(advisory) == 1
+        assert advisory[0]["best_run_value"] is None
+        assert advisory[0]["majority_vote_value"] == {"chem_comp_id": "RET", "role": "agonist"}
+        assert advisory[0]["all_votes"] == {"role": {"agonist": 2}}
+        assert advisory[0]["needs_review"] is True
+        # Tagged gating=False: this minority-omission advisory is shown to the
+        # curator but must not block one-click accept-all (unlike a near-tie).
+        assert advisory[0]["gating"] is False
+
+    def test_omission_advisory_is_review_marker_not_critical_warning(self) -> None:
+        # The omission advisory is a discrepancy record (a structured review
+        # marker), never a critical-warning string. critical_warnings is built
+        # independently in the validation report, so these records cannot gate
+        # one-click accept through that channel.
+        best = {"ligands": []}
+        majority = {"ligands": [{"chem_comp_id": "RET", "role": "agonist"}]}
+        votes = {"ligands": [{"role": {"agonist": 3}}]}
+        discs = find_discrepancies(best, majority, votes)
+        assert len(discs) == 1
+        # A discrepancy record is a dict, not a warning string.
+        assert isinstance(discs[0], dict)
+        assert discs[0]["path"] == "ligands[RET]"
+        assert discs[0]["best_run_value"] is None
+
 
 # ===================================================================
 # Utility: _first_list_entry
