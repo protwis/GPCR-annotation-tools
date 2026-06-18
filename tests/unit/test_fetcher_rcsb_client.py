@@ -46,15 +46,21 @@ def test_valid_pdb_is_written(_sleep, configure_paths) -> None:
 
 
 @patch("gpcr_tools.fetcher.rcsb_client.time.sleep")
-def test_partial_data_with_errors_is_kept(_sleep, configure_paths) -> None:
-    """HTTP 200 with BOTH a populated entry and a non-fatal errors[] must keep
-    the usable entry, not discard the whole structure."""
+def test_partial_data_with_errors_is_not_persisted(_sleep, configure_paths) -> None:
+    """HTTP 200 with BOTH a populated entry AND a top-level errors[] is a PARTIAL
+    response (a sub-resolver failed): the entry is missing fields it would
+    normally carry. Persisting it would freeze that partial metadata as a
+    complete record, so it must be treated as transient — return None and write
+    nothing, leaving the entry to be re-fetched on the next run."""
+    from gpcr_tools.config import get_config
     from gpcr_tools.fetcher.rcsb_client import fetch_single_pdb
 
     payload = {"data": {"entry": {"rcsb_id": "7W55"}}, "errors": [{"message": "soft"}]}
     result = fetch_single_pdb("7W55", session=_session_returning(payload))
 
-    assert result == payload
+    assert result is None
+    raw_path = get_config().raw_pdb_json_dir / "7W55.json"
+    assert not raw_path.exists()
 
 
 @patch("gpcr_tools.fetcher.rcsb_client.time.sleep")

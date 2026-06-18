@@ -126,7 +126,7 @@ def aggregate_workspace(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path
     (contract_dir / "storage_contract.json").write_text(
         json.dumps(
             {
-                "storage_contract_version": 1,
+                "storage_contract_version": 2,
                 "created_by": "test",
                 "created_at_utc": "2026-01-01T00:00:00+00:00",
             }
@@ -204,7 +204,7 @@ class TestAggregatePdb:
         report = json.loads(result.validation_path.read_text())
         assert "critical_warnings" in report
         assert "algo_conflicts" in report
-        assert "algo_notes" in report
+        assert "detector_notes" in report
         assert "chimera_score" in report
         assert "chimera_status" in report
         assert "timestamp" in report
@@ -232,6 +232,32 @@ class TestAggregatePdb:
         assert result.success is False
         assert "Enriched data" in (result.error or "")
 
+    def test_incomplete_enrichment_refused_before_validation(
+        self, aggregate_workspace: Path
+    ) -> None:
+        # An enrichment stamped with the top-level _enrich_incomplete marker (written
+        # during a transient API gap) must NOT be aggregated: consuming it would turn
+        # an unresolved field into an affirmative answer (e.g. a missing slug -> "no
+        # GPCR"). aggregate_pdb refuses with the re-run-fetch message and never reaches
+        # receptor / oligomer validation, so no aggregated output is written.
+        ai_dir = aggregate_workspace / "ai_results" / "INCOMPLETE1"
+        ai_dir.mkdir(parents=True)
+        (ai_dir / "run_00.json").write_text(json.dumps(_make_ai_run()))
+        # The marker lives at the top level, OUTSIDE data.entry.
+        enriched = {"_enrich_incomplete": True, "data": {"entry": _make_enriched_entry()}}
+        (aggregate_workspace / "enriched" / "INCOMPLETE1.json").write_text(json.dumps(enriched))
+
+        with patch(
+            "gpcr_tools.aggregator.runner.analyze_oligomer",
+            side_effect=AssertionError("validation must not run on an incomplete enrichment"),
+        ):
+            result = aggregate_pdb("INCOMPLETE1", skip_api_checks=True)
+
+        assert result.success is False
+        assert "re-run fetch" in (result.error or "")
+        assert result.aggregated_path is None
+        assert not (aggregate_workspace / "aggregated" / "INCOMPLETE1.json").exists()
+
     def test_ground_truth_injected(self, aggregate_workspace: Path) -> None:
         with patch("gpcr_tools.validator.oligomer.scan_all_chains_7tm", return_value=({}, None)):
             result = aggregate_pdb("TEST1", skip_api_checks=True)
@@ -249,11 +275,18 @@ class TestAggregatePdb:
 
 
 class TestVotingLog:
-    def test_no_voting_log_when_no_discrepancies(self, aggregate_workspace: Path) -> None:
-        """Identical runs -> no discrepancies -> no voting log."""
+    def test_voting_log_written_even_without_discrepancies(self, aggregate_workspace: Path) -> None:
+        """Identical runs -> no discrepancies -> the voting log is still written.
+
+        The log is an explicit empty-list record that aggregation ran and found no
+        disagreement (an audit trace, distinct from a missing file). An empty list
+        yields an empty controversy map downstream, so the clean PDB is not gated.
+        """
         with patch("gpcr_tools.validator.oligomer.scan_all_chains_7tm", return_value=({}, None)):
             result = aggregate_pdb("TEST1", skip_api_checks=True)
-        assert result.voting_log_path is None
+        assert result.voting_log_path is not None
+        assert result.voting_log_path.is_file()
+        assert json.loads(result.voting_log_path.read_text()) == []
 
     def test_voting_log_written_on_discrepancy(self, aggregate_workspace: Path) -> None:
         """Different runs -> discrepancies -> voting log written."""

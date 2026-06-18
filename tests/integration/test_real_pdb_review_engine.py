@@ -154,7 +154,7 @@ class TestFixModeTrivialAutoResolve:
         Block behavior in fix_mode:
         - structure_info: no controversy, no warnings → auto-accept (no prompt)
         - receptor_info: no controversy, no warnings → auto-accept (no prompt)
-        - ligands: controversy on ligands[None].name (significant) → prompts
+        - ligands: controversy on ligands[__keyless__:cagrilintide backbone].name (significant) → prompts
         - signaling_partners: no controversy, no warnings → auto-accept (no prompt)
         - auxiliary_proteins: controversy on source (trivial) → auto-resolve + accept (no Confirm prompt)
         - key_findings: no controversy, no warnings → auto-accept (no prompt)

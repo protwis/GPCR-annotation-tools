@@ -26,6 +26,7 @@ dependencies = [
     "rich>=13.0",
     "tqdm>=4.60",
     "requests>=2.31",
+    "gemmi>=0.7.5",  # detect-stage structure geometry (burial / pocket contacts)
 ]
 
 [project.optional-dependencies]
@@ -36,12 +37,12 @@ dev = [
     "mypy>=1.10",
     "types-requests>=2.31",
     "types-tqdm>=4.60",
-    "google-genai",
+    "google-genai>=1.68.0",  # detect_orchestrator relies on Tool.model_copy(deep=True) schema mutation
     "PyMuPDF",
     "lxml",
 ]
 annotate = [
-    "google-genai",
+    "google-genai>=1.68.0",  # detect_orchestrator relies on Tool.model_copy(deep=True) schema mutation
 ]
 papers = [
     "PyMuPDF",

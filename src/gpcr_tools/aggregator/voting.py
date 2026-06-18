@@ -11,6 +11,7 @@ from collections import Counter, defaultdict
 from typing import Any
 
 from gpcr_tools.config import (
+    CASE_FOLD_NAME_FIELDS,
     GROUND_TRUTH_PATHS,
     LIST_ITEM_KEY_FIELDS,
     SOFT_FIELD_KEYS,
@@ -42,8 +43,8 @@ def _first_list_entry(container: Any, key: str) -> dict[str, Any]:
 def extract_ai_g_protein(data: dict[str, Any]) -> str | None:
     """Safely extract the G-protein alpha-subunit UniProt entry name.
 
-    Uses the None-safe ``(x.get(k) or {})`` chain at every level
-    (Blood Lesson 1).
+    Uses the None-safe ``(x.get(k) or {})`` chain at every level so a missing
+    or null intermediate node never raises.
     """
     signaling: dict[str, Any] = data.get("signaling_partners") or {}
     g_protein: dict[str, Any] = signaling.get("g_protein") or {}
@@ -65,6 +66,33 @@ def _resolve_key_field(path: str) -> str | None:
     return None
 
 
+def _case_only_canonical(values: list[Any]) -> str | None:
+    """Return one canonical casing when *values* are a pure case-only variation.
+
+    The runs are a pure-case variation when every value is a string and they
+    all ``casefold()`` to a single bucket — i.e. the runs agree on the entity
+    and disagree only on capitalisation ("Nanobody" vs "nanobody"). Returns
+    ``None`` when that does not hold, so a genuine spelling difference (one run
+    saying "CholesterolBase" against "Cholesterol") still folds to more than one
+    bucket and is left to surface as a real disagreement.
+
+    The chosen casing is deterministic so the displayed name does not drift
+    between runs: most-common original spelling, then fewest uppercase letters,
+    then lexicographic.
+    """
+    if not values or not all(isinstance(v, str) for v in values):
+        return None
+    if len({v.casefold() for v in values}) != 1:
+        return None
+    counts = Counter(values)
+    return str(
+        min(
+            counts,
+            key=lambda s: (-counts[s], sum(1 for ch in s if ch.isupper()), s),
+        )
+    )
+
+
 def get_majority_votes(
     values: list[Any],
     path: str = "",
@@ -74,7 +102,7 @@ def get_majority_votes(
     Returns ``(majority_data, all_votes_data)`` where *all_votes_data*
     preserves the per-value vote counts for downstream discrepancy reporting.
 
-    Blood Lesson 5 — Truthiness:
+    Truthiness:
         When checking if a majority item should be appended we use
         ``if maj_item is not None`` — an empty dict ``{}`` is a valid vote.
     """
@@ -114,7 +142,7 @@ def get_majority_votes(
                 items = grouped_items[group_key]
                 group_path = f"{path}[{group_key}]"
                 maj_item, counts_item = get_majority_votes(items, group_path)
-                # Blood Lesson 5: empty dict {} is valid
+                # Use `is not None` — an empty dict {} is a valid vote
                 if maj_item is not None:
                     majority_list.append(maj_item)
                     counts_list.append(counts_item)
@@ -137,6 +165,15 @@ def get_majority_votes(
         return majority_dict, counts_dict
 
     # --- Scalar branch ---
+    # A name field whose values differ only by letter case is one entity the
+    # runs agree on. Collapse the vote to a single canonical-casing candidate
+    # so the pure-case split is never read as a near-tie. A genuine spelling
+    # difference folds to more than one bucket and is left to vote normally.
+    if key_name in CASE_FOLD_NAME_FIELDS:
+        canonical = _case_only_canonical(values)
+        if canonical is not None:
+            return canonical, {canonical: len(values)}
+
     try:
         counter = Counter(values)
         most_common = counter.most_common(1)[0][0]
@@ -296,11 +333,55 @@ def find_discrepancies(
                     else {}
                 )
                 new_path = f"{path}[{item_key}]"
+                # A voted/majority list entity that the best run does not carry is
+                # dropped silently by the deepcopy aggregation: recursing on a None
+                # run item against a dict majority falls straight through and the
+                # omission leaves no trace. Surface it as an advisory record (a
+                # review marker, like the near-tie case below) so a curator can see
+                # an entity some runs reported but the chosen run omitted -- e.g. a
+                # ligand only a minority of runs found, or a minority site-label
+                # variant. Advisory only: this records but does not gate, and it
+                # never enters the validation report's critical_warnings.
+                #
+                # gating=False distinguishes this minority-omission advisory from a
+                # near-tie disagreement: both carry needs_review=True (so both stay
+                # visible to the curator), but only the near-tie record should
+                # disable one-click accept-all. The curator-side gate filters on this
+                # marker so the advisory is shown without blocking accept-all.
+                if run_item is None:
+                    discrepancies.append(
+                        {
+                            "path": new_path,
+                            "best_run_value": None,
+                            "majority_vote_value": maj_item,
+                            "all_votes": votes_item,
+                            "needs_review": True,
+                            "gating": False,
+                        }
+                    )
+                    continue
                 discrepancies.extend(find_discrepancies(run_item, maj_item, votes_item, new_path))
         return discrepancies
 
     if majority_data is not None:
         if best_run_data != majority_data:
+            # A name leaf whose best-run value differs from the majority value
+            # ONLY by letter case is not a real disagreement: the best run was
+            # selected on the whole structure and may carry a minority
+            # capitalisation of a name it otherwise agrees on. Skip it. This is
+            # independent of how the best run is chosen, so it catches the
+            # selected-value-differs case that the vote-collapse alone does not.
+            # The skip is confined to this differing-value branch on purpose:
+            # when the values are equal the vote shape must still be checked
+            # below, so a genuine near-tie between distinct name wordings (which
+            # do not fold to one bucket) keeps being surfaced for review.
+            if (
+                current_key in CASE_FOLD_NAME_FIELDS
+                and isinstance(best_run_data, str)
+                and isinstance(majority_data, str)
+                and best_run_data.casefold() == majority_data.casefold()
+            ):
+                return discrepancies
             discrepancies.append(
                 {
                     "path": path,
@@ -359,6 +440,10 @@ def flag_low_confidence_consensus(
     state = (best_run_data.get("structure_info") or {}).get("state")
     if _is_low(state):
         flags.append(_record("structure_info.state.value", state))
+
+    oligomeric_state = (best_run_data.get("receptor_info") or {}).get("oligomeric_state")
+    if _is_low(oligomeric_state):
+        flags.append(_record("receptor_info.oligomeric_state.value", oligomeric_state))
 
     for idx, lig in enumerate(best_run_data.get("ligands") or []):
         if isinstance(lig, dict) and _is_low(lig.get("role")):

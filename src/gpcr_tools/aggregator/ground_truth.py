@@ -38,11 +38,11 @@ def inject_ground_truth(
 ) -> None:
     """Overwrite objective metadata in *best_run_data* from *enriched_entry*.
 
-    Blood Lesson 1 — None-safety:
+    None-safety:
         Every extraction uses ``(x.get(k) or {})`` / ``or []`` / ``or ""``.
         Never ``.get(k, {})`` on external data.
 
-    Blood Lesson 5 — Truthiness:
+    Truthiness:
         ``enriched_entry`` validity is checked with ``is None`` by the caller
         (enriched_loader).  Here we trust it is a dict.
     """

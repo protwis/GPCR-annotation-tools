@@ -4,32 +4,44 @@ Classifies GPCR oligomeric state (monomer/homomer/heteromer), scans chains
 for 7TM completeness, suggests a primary protomer, generates alerts for
 AI hallucinations and missed protomers, and applies smart chain_id overrides.
 
-Blood Lesson 1 — None-safety:
-    ``(inst.get("rcsb_polymer_entity_instance_container_identifiers") or {}).get("auth_asym_id")``
-Blood Lesson 3 — Warning format:
-    Alert messages follow ``f"[{ALERT_TYPE}] at 'oligomer_analysis': description"``.
-Blood Lesson 4 — Magic strings:
-    All alert types, classifications, and TM statuses are constants from ``config.py``.
+Conventions:
+    - None-safe: ``(... or {}).get("auth_asym_id")`` at every nested access.
+    - Alert messages follow ``f"[{ALERT_TYPE}] at 'oligomer_analysis': description"``.
+    - All alert types, classifications, and TM statuses are constants from ``config.py``.
 """
 
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 from gpcr_tools.config import (
+    AI_OLIGOMER_TO_RECEPTOR_LEVEL,
     ALERT_7TM_UPGRADE,
+    ALERT_ASSEMBLY_MISMATCH,
     ALERT_CHAIN_ID_OVERRIDDEN,
     ALERT_CONFIRMED_OLIGOMER,
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
+    ALERT_NO_GPCR,
+    ALERT_OLIGOMER_DISAGREEMENT,
+    ALERT_PREFIX_FUSION_NOTE,
+    ALERT_PREFIX_MISSED_POLYMER,
+    ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
+    APO_SENTINEL,
+    CRYSTALLIZATION_FUSION_KEYWORDS,
+    CRYSTALLIZATION_FUSION_SLUGS,
     EMPTY_VALUES,
     GPCR_MIN_ANNOTATED_TM,
     GPCR_SLUG_NEGATIVE_PREFIXES,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
+    OLIGOMER_KIND_HETERO,
+    OLIGOMER_KIND_HOMO,
     OLIGOMER_MONOMER,
     OLIGOMER_NO_GPCR,
     TM_COVERAGE_THRESHOLD,
@@ -39,7 +51,11 @@ from gpcr_tools.config import (
     TM_STATUS_UNKNOWN,
     TM_UNIPROT_FEATURE_TYPES,
 )
-from gpcr_tools.validator.api_clients import fetch_polymer_features
+from gpcr_tools.validator.api_clients import (
+    PolymerFeaturesCacheLike,
+    fetch_polymer_features,
+    fetch_polymer_features_cached,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +78,7 @@ def is_gpcr_slug(slug: str) -> bool:
 def get_sequence_length(entity: dict[str, Any]) -> int:
     """Extract sample sequence length from *entity*'s polymer data.
 
-    Blood Lesson 1: guard ``rcsb_sample_sequence_length`` for None.
+    Guard ``rcsb_sample_sequence_length`` for None.
     """
     poly = entity.get("entity_poly") or {}
     length = poly.get("rcsb_sample_sequence_length")
@@ -201,14 +217,23 @@ def scan_all_chains_7tm(
     pdb_id: str,
     gpcr_chain_ids: set[str],
     graphql_entry: dict[str, Any] | None = None,
+    cache: PolymerFeaturesCacheLike | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[str, Any] | None]:
     """Scan all GPCR chains for 7TM completeness.
 
     Returns ``(results, graphql_entry)`` where *results* maps
     ``auth_asym_id`` to TM analysis dicts.
+
+    When *graphql_entry* is not supplied it is fetched live; passing *cache*
+    serves a fresh copy from disk and stores a successful fetch, so the 7TM
+    count survives a transient RCSB outage.
     """
     if graphql_entry is None:
-        graphql_entry = fetch_polymer_features(pdb_id)
+        graphql_entry = (
+            fetch_polymer_features_cached(pdb_id, cache)
+            if cache is not None
+            else fetch_polymer_features(pdb_id)
+        )
     if not graphql_entry:
         return {}, None
 
@@ -223,6 +248,20 @@ def scan_all_chains_7tm(
             results[auth_id] = _analyze_tm_for_entity_instance(entity, inst)
 
     return results, graphql_entry
+
+
+def format_7tm_status(tm: dict[str, Any] | None) -> str:
+    """Render a TM analysis dict as a ``"STATUS resolved/total"`` string.
+
+    ``None`` (no analysis available) renders as ``"UNKNOWN 0/0"`` -- the same
+    shape a chain with no transmembrane annotation produces, so a missing fetch
+    and a genuine non-7TM chain read identically as "not a 7TM receptor".
+    """
+    tm = tm or {}
+    status = tm.get("status") or TM_STATUS_UNKNOWN
+    resolved = tm.get("resolved_tms", 0)
+    total = tm.get("total_tms", 0)
+    return f"{status} {resolved}/{total}"
 
 
 # ---------------------------------------------------------------------------
@@ -361,6 +400,182 @@ def _build_label_asym_id_map(
     return mapping
 
 
+# ---------------------------------------------------------------------------
+# Missed non-GPCR polymer reconciliation
+# ---------------------------------------------------------------------------
+
+
+# Slug prefixes that mark a chain as a signaling partner (G-protein alpha via
+# "gna", beta "gbb", gamma "gbg", arrestin "arr"); an unannotated chain with one
+# of these is routed to the signaling_partners review block, everything else to
+# auxiliary_proteins. Used only to anchor the alert to the right block.
+_SIGNALING_SLUG_PREFIXES: tuple[str, ...] = ("gna", "gbb", "gbg", "arr")
+
+
+def _split_chain_ids(value: Any) -> set[str]:
+    """Parse a chain_id field (single, comma- or semicolon-separated) to a set."""
+    if not value or not isinstance(value, str):
+        return set()
+    out: set[str] = set()
+    for part in value.replace(";", ",").split(","):
+        token = part.strip()
+        if token and token.lower() not in EMPTY_VALUES and token.lower() != APO_SENTINEL:
+            out.add(token)
+    return out
+
+
+def _build_all_polymer_chains(enriched_entry: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Build ``{auth_asym_id: {"description": str, "slug": str | None}}`` per chain.
+
+    Covers all polymer entities (GPCR and non-GPCR alike). Branched
+    oligosaccharides and non-polymer ligands live in other buckets and are not
+    included here. The slug (when present) only anchors the alert to a review
+    block; it never decides whether a chain is flagged.
+    """
+    chains: dict[str, dict[str, Any]] = {}
+    for entity in enriched_entry.get("polymer_entities") or []:
+        if not isinstance(entity, dict):
+            continue
+        desc = (
+            (entity.get("rcsb_polymer_entity") or {}).get("pdbx_description")
+        ) or "unknown polymer"
+        slug: str | None = None
+        for u in entity.get("uniprots") or []:
+            if isinstance(u, dict) and u.get("gpcrdb_entry_name_slug"):
+                slug = u["gpcrdb_entry_name_slug"]
+                break
+        for inst in entity.get("polymer_entity_instances") or []:
+            if not isinstance(inst, dict):
+                continue
+            auth = (inst.get("rcsb_polymer_entity_instance_container_identifiers") or {}).get(
+                "auth_asym_id"
+            )
+            if auth:
+                chains[auth] = {"description": desc, "slug": slug}
+    return chains
+
+
+def _missed_chain_block(slug: str | None) -> str:
+    """Pick the review block an unannotated chain should surface under.
+
+    The curate UI buckets a warning to a block when the block key appears in the
+    warning text, so the alert must name a real block. Signaling partners go to
+    ``signaling_partners``; everything else (nanobody / scFv / RAMP / fusion /
+    peptide) goes to ``auxiliary_proteins`` where a curator adds missed partners.
+    """
+    if slug and slug.lower().startswith(_SIGNALING_SLUG_PREFIXES):
+        return "signaling_partners"
+    return "auxiliary_proteins"
+
+
+def collect_ai_claimed_chains(best_run_data: dict[str, Any]) -> set[str]:
+    """Union every polymer chain id the annotation claims, across all slots.
+
+    The model can name a chain under the receptor, the G-protein subunits, the
+    arrestin, the auxiliary proteins (nanobody / scFv / RAMP / ...), or a
+    polymeric ligand. A chain claimed in any slot counts as annotated.
+    """
+    claimed: set[str] = set()
+    claimed |= _split_chain_ids((best_run_data.get("receptor_info") or {}).get("chain_id"))
+
+    partners = best_run_data.get("signaling_partners") or {}
+    g_protein = partners.get("g_protein") or {}
+    for subunit in ("alpha_subunit", "beta_subunit", "gamma_subunit"):
+        claimed |= _split_chain_ids((g_protein.get(subunit) or {}).get("chain_id"))
+    claimed |= _split_chain_ids((partners.get("arrestin") or {}).get("chain_id"))
+
+    for aux in best_run_data.get("auxiliary_proteins") or []:
+        if isinstance(aux, dict):
+            claimed |= _split_chain_ids(aux.get("chain_id"))
+    for ligand in best_run_data.get("ligands") or []:
+        if isinstance(ligand, dict):
+            claimed |= _split_chain_ids(ligand.get("chain_id"))
+    return claimed
+
+
+def reconcile_missed_polymers(
+    enriched_entry: dict[str, Any],
+    best_run_data: dict[str, Any],
+) -> list[str]:
+    """Flag non-GPCR polymer chains present in the structure but unannotated.
+
+    GPCR chains are the missed-protomer check's responsibility and are excluded
+    here. Returns one warning string per unannotated non-GPCR polymer chain,
+    anchored to the review block a curator would add it under.
+    """
+    all_chains = _build_all_polymer_chains(enriched_entry)
+    if not all_chains:
+        return []
+    # Exclude every chain a GPCR slug identifies (via the full roster, not the
+    # 7TM-gated classify_roster): those belong to the missed-protomer check.
+    gpcr_chains = set(_build_gpcr_roster(enriched_entry))
+    claimed = collect_ai_claimed_chains(best_run_data)
+
+    # A chain the model named as the receptor but that a chain-id override later
+    # corrected already carries a HALLUCINATION alert; do not re-flag it here.
+    override = (best_run_data.get("oligomer_analysis") or {}).get("chain_id_override") or {}
+    if override.get("applied"):
+        claimed |= _split_chain_ids(override.get("original_chain_id"))
+
+    warnings: list[str] = []
+    for auth, info in sorted(all_chains.items()):
+        if auth in gpcr_chains or auth in claimed:
+            continue
+        block = _missed_chain_block(info["slug"])
+        warnings.append(
+            f"{ALERT_PREFIX_MISSED_POLYMER} at '{block}': chain '{auth}' "
+            f"('{info['description']}') is present in the structure but not "
+            f"annotated; confirm it."
+        )
+    return warnings
+
+
+def detect_crystallization_fusions(enriched_entry: dict[str, Any]) -> list[str]:
+    """Note any receptor entity carrying a BRIL / T4-lysozyme crystallization fusion.
+
+    BRIL (cytochrome b562RIL) and T4 lysozyme are engineering aids fused into a
+    receptor to aid crystallization, not part of the biological receptor. They
+    are detected by a fusion-partner slug or a description keyword, but only on
+    an entity that is itself a GPCR (so a standalone lysozyme is not flagged).
+    A fusion modelled as its own separate entity (no GPCR slug) is intentionally
+    left to :func:`reconcile_missed_polymers`, which flags it as an unannotated
+    chain. Advisory only -- returns non-blocking notes anchored to receptor_info.
+    """
+    notes: list[str] = []
+    for entity in enriched_entry.get("polymer_entities") or []:
+        if not isinstance(entity, dict):
+            continue
+        slugs = [
+            (u.get("gpcrdb_entry_name_slug") or "")
+            for u in (entity.get("uniprots") or [])
+            if isinstance(u, dict)
+        ]
+        if not any(is_gpcr_slug(s) for s in slugs):
+            continue  # only receptor entities can carry a receptor-side fusion
+        description = ((entity.get("rcsb_polymer_entity") or {}).get("pdbx_description")) or ""
+        has_fusion_slug = any(s.lower().startswith(CRYSTALLIZATION_FUSION_SLUGS) for s in slugs)
+        desc_lower = description.lower()
+        has_fusion_keyword = any(kw in desc_lower for kw in CRYSTALLIZATION_FUSION_KEYWORDS)
+        if not (has_fusion_slug or has_fusion_keyword):
+            continue
+        chain_set: set[str] = set()
+        for inst in entity.get("polymer_entity_instances") or []:
+            if not isinstance(inst, dict):
+                continue
+            auth = (inst.get("rcsb_polymer_entity_instance_container_identifiers") or {}).get(
+                "auth_asym_id"
+            )
+            if auth:
+                chain_set.add(auth)
+        chain_str = ", ".join(sorted(chain_set)) or "?"
+        notes.append(
+            f"{ALERT_PREFIX_FUSION_NOTE} at 'receptor_info': chain(s) {chain_str} "
+            f"carry a crystallization fusion ('{description}'); confirm the receptor "
+            f"annotation excludes the fusion partner."
+        )
+    return notes
+
+
 def build_nonpolymer_instance_index(
     enriched_entry: dict[str, Any],
 ) -> dict[str, list[dict[str, str]]]:
@@ -428,20 +643,258 @@ def find_multi_copy_components(
 def _get_assembly_cross_check(
     enriched_entry: dict[str, Any],
 ) -> dict[str, Any]:
-    """Extract oligomeric_state from first assembly for informational annotation."""
-    for asm in enriched_entry.get("assemblies") or []:
-        if not isinstance(asm, dict):
-            continue
-        for sym in asm.get("rcsb_struct_symmetry") or []:
-            if not isinstance(sym, dict):
-                continue
-            return {
-                "oligomeric_state": sym.get("oligomeric_state"),
-                "stoichiometry": sym.get("stoichiometry"),
-                "kind": sym.get("kind"),
-                "type": sym.get("type"),
-            }
-    return {}
+    """Extract the biological-assembly oligomeric state for informational annotation.
+
+    RCSB can deposit several assemblies per entry (e.g. the author-provided one
+    plus software-predicted alternatives).  The assembly RCSB marks as the
+    representative biological unit carries ``pdbx_struct_assembly.rcsb_candidate_assembly
+    == "Y"``; that one is preferred here, falling back to the first assembly only
+    when none is flagged.  The first global-symmetry block of the chosen assembly
+    supplies ``oligomeric_state`` / ``stoichiometry`` / ``kind`` / ``type``; the
+    candidate flag and modeled-monomer count are surfaced alongside so a caller can
+    reconcile the GPCR-centric classification against the biological assembly.
+
+    The first block's state is kept as the displayed ``oligomeric_state`` (changing
+    it would perturb the surfaced annotation), but ALL symmetry blocks of the chosen
+    assembly are scanned for a derived ``has_homo_symmetry`` flag -- True when ANY
+    block's ``oligomeric_state`` starts with "Homo" (case-insensitive). RCSB can
+    record the homo-oligomer in a later Local/Pseudo block rather than the first
+    Global one, so reading only the first block misses a real homodimer.
+
+    All data is already in the enriched entry -- no network call.  Returns ``{}``
+    when no assembly carries a symmetry block.
+    """
+    assemblies = [a for a in (enriched_entry.get("assemblies") or []) if isinstance(a, dict)]
+    if not assemblies:
+        return {}
+
+    # Prefer the assembly RCSB flags as the biological candidate; fall back to the
+    # first assembly when none is flagged (None-safe on a missing struct-assembly).
+    chosen = next(
+        (
+            a
+            for a in assemblies
+            if (a.get("pdbx_struct_assembly") or {}).get("rcsb_candidate_assembly") == "Y"
+        ),
+        assemblies[0],
+    )
+
+    symmetry_blocks = [s for s in (chosen.get("rcsb_struct_symmetry") or []) if isinstance(s, dict)]
+    if not symmetry_blocks:
+        return {}
+
+    # ANY block declaring a Homo oligomer corroborates a receptor homo-oligomer,
+    # even when it is not the first (e.g. a later Local/Pseudo block).
+    has_homo_symmetry = any(
+        isinstance(s.get("oligomeric_state"), str)
+        and s["oligomeric_state"].strip().lower().startswith("homo")
+        for s in symmetry_blocks
+    )
+
+    first = symmetry_blocks[0]
+    return {
+        "oligomeric_state": first.get("oligomeric_state"),
+        "stoichiometry": first.get("stoichiometry"),
+        "kind": first.get("kind"),
+        "type": first.get("type"),
+        "has_homo_symmetry": has_homo_symmetry,
+        "rcsb_candidate_assembly": (chosen.get("pdbx_struct_assembly") or {}).get(
+            "rcsb_candidate_assembly"
+        ),
+        "modeled_polymer_monomer_count": (chosen.get("rcsb_assembly_info") or {}).get(
+            "modeled_polymer_monomer_count"
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Assembly-consistency advisory
+# ---------------------------------------------------------------------------
+
+
+_OLIGOMERIC_MER_RE = re.compile(r"(\d+)-mer")
+
+
+def _parse_oligomeric_count(oligomeric_state: Any) -> int | None:
+    """Parse the subunit count from an RCSB oligomeric_state string.
+
+    The value space is ``"Monomer"`` / ``"Homo N-mer"`` / ``"Hetero N-mer"`` /
+    ``None``.  ``"Monomer"`` maps to ``1``; an ``N-mer`` maps to ``N``; anything
+    unparseable (including ``None``) returns ``None`` so the caller treats it as
+    no signal rather than a contradiction.
+    """
+    if not isinstance(oligomeric_state, str):
+        return None
+    text = oligomeric_state.strip()
+    if text.lower() == "monomer":
+        return 1
+    match = _OLIGOMERIC_MER_RE.search(text)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def _reconcile_assembly_consistency(
+    classification: str,
+    assembly_info: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    """Compare the GPCR-centric classification against the biological assembly.
+
+    The top-line classification counts GPCR-slug chains only, so it can disagree
+    with the RCSB biological assembly in two clear ways.  This pure, None-safe
+    check surfaces that contradiction as a parallel advisory; it never changes the
+    classification.  Returns ``(consistency, alert_or_None)`` where *consistency*
+    is ``{"agrees": bool, "note": str}`` (note empty when they agree) and the
+    alert is appended only when a contradiction fires.
+
+    Fires on exactly two contradictions, and is silent otherwise (the normal case,
+    including monomer-with-monomer-assembly and an absent assembly):
+
+    - ``MONOMER`` while the biological assembly is a higher-order complex
+      (oligomeric_state parses to N >= 2) -- the receptor may be one chain of a
+      larger hetero-complex the GPCR-only count cannot see.
+    - ``HOMOMER`` while NO symmetry block of the biological assembly corroborates a
+      receptor homo-oligomer (no ``Homo N-mer`` block at all) -- the two same-slug
+      chains may be crystallographic copies rather than a biological homodimer.
+      Reading every block (not just the first) keeps a real homodimer whose Homo
+      block is recorded later (Local/Pseudo) from false-firing.
+    """
+    state = assembly_info.get("oligomeric_state") if isinstance(assembly_info, dict) else None
+    if not isinstance(state, str) or not state.strip():
+        return {"agrees": True, "note": ""}, None
+
+    count = _parse_oligomeric_count(state)
+    stoich = assembly_info.get("stoichiometry")
+    has_homo_symmetry = bool(assembly_info.get("has_homo_symmetry"))
+
+    # MONOMER vs higher-order biological assembly (e.g. a 2:2:2 hetero-complex
+    # whose single GPCR chain makes the GPCR-only count read MONOMER).
+    if classification == OLIGOMER_MONOMER and count is not None and count >= 2:
+        note = (
+            f"GPCR-centric MONOMER but RCSB biological assembly is a higher-order "
+            f"complex ({state}, {stoich}); verify the oligomer label."
+        )
+        return (
+            {"agrees": False, "note": note},
+            {
+                "type": ALERT_ASSEMBLY_MISMATCH,
+                "message": f"[{ALERT_ASSEMBLY_MISMATCH}] at 'oligomer_analysis': {note}",
+            },
+        )
+
+    # HOMOMER vs a biological assembly with no Homo symmetry block at all: the
+    # same-slug chains may be crystallographic copies, not a dimer. Checking every
+    # block keeps a real homodimer whose Homo block is later (Local/Pseudo) silent.
+    if classification == OLIGOMER_HOMOMER and not has_homo_symmetry:
+        note = (
+            f"two same-slug chains may be crystallographic copies, not a biological "
+            f"homodimer ({state}, {stoich}); confirm."
+        )
+        return (
+            {"agrees": False, "note": note},
+            {
+                "type": ALERT_ASSEMBLY_MISMATCH,
+                "message": f"[{ALERT_ASSEMBLY_MISMATCH}] at 'oligomer_analysis': {note}",
+            },
+        )
+
+    return {"agrees": True, "note": ""}, None
+
+
+# ---------------------------------------------------------------------------
+# AI-vs-classifier receptor-level cross-check
+# ---------------------------------------------------------------------------
+
+
+def _classifier_receptor_level(
+    classification: str,
+    receptor_count: int,
+) -> tuple[int, str | None] | None:
+    """Reduce the deterministic classifier to a (count, kind) receptor-level fact.
+
+    Counts GPCR RECEPTORS only -- the classifier already excludes
+    G-protein/peptide/ligand partners via the transmembrane gate, so this never
+    leaks a partner into the count. ``MONOMER`` -> ``(1, None)``;
+    ``HOMOMER`` -> ``(count, "homo")``; ``HETEROMER`` -> ``(count, "hetero")``.
+    Returns ``None`` for ``NO_GPCR`` (an empty roster already routes via its own
+    alert -- comparing it here would double-flag).
+    """
+    if classification == OLIGOMER_MONOMER:
+        return (1, None)
+    if classification == OLIGOMER_HOMOMER:
+        return (receptor_count, OLIGOMER_KIND_HOMO)
+    if classification == OLIGOMER_HETEROMER:
+        return (receptor_count, OLIGOMER_KIND_HETERO)
+    return None
+
+
+def _reconcile_ai_oligomer(
+    ai_value: Any,
+    classification: str,
+    receptor_count: int,
+    tm_data_available: bool,
+) -> dict[str, Any] | None:
+    """Cross-check the AI's receptor oligomeric state against the classifier.
+
+    Compares RECEPTOR-LEVEL fact to RECEPTOR-LEVEL fact ONLY: both sides count
+    GPCR receptor copies, never G-protein/arrestin/nanobody/peptide/ligand
+    partners. (The whole RCSB biological assembly -- "Hetero 5-mer" for a
+    receptor+G-protein complex -- is deliberately NOT used here; comparing
+    against it would flag every receptor+transducer complex.)
+
+    Returns a routing alert dict when the two disagree, else ``None``. Stays
+    silent (returns ``None``) in three cases so it never floods the curator:
+
+    * The AI value is ``unknown`` or unrecognised -- it makes no receptor-level
+      claim, so there is nothing to contradict.
+    * ``tm_data_available`` is ``False`` -- the classifier's receptor count is
+      itself unverified (it already routes via ``TM_DATA_UNAVAILABLE``); raising
+      a second disagreement off an untrustworthy count would be a spurious flag.
+    * The classifier found ``NO_GPCR`` -- the empty roster already routes.
+
+    Agreement is exact on the receptor-level fact: same copy count, and (for
+    >=2 copies) same homo/hetero kind. Examples that AGREE (no route): AI
+    ``monomer`` with classifier MONOMER (a receptor + Gabg complex); AI
+    ``homo-dimer`` with classifier HOMOMER count 2 (a Class C receptor dimer);
+    AI ``hetero-dimer`` with classifier HETEROMER count 2 (GABA-B). Example that
+    ROUTES: AI ``monomer`` while the classifier resolved >=2 receptor chains
+    (a possible crystallographic copy vs a true oligomer -- a real ambiguity a
+    human should settle).
+    """
+    if not tm_data_available:
+        return None
+
+    expected = AI_OLIGOMER_TO_RECEPTOR_LEVEL.get(ai_value if isinstance(ai_value, str) else "")
+    if expected is None:
+        # ``unknown`` / missing / unrecognised: the AI asserts no receptor count.
+        return None
+
+    classifier_level = _classifier_receptor_level(classification, receptor_count)
+    if classifier_level is None:
+        # NO_GPCR (or an unmodelled classification): handled by its own alert.
+        return None
+
+    ai_count, ai_kind = expected
+    cls_count, cls_kind = classifier_level
+
+    # Receptor-level agreement: same copy count, and for >=2 copies the same
+    # homo/hetero kind. For a single copy the kind is irrelevant on both sides.
+    counts_match = ai_count == cls_count
+    kinds_match = ai_count < 2 or ai_kind == cls_kind
+    if counts_match and kinds_match:
+        return None
+
+    return {
+        "type": ALERT_OLIGOMER_DISAGREEMENT,
+        "message": (
+            f"[{ALERT_OLIGOMER_DISAGREEMENT}] at 'receptor_info': the annotated receptor "
+            f"oligomeric state ('{ai_value}') disagrees with the receptor-level classifier "
+            f"({classification}, {receptor_count} receptor chain(s)). Both count GPCR "
+            f"receptors only -- this is a true receptor-level discrepancy (e.g. a possible "
+            f"crystallographic copy vs a biological oligomer); confirm the receptor "
+            f"oligomeric state manually."
+        ),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -456,14 +909,19 @@ def _suggest_primary_protomer(
     ai_chain: str | None,
     signaling_partners: dict[str, Any],
     ligands: list[dict[str, Any]],
+    coupling_chain: str | None = None,
 ) -> dict[str, Any]:
-    """Suggest a primary protomer chain using the 5-rank framework.
+    """Suggest a primary protomer chain using the rank framework.
 
-    Rank 0: Homomer context (identical chains, prefer better 7TM).
+    Rank 0: Geometric G-protein coupling protomer (the detect stage measured which
+        protomer the G-alpha engages -- an objective fact that beats the AI guess).
     Rank 1: G-protein bound (AI's chain if in roster and G-protein present).
     Rank 2: Exclusive ligand-binding chain.
     Rank 3: Best 7TM completeness.
     Rank 4: Longest sequence OR valid AI choice.
+
+    A homomer keeps its selected chain but is relabelled rank 0 with a "Homomer"
+    context prefix (the protomers are identical, so the choice is informational).
     """
     if not gpcr_roster:
         return {"chain_id": None, "reason": "No GPCR chains found", "rank_used": None}
@@ -471,6 +929,16 @@ def _suggest_primary_protomer(
     primary: str | None = None
     reason = ""
     rank: int | None = None
+
+    # Rank 0: geometric G-protein coupling. Only one protomer of an obligate dimer
+    # couples the G protein, and in a heterodimer it is often NOT the agonist-binding
+    # one (GABA-B: GABBR1 binds, GABBR2 couples). The detect stage reads the coupling
+    # protomer from the G-alpha interface in the coordinates; that measured fact wins
+    # over the AI's chain choice. (Computed upstream, no GPCRdb per-structure data.)
+    if coupling_chain and coupling_chain in gpcr_roster:
+        primary = coupling_chain
+        reason = f"Rank 0: G-protein coupling protomer (structure geometry) on Chain {primary}"
+        rank = 0
 
     # Rank 1: G-protein bound
     has_gprotein = False
@@ -482,7 +950,7 @@ def _suggest_primary_protomer(
             if any(tag in sp_str for tag in ("gnai", "gnas", "gnaq", "gnao")):
                 has_gprotein = True
 
-    if has_gprotein and ai_chain and ai_chain in gpcr_roster:
+    if not primary and has_gprotein and ai_chain and ai_chain in gpcr_roster:
         primary = ai_chain
         reason = f"Rank 1: G-protein bound — AI-determined active complex on Chain {primary}"
         rank = 1
@@ -536,7 +1004,9 @@ def _suggest_primary_protomer(
             reason = f"Rank 4: Longest sequence ({len_str})"
             rank = 4
 
-    # Prepend classification context for Rank 0 (homomer)
+    # A homomer's primary is informational (the protomers are identical), so relabel
+    # it rank 0 with a "Homomer" context prefix regardless of which rank actually
+    # selected the chain. (A coupling-driven rank-0 keeps its reason, now prefixed.)
     if classification == OLIGOMER_HOMOMER:
         reason = f"Homomer ({len(gpcr_roster)} identical GPCR chains) — {reason}"
         rank = 0
@@ -557,7 +1027,7 @@ def _generate_alerts(
 ) -> list[dict[str, str]]:
     """Generate non-invasive oligomer alerts.
 
-    Blood Lesson 3: alert messages follow
+    Alert messages follow
     ``f"[{ALERT_TYPE}] at 'oligomer_analysis': ..."``
     """
     alerts: list[dict[str, str]] = []
@@ -636,7 +1106,7 @@ def _apply_chain_override(
     When triggered, both ``chain_id`` and ``uniprot_entry_name`` are corrected.
     Original AI values are recorded for transparency.
 
-    Blood Lesson 7: return dict includes ``original_chain_id`` and
+    The return dict includes ``original_chain_id`` and
     ``corrected_chain_id`` as explicit keys.
     """
     suggested_chain = suggestion.get("chain_id")
@@ -713,6 +1183,101 @@ def _apply_chain_override(
 
 
 # ---------------------------------------------------------------------------
+# GPCR protomer mis-filed as auxiliary protein
+# ---------------------------------------------------------------------------
+
+
+def _is_crystallization_fusion_aux(aux: dict[str, Any]) -> bool:
+    """Is this ``auxiliary_proteins`` entry a crystallization fusion, not a protomer?
+
+    A crystallization fusion (BRIL / cytochrome b562, T4 lysozyme, GFP, glycogen
+    synthase, …) is an engineering aid spliced into the receptor chain, not a
+    separate biological protomer. The model marks it either by typing it
+    "Fusion protein" or by naming a known fusion partner. Either signal keeps the
+    entry from being evicted when it sits on a chain that is also a real protomer.
+    """
+    type_value = (aux.get("type") or {}).get("value") if isinstance(aux.get("type"), dict) else None
+    if isinstance(type_value, str) and "fusion" in type_value.lower():
+        return True
+    name_lower = (aux.get("name") or "").lower()
+    return any(kw in name_lower for kw in CRYSTALLIZATION_FUSION_KEYWORDS)
+
+
+def reconcile_gpcr_in_auxiliary(
+    best_run_data: dict[str, Any],
+    validated_roster: dict[str, dict[str, Any]],
+    classification: str,
+    alerts: list[dict[str, str]],
+) -> None:
+    """Evict a GPCR protomer mis-filed under ``auxiliary_proteins`` (mutates in-place).
+
+    A Class C receptor is an obligate dimer; its partner protomer is a real GPCR
+    chain. When the model files that partner under ``auxiliary_proteins`` (often as
+    type "Other"), it pollutes ``other_aux_proteins.csv``. The partner is already
+    recorded independently in the structures.csv Partner columns (via
+    :func:`resolve_partner_protomer` over ``all_gpcr_chains``), so removing the
+    auxiliary entry loses no data.
+
+    Two guards keep this from deleting legitimate auxiliary entries:
+
+    * *validated_roster* is the transmembrane-gated roster (a chain is a protomer
+      only if its UniProt annotation carries enough transmembrane helices). A
+      soluble partner mis-mapped to a receptor slug — an E3 ligase, an R-spondin
+      ectodomain — is not in this roster, so its chain never matches and it stays.
+    * *classification* decides whether eviction is even possible. A single-protomer
+      structure has no second protomer to recover, so anything sharing the receptor
+      chain is a fusion or sub-domain and is always kept. Only a homo-/heteromer
+      (two or more real protomers, e.g. a Class C dimer) can hide a mis-filed
+      partner — and even then a crystallization fusion sitting on a protomer chain
+      (typed "Fusion protein" or named BRIL / T4 lysozyme / GFP / …) is kept.
+
+    An evicted entry yields a domain-language alert. An entry with an
+    empty/garbled/missing chain_id is left untouched (fail-safe).
+    """
+    aux_list = best_run_data.get("auxiliary_proteins")
+    if not isinstance(aux_list, list) or not validated_roster:
+        return
+
+    # A single-protomer structure cannot hide a mis-filed second protomer; every
+    # auxiliary entry is a fusion or sub-domain of the lone receptor chain. Keep all.
+    if classification == OLIGOMER_MONOMER:
+        return
+
+    kept: list[Any] = []
+    for aux in aux_list:
+        if not isinstance(aux, dict):
+            kept.append(aux)
+            continue
+        aux_chains = _split_chain_ids(aux.get("chain_id"))
+        roster_hits = sorted(aux_chains & set(validated_roster.keys()))
+        # Keep the entry when its chain is not a validated protomer (nothing to
+        # recover) or when it is a crystallization fusion sitting on a protomer
+        # chain. The two keep-reasons are split so a future edit cannot silently
+        # swap them into an evict.
+        if not roster_hits:
+            kept.append(aux)
+            continue
+        if _is_crystallization_fusion_aux(aux):
+            kept.append(aux)
+            continue
+        name = aux.get("name") or "unknown"
+        slug = validated_roster[roster_hits[0]].get("slug") or "unknown"
+        chains_text = ", ".join(roster_hits)
+        alerts.append(
+            {
+                "type": ALERT_PROTOMER_IN_AUXILIARY,
+                "message": (
+                    f"[{ALERT_PROTOMER_IN_AUXILIARY}] at 'auxiliary_proteins': "
+                    f"auxiliary protein '{name}' (chain {chains_text}, slug {slug}) "
+                    f"is a GPCR protomer recorded as the dimer partner; "
+                    f"removed from auxiliary proteins."
+                ),
+            }
+        )
+    best_run_data["auxiliary_proteins"] = kept
+
+
+# ---------------------------------------------------------------------------
 # Main analysis
 # ---------------------------------------------------------------------------
 
@@ -721,21 +1286,46 @@ def analyze_oligomer(
     pdb_id: str,
     best_run_data: dict[str, Any],
     enriched_entry: dict[str, Any],
+    coupling_chain: str | None = None,
+    polymer_features_cache: PolymerFeaturesCacheLike | None = None,
 ) -> None:
     """Run oligomer analysis on *best_run_data* against *enriched_entry*.
 
     Writes ``best_run_data["oligomer_analysis"]`` in-place.
     May correct ``receptor_info.chain_id`` and ``uniprot_entry_name``
     when AI is objectively wrong (HALLUCINATION or 7TM_UPGRADE).
+
+    *coupling_chain* is the detect stage's geometric G-protein-coupling protomer (or
+    ``None``); when set it is the highest-priority primary-protomer choice.
+
+    *polymer_features_cache*, when supplied, serves the transmembrane-helix
+    annotations from disk and stores a successful fetch, so the 7TM count
+    survives a transient RCSB outage. When the fetch still fails and no cached
+    copy is available, the receptor count cannot be transmembrane-verified; the
+    classification is then flagged low-confidence and routed (TM_DATA_UNAVAILABLE)
+    rather than failing open into counting an unverified peptide/partner as a
+    receptor protomer.
     """
     # 1. Build GPCR roster
     gpcr_roster = _build_gpcr_roster(enriched_entry)
 
-    # 2. Scan all GPCR chains for 7TM
+    # 2. Scan all GPCR chains for 7TM. A cache (when supplied) lets the fetch
+    # survive a transient outage; a genuine fetch failure is detected so the
+    # count is not silently failed open below.
     tm_roster: dict[str, dict[str, Any]] = {}
     graphql_entry: dict[str, Any] | None = None
+    tm_fetch_failed = False
     if gpcr_roster:
-        tm_roster, graphql_entry = scan_all_chains_7tm(pdb_id, set(gpcr_roster.keys()))
+        tm_roster, graphql_entry = scan_all_chains_7tm(
+            pdb_id, set(gpcr_roster.keys()), cache=polymer_features_cache
+        )
+        # The transmembrane gate could not run: there are GPCR-slug chains to
+        # verify but the feature fetch returned nothing. Distinguish this from a
+        # structure whose chains genuinely carry no TM annotation by re-probing
+        # only when a cache is wired (the path that owns the fetch); without a
+        # cache the legacy behavior is preserved byte-for-byte.
+        if polymer_features_cache is not None and graphql_entry is None:
+            tm_fetch_failed = True
 
     # 3. Refine fusion slugs using per-UniProt TM features
     _refine_fusion_slugs(gpcr_roster, enriched_entry, graphql_entry)
@@ -797,6 +1387,7 @@ def analyze_oligomer(
         ai_chain,
         signaling_partners,
         ligands_data,
+        coupling_chain=coupling_chain,
     )
 
     # 6. Alerts — use the validated roster so non-7TM partners don't trigger a
@@ -808,8 +1399,29 @@ def analyze_oligomer(
         best_run_data,
     )
 
+    # A GPCR-annotation tool that finds NO GPCR protomer must alarm the curator, not
+    # pass silently: the empty roster can be a genuine non-GPCR structure OR an
+    # unresolved/missing UniProt mapping (RCSB exposed no slug). Promoted to a gating
+    # warning by inject_oligomer_alerts so one-click accept is disabled.
+    if classification == OLIGOMER_NO_GPCR:
+        alerts.append(
+            {
+                "type": ALERT_NO_GPCR,
+                "message": (
+                    f"[{ALERT_NO_GPCR}] at 'receptor_info': no GPCR protomer was found "
+                    f"in the structure (the roster is empty). This may be a non-GPCR "
+                    f"structure or an unresolved/missing UniProt-to-GPCRdb mapping; "
+                    f"confirm the receptor identity manually."
+                ),
+            }
+        )
+
+    # When the transmembrane fetch failed, every GPCR chain falls back to UNKNOWN
+    # status -- but that is a data gap, NOT evidence the chains are not GPCRs.
+    # Suppress the "are you sure these are GPCRs?" accusation in that case;
+    # ALERT_TM_DATA_UNAVAILABLE below is the only correct signal.
     unknown_chains = [c for c in all_gpcr_chains if c["7tm_status"] == TM_STATUS_UNKNOWN]
-    if unknown_chains:
+    if unknown_chains and not tm_fetch_failed:
         slugs = [f"Chain {c['chain_id']} ({c['slug']})" for c in unknown_chains]
         alerts.append(
             {
@@ -822,6 +1434,35 @@ def analyze_oligomer(
                 ),
             }
         )
+
+    # The transmembrane gate could not run (feature fetch failed, no cached copy),
+    # so the classification used the unfiltered roster: a peptide ligand or
+    # single-pass partner carrying a GPCR slug may have been counted as a receptor
+    # protomer. Rather than let that pass silently, route to a curator. Promoted to
+    # a gating warning by inject_oligomer_alerts.
+    if tm_fetch_failed:
+        alerts.append(
+            {
+                "type": ALERT_TM_DATA_UNAVAILABLE,
+                "message": (
+                    f"[{ALERT_TM_DATA_UNAVAILABLE}] at 'receptor_info': transmembrane-helix "
+                    f"data could not be fetched, so the receptor-chain count is unverified "
+                    f"and the oligomer classification ({classification}) is low-confidence. "
+                    f"A peptide ligand or partner chain may be miscounted as a receptor; "
+                    f"confirm the receptor chains manually."
+                ),
+            }
+        )
+
+    # 6b. Evict a GPCR protomer mis-filed under auxiliary_proteins (the obligate
+    # dimer partner of a Class C receptor). Tested against the transmembrane-gated
+    # validated roster so a soluble partner mis-mapped to a receptor slug (an E3
+    # ligase, an R-spondin ectodomain) is never deleted, and only a homo-/heteromer
+    # can lose an entry — a single-protomer structure keeps every entry, and a
+    # crystallization fusion on a protomer chain is kept. The recovered partner is
+    # already in the structures.csv Partner columns via resolve_partner_protomer,
+    # so eviction loses no data; an alert flags the move for review.
+    reconcile_gpcr_in_auxiliary(best_run_data, classify_roster, classification, alerts)
 
     # 7. Smart override: correct chain_id when AI is objectively wrong
     override_info = _apply_chain_override(
@@ -865,12 +1506,48 @@ def analyze_oligomer(
     # 9. Assembly cross-check (informational only)
     assembly_info = _get_assembly_cross_check(enriched_entry)
 
-    # 10. Write output
+    # 9b. Reconcile the GPCR-centric classification against the RCSB biological
+    # assembly. The classification counts GPCR-slug chains only, so it can miss a
+    # larger hetero-complex (MONOMER but the assembly is higher-order) or read a
+    # homodimer into two crystallographic copies (HOMOMER but the assembly is a
+    # monomer / hetero-complex). This surfaces that contradiction as a parallel
+    # advisory + alert; it never changes the classification, and stays silent in
+    # the overwhelming normal case (ordinary monomers are byte-identical to before).
+    assembly_consistency, assembly_alert = _reconcile_assembly_consistency(
+        classification,
+        assembly_info,
+    )
+    if assembly_alert:
+        alerts.append(assembly_alert)
+
+    # 9c. Receptor-level cross-check: compare the AI's receptor oligomeric state
+    # against the deterministic classifier AT THE RECEPTOR LEVEL (both count GPCR
+    # receptors only -- never the whole RCSB assembly, which would flag every
+    # receptor+G-protein complex). A disagreement (e.g. AI 'monomer' but the
+    # classifier resolved >=2 receptor chains) is a real ambiguity, so route it.
+    # Silent when the AI says 'unknown', when the count is TM-unverified (that
+    # already routes via TM_DATA_UNAVAILABLE), and in the normal agreeing case.
+    ai_oligomer_value = (receptor_info.get("oligomeric_state") or {}).get("value")
+    oligomer_disagreement = _reconcile_ai_oligomer(
+        ai_oligomer_value,
+        classification,
+        len(classify_roster),
+        tm_data_available=not tm_fetch_failed,
+    )
+    if oligomer_disagreement:
+        alerts.append(oligomer_disagreement)
+
+    # 10. Write output. ``receptor_count`` and ``tm_data_available`` expose the
+    # transmembrane-gated count and whether it could be verified, so the report
+    # and any future receptor-level cross-check read one clean path.
     best_run_data["oligomer_analysis"] = {
         "classification": classification,
+        "receptor_count": len(classify_roster),
+        "tm_data_available": not tm_fetch_failed,
         "all_gpcr_chains": all_gpcr_chains,
         "primary_protomer_suggestion": suggestion,
         "assembly_cross_check": assembly_info,
+        "assembly_consistency": assembly_consistency,
         "alerts": alerts,
         "chain_id_override": override_info,
         "label_asym_id_map": label_map,

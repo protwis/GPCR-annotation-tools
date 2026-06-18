@@ -1,8 +1,7 @@
 """Load enriched PDB metadata from the workspace.
 
 Returns the ``data.entry`` dict from the RCSB enriched JSON, using
-explicit ``isinstance`` checks rather than chained ``.get()`` calls
-(Blood Lesson 1, Review 8 improvement).
+explicit ``isinstance`` checks rather than chained ``.get()`` calls.
 """
 
 from __future__ import annotations
@@ -12,8 +11,30 @@ import logging
 from typing import Any
 
 from gpcr_tools.config import get_config
+from gpcr_tools.fetcher.enricher import INCOMPLETE_MARKER_KEY
 
 logger = logging.getLogger(__name__)
+
+
+def enriched_is_incomplete(pdb_id: str) -> bool:
+    """True if the enriched record was written during a transient API outage.
+
+    Such a record carries a top-level incomplete marker (set when a UniProt /
+    PubChem / RCSB lookup transiently failed mid-enrichment) and must be
+    re-enriched before it is trusted — consuming it would bake a transient gap
+    (e.g. an unresolved receptor slug) into an affirmative answer. A missing or
+    unreadable file returns ``False`` (``load_enriched_data`` reports those as
+    ``None``). The marker lives at the top level, OUTSIDE ``data.entry``.
+    """
+    source_path = get_config().enriched_dir / f"{pdb_id}.json"
+    if not source_path.is_file():
+        return False
+    try:
+        with source_path.open("r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return False
+    return bool(isinstance(raw, dict) and raw.get(INCOMPLETE_MARKER_KEY))
 
 
 def load_enriched_data(pdb_id: str) -> dict[str, Any] | None:
@@ -22,7 +43,7 @@ def load_enriched_data(pdb_id: str) -> dict[str, Any] | None:
     Returns ``None`` when the file is missing, unreadable, or the JSON
     structure is unexpected.
 
-    Blood Lesson 5 — Truthiness:
+    Truthiness:
         Callers MUST check ``if enriched is None:`` — NOT ``if not enriched:``.
         An empty dict ``{}`` is valid enriched data.
     """

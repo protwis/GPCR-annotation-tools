@@ -11,6 +11,7 @@ from gpcr_tools.csv_generator.review_engine import (
     _resolve_list_key_field,
     get_verified_paths,
     has_downstream_controversy,
+    has_gating_controversy,
     is_controversy_significant,
 )
 
@@ -48,7 +49,9 @@ class TestListItemPathMatchesAggregatorIdentity:
         review_path = _list_item_path("ligands", item, "chem_comp_id", 0)
         agg_path = f"ligands[{config.list_item_identity(item, 'chem_comp_id', 0)}]"
         assert review_path == agg_path
-        assert review_path == "ligands[__keyless__:GLP-1]"
+        # The keyless name is SAFE-normalized (casefold + separator collapse), so
+        # review navigation and aggregation share the same normalized identity.
+        assert review_path == "ligands[__keyless__:glp 1]"
 
     def test_real_key_path_unchanged(self):
         item = {"chem_comp_id": "ATP", "name": "x"}
@@ -86,6 +89,61 @@ class TestHasDownstreamControversy:
         assert has_downstream_controversy("ligands", controversies) is True
         assert has_downstream_controversy("ligands[ADN]", controversies) is True
         assert has_downstream_controversy("ligands[ZMA]", controversies) is False
+
+
+class TestHasGatingControversy:
+    """The one-click accept-all gate is driven by this helper. Minority-omission
+    advisories (gating=False) stay in the controversy map for display but must
+    not disable accept-all; near-tie / real disagreements still gate."""
+
+    def _omission_advisory(self, path: str) -> dict:
+        # Same shape voting.py emits for an entity the chosen run omitted.
+        return {
+            "path": path,
+            "best_run_value": None,
+            "majority_vote_value": {"chem_comp_id": "RET"},
+            "all_votes": {"role": {"agonist": 2}},
+            "needs_review": True,
+            "gating": False,
+        }
+
+    def _near_tie(self, path: str) -> dict:
+        # Same shape voting.py emits for a near-tie disagreement (no gating key).
+        return {
+            "path": path,
+            "best_run_value": "agonist",
+            "majority_vote_value": "antagonist",
+            "all_votes": {"agonist": 5, "antagonist": 5},
+            "needs_review": True,
+            "vote_margin": 0,
+        }
+
+    def test_empty_map_does_not_gate(self):
+        assert has_gating_controversy({}) is False
+
+    def test_only_omission_advisories_do_not_gate(self):
+        # A PDB whose sole controversy is a minority-omission advisory must keep
+        # one-click accept-all enabled.
+        controversies = {c["path"]: c for c in [self._omission_advisory("ligands[RET]")]}
+        assert has_gating_controversy(controversies) is False
+
+    def test_near_tie_still_gates(self):
+        # A genuine near-tie disagreement disables accept-all exactly as before.
+        controversies = {c["path"]: c for c in [self._near_tie("ligands[ADN].role.value")]}
+        assert has_gating_controversy(controversies) is True
+
+    def test_mixed_gates_on_the_near_tie(self):
+        controversies = {
+            c["path"]: c
+            for c in [
+                self._omission_advisory("ligands[RET]"),
+                self._near_tie("ligands[ADN].role.value"),
+            ]
+        }
+        # The advisory is still present (visible for review)...
+        assert "ligands[RET]" in controversies
+        # ...but the near-tie is what gates.
+        assert has_gating_controversy(controversies) is True
 
 
 class TestIsControversySignificant:

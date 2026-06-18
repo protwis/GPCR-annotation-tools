@@ -1,4 +1,4 @@
-"""Tests for the integrity checker (Epic 4).
+"""Tests for the integrity checker.
 
 Covers: ghost chain detection, ghost ligand detection, fake UniProt,
 fake PubChem, method consistency, multi-error scenarios, None-safety,
@@ -48,6 +48,35 @@ def _enriched_with_chains_and_ligands(
             for lid in ligands
         ]
 
+    return entry
+
+
+def _enriched_with_branched(
+    comp_ids: list[str],
+    chains: list[str] | None = None,
+    nonpolymer: list[str] | None = None,
+    *,
+    source: str = "connect_target",
+) -> dict[str, Any]:
+    """Build an enriched_entry whose ligands include branched (sugar) units.
+
+    Mirrors the real RCSB shape: branched component ids are not a flat list but
+    surface through one of three sources, selected by *source*:
+    ``connect_target`` / ``connect_partner`` (struct-conn records) or
+    ``feature`` (instance features).
+    """
+    entry = _enriched_with_chains_and_ligands(chains=chains or ["A"], ligands=nonpolymer)
+    if source == "feature":
+        instance: dict[str, Any] = {
+            "rcsb_branched_instance_feature": [
+                {"feature_value": [{"comp_id": cid} for cid in comp_ids]}
+            ]
+        }
+    else:
+        instance = {
+            "rcsb_branched_struct_conn": [{source: {"label_comp_id": cid}} for cid in comp_ids]
+        }
+    entry["branched_entities"] = [{"branched_entity_instances": [instance]}]
     return entry
 
 
@@ -110,6 +139,61 @@ class TestGhostLigand:
         warnings = validate_all("TEST", ai_data, enriched)
         assert not any("Ghost Ligand" in w for w in warnings)
 
+    def test_ghost_ligand_in_ligand_free_structure_detected(self) -> None:
+        # No nonpolymer entities at all: a hallucinated small molecule must not
+        # slip through just because the structure has no real small molecules.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "FAKE"}]}
+        enriched = _enriched_with_chains_and_ligands(chains=["A"])
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert any("Ghost Ligand" in w and "'FAKE'" in w for w in warnings)
+
+    def test_branched_sugar_not_flagged(self) -> None:
+        # A real glycan (NAG) lives in branched_entities, not nonpolymer; the
+        # model legitimately referencing it must not be called a ghost.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "NAG"}]}
+        enriched = _enriched_with_branched(["NAG", "MAN"])
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert not any("Ghost Ligand" in w for w in warnings)
+
+    def test_ghost_ligand_detected_alongside_branched(self) -> None:
+        # Branched present but the claimed code is in neither bucket -> ghost.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "FAKE"}]}
+        enriched = _enriched_with_branched(["NAG"])
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert any("Ghost Ligand" in w and "'FAKE'" in w for w in warnings)
+
+    def test_branched_sugar_via_connect_partner_not_flagged(self) -> None:
+        # A sugar code can arrive on the connect_partner side; it must be harvested.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "NAG"}]}
+        enriched = _enriched_with_branched(["NAG"], source="connect_partner")
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert not any("Ghost Ligand" in w for w in warnings)
+
+    def test_branched_sugar_via_instance_feature_not_flagged(self) -> None:
+        # Some depositions expose sugar codes only through instance features.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "BMA"}]}
+        enriched = _enriched_with_branched(["BMA"], source="feature")
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert not any("Ghost Ligand" in w for w in warnings)
+
+    def test_unresolved_branched_suppresses_ghost(self) -> None:
+        # Branched entity present but no component id extractable (e.g. a free
+        # glycan with no connectivity record): the inventory is not fully known,
+        # so a claimed sugar must not be flagged -- avoids a false positive.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "NAG"}]}
+        enriched: dict[str, Any] = _enriched_with_chains_and_ligands(chains=["A"])
+        enriched["branched_entities"] = [{}]  # present but no extractable comp id
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert not any("Ghost Ligand" in w for w in warnings)
+
+    def test_protein_ligand_sentinel_skipped_without_nonpolymer(self) -> None:
+        # Peptide/protein ligands carry the "None" sentinel and stay skipped
+        # even when the structure has no small-molecule entities.
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "None"}]}
+        enriched = _enriched_with_chains_and_ligands(chains=["A"])
+        warnings = validate_all("TEST", ai_data, enriched)
+        assert not any("Ghost Ligand" in w for w in warnings)
+
 
 class TestMethodConsistency:
     def test_method_conflict_xray(self) -> None:
@@ -161,6 +245,28 @@ class TestFakeUniProt:
             warnings = validate_all("TEST", ai_data, enriched, cache=cache)
         assert not any("Fake UniProt" in w for w in warnings)
 
+    def test_comma_joined_uniprot_checked_per_slug(self, tmp_path: Path) -> None:
+        # A comma-joined heterodimer receptor name must be looked up one slug at a
+        # time, never as the joined string (which is not a real UniProt ID and would
+        # spuriously fail to resolve).
+        cache = ValidationCache(tmp_path / "cache.json")
+        ai_data: dict[str, Any] = {
+            "receptor_info": {"uniprot_entry_name": "grm2_human, grm7_human"}
+        }
+        seen: list[str] = []
+
+        def _record(uid: str, _cache: Any) -> bool:
+            seen.append(uid)
+            return True
+
+        with patch(
+            "gpcr_tools.validator.integrity_checker.check_uniprot_existence",
+            side_effect=_record,
+        ):
+            warnings = validate_all("7EPD", ai_data, {}, cache=cache)
+        assert seen == ["grm2_human", "grm7_human"]  # each slug separately, never joined
+        assert not any("API_UNAVAILABLE" in w or "Fake UniProt" in w for w in warnings)
+
     def test_api_unavailable_warning(self, tmp_path: Path) -> None:
         cache = ValidationCache(tmp_path / "cache.json")
         ai_data: dict[str, Any] = {"receptor_info": {"uniprot_entry_name": "test_human"}}
@@ -200,7 +306,7 @@ class TestFakePubChem:
 
 class TestMultiError:
     def test_multiple_errors_in_one_pdb(self, tmp_path: Path) -> None:
-        """Review 4 A-3: multi-error scenario."""
+        """Multiple distinct validation errors in a single PDB."""
         cache = ValidationCache(tmp_path / "cache.json")
         ai_data: dict[str, Any] = {
             "receptor_info": {
@@ -254,7 +360,7 @@ class TestNoneSafety:
         validate_all("TEST", ai_data, enriched)
 
     def test_null_container_identifiers(self) -> None:
-        """BL1: null rcsb_polymer_entity_instance_container_identifiers."""
+        """None-safe: null rcsb_polymer_entity_instance_container_identifiers must not crash."""
         ai_data: dict[str, Any] = {"receptor_info": {"chain_id": "A"}}
         enriched: dict[str, Any] = {
             "polymer_entities": [
@@ -268,7 +374,7 @@ class TestNoneSafety:
         validate_all("TEST", ai_data, enriched)
 
     def test_null_nonpolymer_comp(self) -> None:
-        """BL1: null nonpolymer_comp."""
+        """None-safe: null nonpolymer_comp must not crash."""
         ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "ATP"}]}
         enriched: dict[str, Any] = {
             "nonpolymer_entities": [
@@ -280,10 +386,25 @@ class TestNoneSafety:
         }
         validate_all("TEST", ai_data, enriched)
 
+    def test_null_branched_subfields(self) -> None:
+        """None-safe: null branched struct-conn / feature / prd must not crash."""
+        ai_data: dict[str, Any] = {"ligands": [{"chem_comp_id": "NAG"}]}
+        enriched: dict[str, Any] = {
+            "branched_entities": [
+                {
+                    "prd": None,
+                    "branched_entity_instances": [
+                        {"rcsb_branched_struct_conn": None, "rcsb_branched_instance_feature": None}
+                    ],
+                }
+            ]
+        }
+        validate_all("TEST", ai_data, enriched)
+
 
 class TestWarningFormat:
     def test_all_warnings_match_regex(self, tmp_path: Path) -> None:
-        """Blood Lesson 3: every warning must match the UI regex contract."""
+        """Every warning must match the UI parsing regex contract."""
         cache = ValidationCache(tmp_path / "cache.json")
         ai_data: dict[str, Any] = {
             "receptor_info": {

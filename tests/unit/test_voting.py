@@ -130,6 +130,21 @@ class TestListOfDictVoting:
         assert majority[0]["chem_comp_id"] == "ATP"
         assert majority[0]["role"] == "agonist"
 
+    def test_pharmacological_role_check_is_voted(self) -> None:
+        # The incidental_candidate-fork field is voted by the generic nested recursion.
+        runs = [
+            [{"chem_comp_id": "CLR", "pharmacological_role_check": {"is_functional_ligand": True}}],
+            [{"chem_comp_id": "CLR", "pharmacological_role_check": {"is_functional_ligand": True}}],
+            [
+                {
+                    "chem_comp_id": "CLR",
+                    "pharmacological_role_check": {"is_functional_ligand": False},
+                }
+            ],
+        ]
+        majority, _ = get_majority_votes(runs, path="ligands")
+        assert majority[0]["pharmacological_role_check"]["is_functional_ligand"] is True
+
     def test_group_by_name(self) -> None:
         runs = [
             [{"name": "Nanobody", "type": "Nb"}],
@@ -286,6 +301,61 @@ class TestSoftFieldExclusion:
         assert majority["_provenance"] is None
         discs = find_discrepancies(runs[0], majority, {})
         assert all(not d["path"].endswith("_provenance") for d in discs)
+
+    def test_justification_and_evidence_excluded(self) -> None:
+        # Per-run free-text justification prose (why a site was called, the
+        # evidence cited) is phrased differently every run; it must not drive
+        # voting or surface as a discrepancy.
+        runs = [
+            {
+                "site_ref": "orthosteric",
+                "site_ref_justification": "contacts the canonical pocket residues",
+                "evidence": "Fig 2 of the paper shows the bound pose",
+            },
+            {
+                "site_ref": "orthosteric",
+                "site_ref_justification": "sits in the conserved binding cleft",
+                "evidence": "described in the results section",
+            },
+        ]
+        majority, _ = get_majority_votes(runs)
+        assert majority["site_ref"] == "orthosteric"
+        assert majority["site_ref_justification"] is None
+        assert majority["evidence"] is None
+        discs = find_discrepancies(runs[0], majority, {})
+        assert all(not d["path"].endswith(("site_ref_justification", "evidence")) for d in discs)
+
+    def test_structured_evidence_subtree_fully_excluded(self) -> None:
+        # The structured evidence object ({source, quote_or_path, reasoning})
+        # is the justification block on an inference. Its children are all
+        # explanatory: source is a provenance label, the other two are prose.
+        # None of them is an ingested decision value, so the whole subtree is
+        # excluded from voting and never surfaces a discrepancy — even when the
+        # runs disagree on every sub-field. The decided value lives in `value`.
+        runs = [
+            {
+                "value": "active",
+                "evidence": {
+                    "source": "Paper",
+                    "quote_or_path": "stabilised by the bound agonist",
+                    "reasoning": "agonist-bound is the active conformation",
+                },
+            },
+            {
+                "value": "active",
+                "evidence": {
+                    "source": "PDB Metadata",
+                    "quote_or_path": "annotated active in the entry",
+                    "reasoning": "metadata records an active state",
+                },
+            },
+        ]
+        majority, _ = get_majority_votes(runs)
+        assert majority["value"] == "active"
+        assert majority["evidence"] is None
+        discs = find_discrepancies(runs[0], majority, {})
+        # The disagreeing source/quote/reasoning must NOT produce discrepancies.
+        assert all(".evidence" not in d["path"] for d in discs)
 
 
 # ===================================================================
@@ -480,6 +550,50 @@ class TestDiscrepancies:
         discs = find_discrepancies("string", {"a": 1}, {})
         assert discs == []
 
+    def test_majority_list_item_absent_from_best_run_is_advisory(self) -> None:
+        # A voted/majority ligand the best run does not carry must not vanish: the
+        # omission is surfaced as an advisory review marker (e.g. a ligand only a
+        # minority of runs reported, or a minority-only entity that the chosen run
+        # dropped). best_run_value is None and the majority item is preserved.
+        best = {"ligands": [{"chem_comp_id": "ATP", "role": "agonist"}]}
+        majority = {
+            "ligands": [
+                {"chem_comp_id": "ATP", "role": "agonist"},
+                {"chem_comp_id": "RET", "role": "agonist"},
+            ]
+        }
+        votes = {
+            "ligands": [
+                {"role": {"agonist": 10}},
+                {"role": {"agonist": 2}},
+            ]
+        }
+        discs = find_discrepancies(best, majority, votes)
+        advisory = [d for d in discs if d["path"] == "ligands[RET]"]
+        assert len(advisory) == 1
+        assert advisory[0]["best_run_value"] is None
+        assert advisory[0]["majority_vote_value"] == {"chem_comp_id": "RET", "role": "agonist"}
+        assert advisory[0]["all_votes"] == {"role": {"agonist": 2}}
+        assert advisory[0]["needs_review"] is True
+        # Tagged gating=False: this minority-omission advisory is shown to the
+        # curator but must not block one-click accept-all (unlike a near-tie).
+        assert advisory[0]["gating"] is False
+
+    def test_omission_advisory_is_review_marker_not_critical_warning(self) -> None:
+        # The omission advisory is a discrepancy record (a structured review
+        # marker), never a critical-warning string. critical_warnings is built
+        # independently in the validation report, so these records cannot gate
+        # one-click accept through that channel.
+        best = {"ligands": []}
+        majority = {"ligands": [{"chem_comp_id": "RET", "role": "agonist"}]}
+        votes = {"ligands": [{"role": {"agonist": 3}}]}
+        discs = find_discrepancies(best, majority, votes)
+        assert len(discs) == 1
+        # A discrepancy record is a dict, not a warning string.
+        assert isinstance(discs[0], dict)
+        assert discs[0]["path"] == "ligands[RET]"
+        assert discs[0]["best_run_value"] is None
+
 
 # ===================================================================
 # Utility: _first_list_entry
@@ -600,8 +714,9 @@ class TestKeylessDiscrepancyDetection:
         votes = {"ligands": [{}, {}]}
         discs = find_discrepancies(best, majority, votes)
         paths = [d["path"] for d in discs]
-        # Alpha's role disagreement surfaces on Alpha's own path, never ligands[None]
-        assert any("Alpha" in p and p.endswith(".role") for p in paths)
+        # Alpha's role disagreement surfaces on Alpha's own (normalized) path,
+        # never collapsed under ligands[None].
+        assert any("alpha" in p.lower() and p.endswith(".role") for p in paths)
         assert not any(p == "ligands[None].role" for p in paths)
 
 
@@ -621,6 +736,22 @@ class TestLowConfidenceConsensus:
         best = {"structure_info": {"state": {"value": "active", "confidence": "High"}}}
         assert flag_low_confidence_consensus(best, frozenset({"Low"})) == []
 
+    def test_low_confidence_oligomeric_state_flagged(self) -> None:
+        from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
+
+        best = {"receptor_info": {"oligomeric_state": {"value": "homo-dimer", "confidence": "Low"}}}
+        flags = flag_low_confidence_consensus(best, frozenset({"Low"}))
+        assert any(
+            f["path"] == "receptor_info.oligomeric_state.value" and f.get("needs_review")
+            for f in flags
+        )
+
+    def test_high_confidence_oligomeric_state_not_flagged(self) -> None:
+        from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
+
+        best = {"receptor_info": {"oligomeric_state": {"value": "monomer", "confidence": "High"}}}
+        assert flag_low_confidence_consensus(best, frozenset({"Low"})) == []
+
     def test_low_confidence_ligand_role_flagged(self) -> None:
         from gpcr_tools.aggregator.voting import flag_low_confidence_consensus
 
@@ -635,11 +766,142 @@ class TestLowConfidenceConsensus:
 
         best = {
             "auxiliary_proteins": [
-                {"name": "Nb35", "type": {"value": "nanobody", "confidence": "Low"}}
+                {
+                    "name": "Nb35",
+                    "chain_id": "B",
+                    "type": {"value": "nanobody", "confidence": "Low"},
+                }
             ]
         }
         flags = flag_low_confidence_consensus(best, frozenset({"Low"}))
-        assert any(f["path"] == "auxiliary_proteins[Nb35].type.value" for f in flags)
+        # Identity is the normalized name plus the chain-set suffix.
+        assert any(f["path"] == "auxiliary_proteins[nb35|ch:b].type.value" for f in flags)
+
+
+class TestNameCaseFolding:
+    """A name field whose values differ only by letter case is one entity the
+    runs agree on; a pure-case split must not be surfaced for review. Genuine
+    spelling differences, and any non-name field, must still surface.
+    """
+
+    def test_pure_case_split_collapses_to_single_candidate(self) -> None:
+        # Five "Nanobody Nb52" vs five "nanobody Nb52" differ only by case:
+        # the vote collapses to one canonical candidate so the margin logic
+        # never sees a near-tie.
+        runs = [{"name": "Nanobody Nb52"}] * 5 + [{"name": "nanobody Nb52"}] * 5
+        majority, votes = get_majority_votes(runs)
+        assert isinstance(majority["name"], str)
+        assert majority["name"].casefold() == "nanobody nb52"
+        # Collapsed to a single candidate carrying the full vote count.
+        assert votes["name"] == {majority["name"]: 10}
+
+    def test_collapsed_pure_case_vote_not_flagged_as_near_tie(self) -> None:
+        # End to end: the pure-case 5:5 split must not produce a needs_review
+        # near-tie discrepancy once the vote is collapsed.
+        runs = [{"name": "Palmitic Acid"}] * 5 + [{"name": "Palmitic acid"}] * 5
+        majority, votes = get_majority_votes(runs)
+        best = runs[0]
+        discs = find_discrepancies(best, majority, votes)
+        assert discs == []
+
+    def test_canonical_casing_is_deterministic(self) -> None:
+        # Most-common original spelling wins; an even split breaks to fewest
+        # uppercase then lexicographic — stable across reorderings of the input.
+        forward = [{"name": "CHOLESTEROL"}] * 5 + [{"name": "Cholesterol"}] * 5
+        reverse = [{"name": "Cholesterol"}] * 5 + [{"name": "CHOLESTEROL"}] * 5
+        maj_f, _ = get_majority_votes(forward)
+        maj_r, _ = get_majority_votes(reverse)
+        # Tie on count -> fewest uppercase letters -> "Cholesterol".
+        assert maj_f["name"] == "Cholesterol"
+        assert maj_r["name"] == "Cholesterol"
+
+    def test_canonical_prefers_most_common(self) -> None:
+        runs = [{"name": "Cholesterol"}] * 7 + [{"name": "CHOLESTEROL"}] * 3
+        majority, _ = get_majority_votes(runs)
+        assert majority["name"] == "Cholesterol"
+
+    def test_selected_value_differs_only_by_case_suppressed(self) -> None:
+        # Regression guard for the second blocking path: the best run carries a
+        # minority capitalisation while the majority value is the canonical one.
+        # The vote collapse cannot catch this (it is about which run was chosen,
+        # not the vote shape), so the discrepancy stage must skip it directly.
+        best = {"name": "CALCIUM ION"}
+        majority = {"name": "Calcium Ion"}
+        votes = {"name": {"Calcium Ion": 10}}
+        discs = find_discrepancies(best, majority, votes)
+        assert discs == []
+
+    def test_name_near_tie_still_flagged_when_best_matches_majority(self) -> None:
+        # The case-only skip must stay confined to the selected-value-differs
+        # path. When the best run carries the majority value but the votes are a
+        # genuine multi-bucket near-tie between distinct name wordings, the
+        # near-tie must still surface for review (regression guard: an earlier
+        # version short-circuited any case-equal name leaf, swallowing this).
+        best = {"name": "mTOR fragment"}
+        majority = {"name": "mTOR fragment"}
+        votes = {"name": {"mTOR fragment": 5, "Rapamycin binding fragment": 5}}
+        discs = find_discrepancies(best, majority, votes)
+        flagged = [d for d in discs if d["path"] == "name"]
+        assert flagged and flagged[0].get("needs_review") is True
+        assert flagged[0].get("vote_margin") == 0
+
+    def test_mixed_spelling_singleton_still_flagged(self) -> None:
+        # A lone genuine spelling variant ("CholesterolBase") against a
+        # case-only cluster does NOT fold to one bucket, so it votes normally
+        # and the best run carrying it surfaces as a real disagreement.
+        runs = (
+            [{"name": "Cholesterol"}] * 5
+            + [{"name": "CHOLESTEROL"}] * 4
+            + [{"name": "CholesterolBase"}]
+        )
+        majority, votes = get_majority_votes(runs)
+        # Multi-bucket: the strict single-bucket gate does not fire, so the
+        # name still votes normally and the majority is the cholesterol cluster.
+        assert majority["name"].casefold() == "cholesterol"
+        best = {"name": "CholesterolBase"}
+        discs = find_discrepancies(best, majority, votes)
+        assert any(d["path"] == "name" for d in discs)
+
+    def test_true_wording_difference_still_flagged(self) -> None:
+        # Different wording (not a case variant) must still vote and surface.
+        runs = [{"name": "mTOR fragment"}] * 5 + [{"name": "Rapamycin binding fragment"}] * 5
+        majority, votes = get_majority_votes(runs)
+        best = {"name": "Rapamycin binding fragment"}
+        discs = find_discrepancies(best, majority, votes)
+        # The best run's value differs from the majority in more than case.
+        assert any(d["path"] == "name" for d in discs)
+
+    def test_chain_id_case_not_folded(self) -> None:
+        # Scope guard: chain_id is case-sensitive (A and a can be distinct
+        # chains), so a pure-case split there must NOT collapse.
+        runs = [{"chain_id": "A"}] * 5 + [{"chain_id": "a"}] * 5
+        _majority, votes = get_majority_votes(runs)
+        # Two competing candidates remain — not collapsed to one.
+        assert len(votes["chain_id"]) == 2
+        # And a chain_id whose selected value differs is still a discrepancy.
+        best = {"chain_id": "a"}
+        discs = find_discrepancies(best, {"chain_id": "A"}, {"chain_id": {"A": 5, "a": 5}})
+        assert any(d["path"] == "chain_id" for d in discs)
+
+    def test_non_name_scalar_field_not_folded(self) -> None:
+        # A non-name scalar leaf (here a role value) keeps case-sensitive
+        # voting and reports when the selected value differs from the majority.
+        best = {"role": "Agonist"}
+        majority = {"role": "agonist"}
+        votes = {"role": {"agonist": 6, "Agonist": 4}}
+        discs = find_discrepancies(best, majority, votes)
+        assert any(d["path"] == "role" for d in discs)
+
+    def test_name_with_none_value_votes_normally(self) -> None:
+        # A run reporting None for the name alongside string values is not a
+        # pure-case variation: the non-string guard leaves the votes to be
+        # counted normally rather than collapsed to one casing candidate.
+        runs = [{"name": "Cholesterol"}] * 5 + [{"name": "CHOLESTEROL"}] * 4 + [{"name": None}]
+        majority, votes = get_majority_votes(runs)
+        assert majority["name"] == "Cholesterol"
+        # Not collapsed: the None run keeps a distinct, separately counted vote.
+        assert votes["name"].get(None) == 1
+        assert votes["name"].get("Cholesterol") == 5
 
 
 class TestObjectListScoring:

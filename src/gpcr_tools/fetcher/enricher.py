@@ -16,6 +16,7 @@ import json
 import logging
 import os
 import tempfile
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -30,7 +31,7 @@ from gpcr_tools.config import (
     HTTP_RETRY_STATUS_FORCELIST,
     HTTP_RETRY_TOTAL,
     LIGAND_EXCLUDE_LIST,
-    LIGAND_WEIGHT_THRESHOLD,
+    LIPID_COMP_IDS,
     PUBCHEM_REST_URL,
     RCSB_GRAPHQL_URL,
     RCSB_SEARCH_URL,
@@ -46,6 +47,19 @@ from gpcr_tools.config import (
 from gpcr_tools.fetcher.cache import JsonCache
 
 logger = logging.getLogger(__name__)
+
+# A resolved polypeptide entity with no reference sequence is treated as a
+# peptide ligand only up to this length; longer chains are receptors, fusion
+# partners, antibodies or crystallization scaffolds rather than ligands. Sized
+# to clear typical peptide agonists while staying below short antibody fragments
+# and structural domains.
+PEPTIDE_LIGAND_MAX_LENGTH = 50
+
+# Top-level marker stamped on an enriched record that was written while one or
+# more external lookups transiently failed. The resume skip re-enriches a record
+# carrying this marker (the cross-run caches mean only the failed lookup is
+# re-hit), so a partial-outage record self-heals rather than freezing its gaps.
+INCOMPLETE_MARKER_KEY = "_enrich_incomplete"
 
 _CHEM_COMP_QUERY = """\
 query($id: String!) {
@@ -109,8 +123,16 @@ def enrich_single_pdb(
     enriched_path = cfg.enriched_dir / f"{pdb_id}.json"
 
     if enriched_path.exists() and not force:
-        logger.info("[%s] Enriched JSON already exists, skipping", pdb_id)
-        return True
+        # A previous run may have written this record while one or more lookups
+        # were transiently failing; it carries the _enrich_incomplete marker.
+        # Re-enrich those (the successful lookups are cached cross-run, so only
+        # the previously-failed lookup is re-hit — cheap and self-healing once
+        # the transient clears). A clean record has no marker and is skipped.
+        if _enriched_is_incomplete(enriched_path):
+            logger.info("[%s] Enriched JSON exists but is marked incomplete, re-enriching", pdb_id)
+        else:
+            logger.info("[%s] Enriched JSON already exists, skipping", pdb_id)
+            return True
 
     if not raw_path.exists():
         logger.error("[%s] Raw JSON not found at %s", pdb_id, raw_path)
@@ -132,6 +154,9 @@ def enrich_single_pdb(
     # 1. UniProt enrichment
     _enrich_uniprot(pdb_data, sess, uniprot_cache, stats=stats)
 
+    # 1b. Polymer ligand-type hints (peptide / nucleic-acid ligands)
+    _tag_polymer_ligand_types(pdb_data)
+
     # 2. Ligand type + PubChem enrichment
     _enrich_ligands(pdb_data, sess, pubchem_cache, synonyms_cache, smiles_cache, stats=stats)
 
@@ -151,6 +176,25 @@ def enrich_single_pdb(
         )
         return False
 
+    # A PARTIAL transient failure (some lookups succeeded, some hard-failed)
+    # still leaves the record with null/empty fields where the failed lookups
+    # would sit. Persist it so the rest of the pipeline proceeds, but stamp it
+    # incomplete so the resume skip re-enriches it on the next run instead of
+    # freezing the gaps as truth. A fully-successful enrich carries no marker
+    # (and any stale marker from a prior partial run is cleared) so it is
+    # skipped normally.
+    if stats["hard_failed"] > 0:
+        pdb_data[INCOMPLETE_MARKER_KEY] = True
+        logger.warning(
+            "[%s] %d of %d enrichment lookup(s) failed — writing record marked "
+            "incomplete; rerun to re-enrich the failed lookup(s)",
+            pdb_id,
+            stats["hard_failed"],
+            stats["attempted"],
+        )
+    else:
+        pdb_data.pop(INCOMPLETE_MARKER_KEY, None)
+
     # Write enriched output atomically. The existence-based resume skip treats
     # enriched/{id}.json as a completed checkpoint, so a half-written file from
     # an interrupted run must never be left behind — a later run would trust it
@@ -168,6 +212,23 @@ def enrich_single_pdb(
         return False
     logger.info("[%s] Enriched → %s", pdb_id, enriched_path)
     return True
+
+
+def _enriched_is_incomplete(enriched_path: Path) -> bool:
+    """Return True if an existing enriched record is marked incomplete.
+
+    A record stamped with :data:`INCOMPLETE_MARKER_KEY` was written while a
+    lookup transiently failed and must be re-enriched. A record that cannot be
+    read (truncated / corrupt) is also treated as needing a redo. A clean,
+    fully-successful record returns False and is skipped on resume.
+    """
+    try:
+        with open(enriched_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        # Unreadable: don't trust it as a completed checkpoint — re-enrich.
+        return True
+    return bool(isinstance(data, dict) and data.get(INCOMPLETE_MARKER_KEY))
 
 
 # ---------------------------------------------------------------------------
@@ -206,6 +267,45 @@ def _enrich_uniprot(
             acc = uni.get("rcsb_id")
             if acc and acc in slug_map:
                 uni["gpcrdb_entry_name_slug"] = slug_map[acc]
+
+
+def _resolve_secondary_accession(acc: str, session: requests.Session) -> tuple[str | None, bool]:
+    """Resolve an accession the batch endpoint did not match (a secondary one).
+
+    The ``/accessions`` batch endpoint matches PRIMARY accessions only -- a
+    secondary (merged/retired) accession returns nothing. UniProt merges
+    accessions over time, so an RCSB polymer entity can legitimately carry a
+    secondary accession; without this fallback that receptor would silently lose
+    its ``gpcrdb_entry_name_slug``. The search endpoint maps a secondary accession
+    to its current entry via ``sec_acc:``.
+
+    Returns ``(slug, confirmed)``:
+      * ``(slug, True)``  -- resolved to a single current entry.
+      * ``(None, True)``  -- a definitive HTTP-200 answer with no single match
+        (genuinely absent, or an ambiguous demerge); the caller may negative-cache.
+      * ``(None, False)`` -- a TRANSIENT failure (non-200 / timeout / parse error);
+        the caller must abstain and NOT freeze it as a permanent negative.
+    """
+    try:
+        response = session.get(
+            f"{UNIPROT_REST_URL}/search",
+            params={"query": f"sec_acc:{acc}", "fields": "accession,id", "format": "json"},
+            timeout=TIMEOUT_UNIPROT_BATCH,
+        )
+        if response.status_code == 200:
+            results = response.json().get("results") or []
+            # Exactly one current entry = an unambiguous merge. A rare demerge
+            # (one old accession -> several entries) is left unresolved rather
+            # than guessing which one this PDB meant -- a confirmed non-match.
+            if len(results) == 1:
+                entry_name = results[0].get("uniProtkbId")
+                if entry_name:
+                    return str(entry_name).lower(), True
+            return None, True  # confirmed: genuinely absent or ambiguous demerge
+        return None, False  # non-200: transient/unexpected -> abstain, do not cache
+    except (requests.exceptions.RequestException, ValueError) as exc:
+        logger.warning("[UniProt sec_acc] Lookup failed for %s: %s", acc, exc)
+        return None, False  # transient -> abstain, do not cache
 
 
 def _resolve_uniprot_slugs(
@@ -249,10 +349,33 @@ def _resolve_uniprot_slugs(
                     cache.set(accession, slug)
                 found.add(accession)
 
-        # Cache misses as None so we don't re-query
+        # Accessions the batch did not match are likely SECONDARY (merged/retired)
+        # -- the batch endpoint matches primary accessions only. Resolve each via a
+        # sec_acc search so a real GPCR carrying a secondary accession is not
+        # silently left slug-less.
+        confirmed_missing: set[str] = set()
         for acc in to_fetch - found:
+            if stats is not None:
+                stats["attempted"] += 1
+            slug, confirmed = _resolve_secondary_accession(acc, session)
+            if slug is not None:
+                result[acc] = slug
+                if cache:
+                    cache.set(acc, slug)
+            elif confirmed:
+                confirmed_missing.add(acc)
+            elif stats is not None:
+                # Transient sec_acc-search failure: abstain -- do NOT negative-cache
+                # (so it is retried), and count it so the record is marked
+                # incomplete and re-enriched on resume. Never freeze a transient
+                # outage as a permanent negative (mirrors the primary path).
+                stats["hard_failed"] += 1
+
+        # Negative-cache ONLY confirmed misses (a definitive 200 "not in UniProt"),
+        # never a transient failure. (Opt into None-caching explicitly.)
+        for acc in confirmed_missing:
             if cache:
-                cache.set(acc, None)
+                cache.set(acc, None, allow_none=True)
 
     except requests.exceptions.RequestException as exc:
         logger.error("UniProt API request failed: %s", exc)
@@ -262,6 +385,51 @@ def _resolve_uniprot_slugs(
             result[acc] = None
 
     return result
+
+
+def _tag_polymer_ligand_types(pdb_data: dict[str, Any]) -> None:
+    """Set ``gpcrdb_determined_type`` on polymer entities that are ligands.
+
+    Peptide and nucleic-acid ligands are polymer entities, so they never reach
+    the nonpolymer classifier and previously carried no type hint. A short
+    polypeptide with no reference sequence (no UniProt / cross-reference) is a
+    peptide ligand; a nucleotide polymer is a nucleic acid. Receptors, fusion
+    partners and antibody fragments are excluded by the reference-sequence and
+    length checks, so their hint is left unset and they fall through to the
+    polymer ``type`` already shown to the model.
+
+    The hint is persisted on the enriched record here. Surfacing it to the
+    model prompt is a separate concern: the prompt's polymer block does not yet
+    carry ``gpcrdb_determined_type`` (only the nonpolymer block does), so this
+    write is currently persist-only and not consumed downstream. Wiring the
+    polymer hint into the prompt belongs to the prompt-building layer and is
+    intentionally left out of the enrichment step.
+    """
+    polymers = ((pdb_data.get("data") or {}).get("entry") or {}).get("polymer_entities") or []
+    for poly in polymers:
+        entity_poly = poly.get("entity_poly") or {}
+        poly_type = (entity_poly.get("type") or "").lower()
+
+        if "ribonucleotide" in poly_type or "deoxyribonucleotide" in poly_type:
+            poly["gpcrdb_determined_type"] = "na"
+            continue
+
+        if "polypeptide" not in poly_type:
+            continue
+
+        # A reference sequence (UniProt accession) marks a receptor or fusion
+        # partner, never a peptide ligand.
+        identifiers = poly.get("rcsb_polymer_entity_container_identifiers") or {}
+        if identifiers.get("uniprot_ids"):
+            continue
+        if identifiers.get("reference_sequence_identifiers"):
+            continue
+        if any(u.get("rcsb_id") for u in (poly.get("uniprots") or [])):
+            continue
+
+        length = entity_poly.get("rcsb_sample_sequence_length")
+        if isinstance(length, int | float) and length <= PEPTIDE_LIGAND_MAX_LENGTH:
+            poly["gpcrdb_determined_type"] = "peptide"
 
 
 # ---------------------------------------------------------------------------
@@ -288,8 +456,8 @@ def _enrich_ligands(
         descriptor = comp.get("rcsb_chem_comp_descriptor") or {}
 
         # Determined type
-        formula_weight = chem_comp.get("formula_weight")
-        comp["gpcrdb_determined_type"] = _determine_ligand_type(formula_weight)
+        comp_id = chem_comp.get("id")
+        comp["gpcrdb_determined_type"] = _determine_ligand_type(comp_id, chem_comp)
 
         # PubChem CID from InChIKey
         inchikey = descriptor.get("InChIKey")
@@ -304,7 +472,6 @@ def _enrich_ligands(
             comp["gpcrdb_pubchem_synonyms"] = []
 
         # SMILES/InChIKey for non-excluded ligands
-        comp_id = chem_comp.get("id")
         if comp_id and comp_id not in LIGAND_EXCLUDE_LIST:
             smiles_data = _fetch_chem_comp_descriptors(comp_id, session, smiles_cache, stats=stats)
             if smiles_data:
@@ -314,14 +481,40 @@ def _enrich_ligands(
                     descriptor["InChIKey"] = smiles_data.get("InChIKey")
 
 
-def _determine_ligand_type(formula_weight: Any) -> str:
-    """Classify ligand as small-molecule, peptide, or unknown."""
-    if formula_weight is None:
-        return "unknown"
-    try:
-        return "small-molecule" if float(formula_weight) < LIGAND_WEIGHT_THRESHOLD else "peptide"
-    except (ValueError, TypeError):
-        return "unknown"
+def _determine_ligand_type(comp_id: str | None, chem_comp: dict[str, Any]) -> str:
+    """Classify a nonpolymer ligand by chemical identity, not molecular weight.
+
+    The hint is a deterministic cascade over the comp_id and the CCD
+    ``_chem_comp.type``:
+
+    1. A comp_id on the curated lipid whitelist resolves to ``lipid`` directly.
+       This is checked first so the answer is stable even for older fetches that
+       predate the ``type`` field.
+    2. Otherwise the CCD type routes the classes it can name: saccharides,
+       free amino acids (peptide-linking monomers), and free mononucleotides
+       (nucleotide-linking monomers, e.g. a bound GDP) are all small molecules.
+    3. Anything else is a small molecule.
+
+    Peptide and protein ligands are polymer entities and never reach this
+    function; their hint is set on the polymer path instead. The previous
+    weight-proxy never produced ``lipid`` and mislabelled heavy small molecules
+    as peptides, so it is gone.
+    """
+    if comp_id and comp_id in LIPID_COMP_IDS:
+        return "lipid"
+
+    ccd_type = (chem_comp.get("type") or "").lower()
+    if "saccharide" in ccd_type:
+        return "small-molecule"
+    if "peptide linking" in ccd_type:
+        # A single free amino acid; treated as a small molecule until the schema
+        # gains a dedicated amino-acid value.
+        return "small-molecule"
+    # A nucleotide-linking component here is a single free mononucleotide (a
+    # bound nucleotide cofactor, e.g. a GDP/GTP) -- a small molecule. The 'na'
+    # value is reserved for polymer nucleic-acid entities, classified on the
+    # polymer path.
+    return "small-molecule"
 
 
 def _get_pubchem_cid(
@@ -343,6 +536,14 @@ def _get_pubchem_cid(
         stats["attempted"] += 1
     try:
         response = session.get(url, timeout=TIMEOUT_PUBCHEM_CID)
+        # Three-way outcome (mirrors the validator's existence checks):
+        #   200 -> confirmed answer, parse + cache (a 200 with no CID is a real
+        #          negative for this InChIKey, cached as a confirmed None).
+        #   404 -> definitive "not found"; abstain from caching but it is a true
+        #          negative, NOT an outage, so it does not count as hard_failed.
+        #   other -> transient/unexpected (403/408/520/Cloudflare 5xx, etc.):
+        #          count as hard_failed so the outage guard sees it, cache
+        #          nothing, return None. Forcelist transients raise into except.
         if response.status_code == 200:
             data = response.json()
             cids = (data.get("IdentifierList") or {}).get("CID")
@@ -351,12 +552,20 @@ def _get_pubchem_cid(
                     pubchem_id = str(cids[0])
                 elif isinstance(cids, int | float):
                     pubchem_id = str(int(cids))
-            # Cache only a confirmed (HTTP 200) answer. A transient failure or
-            # non-200 must NOT be cached: the cache is keyed by InChIKey (not
-            # PDB), shared across runs and not cleared by --force, so a cached
-            # negative from one blip would suppress this ligand forever.
+            # Cache only a confirmed (HTTP 200) answer; a 200-with-no-CID is a
+            # confirmed negative, so opt into caching the None explicitly.
             if cache:
-                cache.set(inchikey, pubchem_id)
+                cache.set(inchikey, pubchem_id, allow_none=True)
+        elif response.status_code == 404:
+            logger.info("PubChem has no CID for InChIKey %s (HTTP 404)", inchikey)
+        else:
+            logger.warning(
+                "PubChem CID lookup for %s returned unexpected HTTP %s — abstaining",
+                inchikey,
+                response.status_code,
+            )
+            if stats is not None:
+                stats["hard_failed"] += 1
     except requests.exceptions.RequestException as exc:
         logger.error("PubChem CID lookup failed for %s: %s", inchikey, exc)
         if stats is not None:
@@ -382,6 +591,11 @@ def _get_pubchem_synonyms(
         stats["attempted"] += 1
     try:
         response = session.get(url, timeout=TIMEOUT_PUBCHEM_SYNONYMS)
+        # Three-way outcome — see _get_pubchem_cid for the full rationale.
+        #   200 -> confirmed list (possibly empty), parse + cache.
+        #   404 -> definitive "no synonyms on record": leave None, no cache, NOT
+        #          counted as hard_failed (a real negative, not an outage).
+        #   other -> transient/unexpected: count as hard_failed, cache nothing.
         if response.status_code == 200:
             data = response.json()
             info_list = (data.get("InformationList") or {}).get("Information") or []
@@ -389,6 +603,16 @@ def _get_pubchem_synonyms(
             # Cache only a confirmed (HTTP 200) answer — see _get_pubchem_cid.
             if cache:
                 cache.set(cid, synonyms)
+        elif response.status_code == 404:
+            logger.info("PubChem has no synonyms for CID %s (HTTP 404)", cid)
+        else:
+            logger.warning(
+                "PubChem synonyms lookup for CID %s returned unexpected HTTP %s — abstaining",
+                cid,
+                response.status_code,
+            )
+            if stats is not None:
+                stats["hard_failed"] += 1
     except requests.exceptions.RequestException as exc:
         logger.error("PubChem synonyms lookup failed for CID %s: %s", cid, exc)
         if stats is not None:
@@ -417,12 +641,26 @@ def _fetch_chem_comp_descriptors(
             headers={"Content-Type": "application/json"},
             timeout=TIMEOUT_RCSB_CHEM_COMP,
         )
+        # Three-way outcome — see _get_pubchem_cid for the full rationale.
+        #   200 -> confirmed answer (descriptor dict, possibly empty), cache it.
+        #   404 -> definitive "not found": no cache, NOT counted as hard_failed.
+        #   other -> transient/unexpected: count as hard_failed, cache nothing.
         if resp.status_code == 200:
             data = resp.json().get("data") or {}
             result = (data.get("chem_comp") or {}).get("rcsb_chem_comp_descriptor") or {}
             # Cache only a confirmed (HTTP 200) answer — see _get_pubchem_cid.
             if cache:
                 cache.set(comp_id, result)
+        elif resp.status_code == 404:
+            logger.info("RCSB chem_comp has no descriptor for %s (HTTP 404)", comp_id)
+        else:
+            logger.warning(
+                "RCSB chem_comp query for %s returned unexpected HTTP %s — abstaining",
+                comp_id,
+                resp.status_code,
+            )
+            if stats is not None:
+                stats["hard_failed"] += 1
     except requests.exceptions.RequestException as exc:
         logger.error("RCSB chem_comp query failed for %s: %s", comp_id, exc)
         if stats is not None:

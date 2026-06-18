@@ -9,7 +9,52 @@ from gpcr_tools.csv_generator.logic import (
     build_structure_note,
     collect_ligand_chains,
     map_label_asym_id,
+    resolve_partner_protomer,
 )
+
+
+def _oligo(*chains: tuple[str, str]) -> dict:
+    """all_gpcr_chains from (chain_id, slug) pairs."""
+    return {"all_gpcr_chains": [{"chain_id": c, "slug": s} for c, s in chains]}
+
+
+class TestResolvePartnerProtomer:
+    def test_heterodimer_records_partner_gene(self) -> None:
+        # GABA-B: primary GABBR2 (B); partner GABBR1 (A) must be recorded, not lost.
+        oligo = _oligo(("A", "gabr1_human"), ("B", "gabr2_human"))
+        assert resolve_partner_protomer(oligo, "B") == ("gabr1_human", "A")
+
+    def test_homodimer_records_other_chain(self) -> None:
+        oligo = _oligo(("A", "grm2_human"), ("B", "grm2_human"))
+        assert resolve_partner_protomer(oligo, "A") == ("grm2_human", "B")
+
+    def test_monomer_has_no_partner(self) -> None:
+        oligo = _oligo(("A", "casr_human"))
+        assert resolve_partner_protomer(oligo, "A") == ("", "")
+
+    def test_single_chain_primary_still_surfaces_partner(self) -> None:
+        # AI reported only the (wrong) GABBR1 chain A; the partner GABBR2 (B) is
+        # still recorded even though the primary stays A (single-chain override deferred).
+        oligo = _oligo(("A", "gabr1_human"), ("B", "gabr2_human"))
+        assert resolve_partner_protomer(oligo, "A") == ("gabr2_human", "B")
+
+    def test_higher_order_joins_extra_chains(self) -> None:
+        oligo = _oligo(
+            ("A", "gp156_human"), ("B", "gp156_human"), ("C", "gp156_human"), ("D", "gp156_human")
+        )
+        partner_uniprot, partner_chains = resolve_partner_protomer(oligo, "A")
+        assert partner_uniprot == "gp156_human"
+        assert partner_chains == "B, C, D"
+
+    def test_empty_all_gpcr_chains(self) -> None:
+        assert resolve_partner_protomer({}, "A") == ("", "")
+
+    def test_empty_primary_records_no_partner(self) -> None:
+        # No known primary chain (malformed receptor_info) -> no partner attribution,
+        # rather than treating every chain as a partner.
+        oligo = _oligo(("A", "gabr1_human"), ("B", "gabr2_human"))
+        assert resolve_partner_protomer(oligo, "") == ("", "")
+
 
 # ── map_label_asym_id ────────────────────────────────────────────────
 
@@ -205,23 +250,41 @@ class TestBuildStructureNote:
         assert "[HETEROMER: chains R, S]" in result
 
     def test_missed_protomer_alert(self):
+        # Real validator messages already carry a "[TYPE] at '...'" prefix.
         oligo = {
             "classification": "MONOMER",
             "chain_id_override": {"applied": False},
-            "alerts": [{"type": "MISSED_PROTOMER", "message": "Missed B"}],
+            "alerts": [
+                {
+                    "type": "MISSED_PROTOMER",
+                    "message": "[MISSED_PROTOMER] at 'oligomer_analysis': Missed B",
+                }
+            ],
             "all_gpcr_chains": [],
         }
         result = build_structure_note({"note": ""}, oligo)
-        assert "[MISSED_PROTOMER: Missed B]" in result
+        assert "[MISSED_PROTOMER]" in result
+        assert "Missed B" in result
+        # The type prefix must appear exactly once in the persisted note.
+        assert result.count("[MISSED_PROTOMER]") == 1
+        assert "[MISSED_PROTOMER: [MISSED_PROTOMER]" not in result
 
     def test_hallucination_alert(self):
         oligo = {
             "chain_id_override": {"applied": False},
-            "alerts": [{"type": "HALLUCINATION", "message": "Chain G fake"}],
+            "alerts": [
+                {
+                    "type": "HALLUCINATION",
+                    "message": "[HALLUCINATION] at 'oligomer_analysis': Chain G fake",
+                }
+            ],
             "all_gpcr_chains": [],
         }
         result = build_structure_note({"note": ""}, oligo)
-        assert "[HALLUCINATION: Chain G fake]" in result
+        assert "[HALLUCINATION]" in result
+        assert "Chain G fake" in result
+        assert result.count("[HALLUCINATION]") == 1
+        assert "[HALLUCINATION: [HALLUCINATION]" not in result
 
     def test_confirmed_oligomer_not_included(self):
         """CONFIRMED_OLIGOMER alerts should NOT appear in the note."""

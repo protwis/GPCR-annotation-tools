@@ -15,11 +15,16 @@ from rich.text import Text
 from rich.theme import Theme
 
 from gpcr_tools.config import (
+    ALERT_ASSEMBLY_MISMATCH,
     ALERT_CHAIN_ID_OVERRIDDEN,
     ALERT_CONFIRMED_OLIGOMER,
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
+    ALERT_MULTI_COPY_LIGAND,
+    ALERT_OLIGOMER_DISAGREEMENT,
+    ALERT_PROTOMER_IN_AUXILIARY,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
     OLIGOMER_MONOMER,
@@ -32,6 +37,7 @@ from gpcr_tools.config import (
     VALIDATION_MATCHED_POLYMER,
     VALIDATION_MATCHED_SMALL_MOLECULE,
     VALIDATION_SKIPPED_APO,
+    ensure_alert_prefix,
 )
 
 # ── Console Setup ───────────────────────────────────────────────────────
@@ -58,6 +64,39 @@ def display_pdb_footer(pdb_id: str) -> None:
     screen scrolls.  Intentionally faint — a quiet marker, not a banner.
     """
     console.print(f"[dim]── PDB {pdb_id} ──[/dim]")
+
+
+def display_critical_warnings_summary(validation_data: dict) -> bool:
+    """Render the validation critical warnings + algorithm conflicts up front.
+
+    These are the same findings that gate the PDB (disable global accept-all)
+    and surface as RED sections once review mode is entered.  Showing them on
+    the Initial Summary lets the curator see *why* a PDB is gated immediately,
+    without first stepping into review.  Returns True if anything was rendered.
+    """
+    if not validation_data:
+        return False
+    critical = validation_data.get("critical_warnings") or []
+    conflicts = validation_data.get("algo_conflicts") or []
+    if not critical and not conflicts:
+        return False
+
+    warn_text = Text()
+    for w in critical:
+        warn_text.append(f"• {w}\n", style="bold red")
+    for c in conflicts:
+        warn_text.append(f"• {c}\n", style="bold yellow")
+
+    count = len(critical) + len(conflicts)
+    console.print(
+        Panel(
+            warn_text,
+            title=f"[bold red]CRITICAL VALIDATION FINDINGS ({count})[/]",
+            border_style="red",
+            box=box.DOUBLE,
+        )
+    )
+    return True
 
 
 # ── Dashboard ───────────────────────────────────────────────────────────
@@ -114,6 +153,33 @@ def create_display_copy(data: Any) -> Any:
         return data
 
 
+def ligand_detector_notes(lig: dict) -> list[str]:
+    """Advisory one-liners for a ligand's detector findings (None-safe).
+
+    The geometry-derived binding site (``site_ref``) and the model's judgment on
+    an incidental-candidate molecule (``pharmacological_role_check``). Returned as plain strings so
+    the formatting logic is testable independently of the Rich panel.
+    """
+    notes: list[str] = []
+    site = lig.get("site_ref")
+    if site:
+        notes.append(f"Site: {site}")
+    justification = lig.get("site_ref_justification")
+    if justification:
+        notes.append(f"Site justification: {justification}")
+    assessment = lig.get("pharmacological_role_check")
+    if isinstance(assessment, dict):
+        verdict = (
+            "functional ligand"
+            if assessment.get("is_functional_ligand")
+            else "incidental / structural"
+        )
+        conf = assessment.get("confidence") or "?"
+        evidence = assessment.get("evidence") or ""
+        notes.append(f"Pharmacological role: {verdict} (confidence {conf}) — {evidence}")
+    return notes
+
+
 def display_ligand_validation_panel(ligands_data: list) -> None:
     """Render a status-aware summary panel for ligands before the main review.
 
@@ -123,7 +189,13 @@ def display_ligand_validation_panel(ligands_data: list) -> None:
         return
 
     has_any_status = any(
-        isinstance(lig, dict) and lig.get("validation_status") for lig in ligands_data
+        isinstance(lig, dict)
+        and (
+            lig.get("validation_status")
+            or lig.get("pharmacological_role_check")
+            or lig.get("site_ref")
+        )
+        for lig in ligands_data
     )
     if not has_any_status:
         return
@@ -174,6 +246,12 @@ def display_ligand_validation_panel(ligands_data: list) -> None:
             status_text = Text(status or "N/A", style="dim")
             detail = Text("")
 
+        # Detector advisories (non-gating): the geometry-derived binding site and
+        # the model's judgment on an incidental-candidate molecule, so the curator can act on
+        # them. They never block the review -- they only inform it.
+        for note in ligand_detector_notes(lig):
+            detail.append(f"\n{note}", style="magenta")
+
         table.add_row(name, comp_id, status_text, detail)
 
     ghost_count = sum(
@@ -207,6 +285,8 @@ def _should_highlight_oligomer(oligo: dict, receptor_chain: str) -> bool:
         ALERT_MISSED_PROTOMER,
         ALERT_CHAIN_ID_OVERRIDDEN,
         ALERT_SUSPICIOUS_7TM,
+        ALERT_OLIGOMER_DISAGREEMENT,
+        ALERT_TM_DATA_UNAVAILABLE,
     }:
         return True
     if oligo.get("classification") in (OLIGOMER_HOMOMER, OLIGOMER_HETEROMER):
@@ -302,9 +382,13 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
         elements.append(sug_text)
 
     # ── Alerts ──
-    if alerts:
+    # ASSEMBLY_MISMATCH is a chain-count vs functional-oligomer note that fires on
+    # most receptor + transducer complexes; it is informational, not actionable, so
+    # it is surfaced below with the assembly cross-check rather than as an alert.
+    actionable_alerts = [a for a in alerts if (a.get("type") or "") != ALERT_ASSEMBLY_MISMATCH]
+    if actionable_alerts:
         alert_text = Text()
-        for alert in alerts:
+        for alert in actionable_alerts:
             atype = alert.get("type") or ""
             style = {
                 ALERT_HALLUCINATION: "bold red",
@@ -312,9 +396,18 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
                 ALERT_MISSED_PROTOMER: "bold yellow",
                 ALERT_CONFIRMED_OLIGOMER: "green",
                 ALERT_SUSPICIOUS_7TM: "bold yellow on red",
+                ALERT_MULTI_COPY_LIGAND: "bold yellow",
+                ALERT_PROTOMER_IN_AUXILIARY: "bold yellow",
+                ALERT_OLIGOMER_DISAGREEMENT: "bold red",
+                ALERT_TM_DATA_UNAVAILABLE: "bold red",
             }.get(atype) or "white"
-            alert_text.append(f"  [{atype}] ", style=style)
-            alert_text.append(f"{alert.get('message') or ''}\n", style="white")
+            # Keep the "[TYPE]" label present exactly once and use the type
+            # only to pick a style. Current validator messages already carry the
+            # prefix (prepending it again would duplicate it, e.g.
+            # "[MULTI_COPY_LIGAND] [MULTI_COPY_LIGAND] ..."), while older recorded
+            # data needs it added.
+            message = ensure_alert_prefix(atype, alert.get("message"))
+            alert_text.append(f"  {message}\n", style=style)
         elements.append(Text())
         elements.append(Text("Alerts:", style="bold underline"))
         elements.append(alert_text)
@@ -332,6 +425,19 @@ def display_oligomer_analysis_panel(main_data: dict) -> None:
         )
         elements.append(Text())
         elements.append(asm_text)
+
+    # Assembly-vs-GPCR-centric mismatch: informational, shown dim alongside the
+    # cross-check above (the difference between the chain-count assembly and the
+    # functional GPCR-centric oligomer label), not an actionable alert.
+    for alert in alerts:
+        if (alert.get("type") or "") == ALERT_ASSEMBLY_MISMATCH:
+            note = Text()
+            note.append("  ", style="dim")
+            note.append(
+                ensure_alert_prefix(ALERT_ASSEMBLY_MISMATCH, alert.get("message")),
+                style="dim",
+            )
+            elements.append(note)
 
     # ── Panel styling ──
     if override.get("applied"):

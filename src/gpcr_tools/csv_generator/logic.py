@@ -12,6 +12,7 @@ from gpcr_tools.config import (
     ALERT_MISSED_PROTOMER,
     OLIGOMER_HETEROMER,
     OLIGOMER_HOMOMER,
+    ensure_alert_prefix,
 )
 
 
@@ -115,6 +116,45 @@ def apply_db_truncation(
     return primary_chain, primary_uniprot, truncation_note
 
 
+def resolve_partner_protomer(oligo: dict, primary_chain: str) -> tuple[str, str]:
+    """The non-primary GPCR protomer(s) of a dimer: ``(partner_uniprots, partner_chains)``.
+
+    A Class C receptor is an obligate dimer; the primary protomer goes in the
+    Receptor_UniProt/ChainID columns and the OTHER protomer would otherwise be lost.
+    This returns it so it is recorded, not dropped:
+
+    * heterodimer -> the partner gene's slug + chain (e.g. GABBR1 alongside GABBR2);
+    * homodimer   -> the same gene's other chain (informational);
+    * monomer     -> ``("", "")``.
+
+    A higher-order assembly (more than two protomers) comma-joins the extra chains.
+    Distinct partner slugs are de-duplicated; chains are sorted for stable output.
+    """
+    primary_chains = {c.strip() for c in str(primary_chain).split(",") if c.strip()}
+    # With no known primary chain (malformed receptor_info), every chain would look
+    # like a partner -- a mis-attribution. Record no partner rather than guess.
+    if not primary_chains:
+        return "", ""
+    partner_slugs: list[str] = []
+    partner_chains: list[str] = []
+    seen: set[str] = set()
+    for chain_info in oligo.get("all_gpcr_chains") or []:
+        if not isinstance(chain_info, dict):
+            continue
+        cid = chain_info.get("chain_id")
+        if not cid or cid in primary_chains:
+            continue
+        partner_chains.append(cid)
+        slug = chain_info.get("slug")
+        if slug and slug not in seen:
+            seen.add(slug)
+            partner_slugs.append(slug)
+    # Slugs keep annotation order (the partner genes), chains are sorted for stability;
+    # the two columns are sets (genes / chains), not positionally paired -- a homodimer
+    # is one gene over several chains.
+    return ", ".join(partner_slugs), ", ".join(sorted(partner_chains))
+
+
 def build_structure_note(
     s_info: dict,
     oligo: dict,
@@ -154,7 +194,11 @@ def build_structure_note(
         for alert in oligo.get("alerts") or []:
             atype = alert.get("type") or ""
             if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER):
-                parts.append(f"[{atype}: {alert.get('message') or ''}]")
+                # Keep the "[TYPE]" label present exactly once in the persisted
+                # note. Current validator messages already carry it; older
+                # recorded data does not. Re-wrapping with "[{atype}: ...]" would
+                # duplicate it (e.g. "[HALLUCINATION: [HALLUCINATION] ...]").
+                parts.append(ensure_alert_prefix(atype, alert.get("message")))
 
     if truncation_note:
         parts.append(truncation_note)

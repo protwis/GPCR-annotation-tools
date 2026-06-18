@@ -12,6 +12,7 @@ from gpcr_tools.config import (
     AUX_PROTEIN_DISPATCH,
     CSV_SCHEMA,
     VALIDATION_GHOST_LIGAND,
+    VALIDATION_SKIPPED_APO,
     get_config,
     is_empty_key,
 )
@@ -22,6 +23,23 @@ def sanitize_value(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip()
+
+
+def _primary_chain(value: Any) -> str:
+    """Collapse a multi-chain G-protein subunit value to a single chain.
+
+    A single subunit physically occupies one chain per complex; a multi-value
+    field (e.g. ``"C, D"``) means the asymmetric unit holds more than one
+    redundant copy of the same complex. The structures row already collapses the
+    receptor to its primary protomer, so the subunit collapses likewise — to the
+    chain of the primary complex, which depositions list first. (A geometry-based
+    pairing to the primary receptor chain would be exact; this first-listed
+    heuristic covers the common ordered case.)
+    """
+    text = sanitize_value(value)
+    # Split on comma or semicolon, tolerating optional spaces, to match the chain
+    # parsers used elsewhere in the codebase; take the first (primary complex).
+    return text.replace(";", ",").split(",")[0].strip()
 
 
 def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]]:
@@ -40,6 +58,7 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
         build_structure_note,
         collect_ligand_chains,
         map_label_asym_id,
+        resolve_partner_protomer,
     )
 
     rows_map: dict[str, list[dict[str, str]]] = {fname: [] for fname in CSV_SCHEMA}
@@ -52,6 +71,11 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 
     receptor_chain = sanitize_value(r_info.get("chain_id"))
     receptor_uniprot = sanitize_value(r_info.get("uniprot_entry_name"))
+    # NOTE: receptor_info.oligomeric_state is captured in the aggregated JSON but is
+    # intentionally NOT yet exported to any CSV column or structure note. Adding it
+    # requires the four-place CSV schema lockstep (CSV_SCHEMA in config.py,
+    # transform_for_csv here, test_csv_writer.py, and the README output table); it is
+    # deferred to a dedicated change so this stays a minimal addition.
 
     # ── Truncation + orphaned-ligand radar ─────────────────────────
     ligand_chains = collect_ligand_chains(data.get("ligands") or [])
@@ -65,6 +89,9 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
     # ── Structure note enrichment ──────────────────────────────────
     s_note = build_structure_note(s_info, oligo, truncation_note)
 
+    # ── Dimer partner protomer (recorded, not dropped) ─────────────
+    partner_uniprot, partner_chain = resolve_partner_protomer(oligo, receptor_chain)
+
     # ── structures.csv ─────────────────────────────────────────────
     rows_map["structures.csv"].append(
         {
@@ -75,6 +102,8 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
             "State": sanitize_value((s_info.get("state") or {}).get("value") or "").capitalize(),
             "ChainID": receptor_chain,
             "label_asym_id": map_label_asym_id(receptor_chain, label_map),
+            "Partner_UniProt": partner_uniprot,
+            "Partner_ChainID": partner_chain,
             "Note": s_note,
             "Date": sanitize_value(s_info.get("release_date")),
         }
@@ -92,6 +121,28 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
         if lig.get("validation_status") == VALIDATION_GHOST_LIGAND and not lig.get(
             "curator_kept_ghost"
         ):
+            continue
+        # Skip an apo / "no ligand" placeholder: the model sometimes emits a row
+        # to note the structure also has a ligand-free form. It is not a bound
+        # ligand, so it must not become a ligand-interaction row (it would
+        # otherwise carry a spurious binding site / role). The validator tags
+        # these SKIPPED_APO; the value checks also catch any that slipped tagging.
+        if (
+            lig.get("validation_status") == VALIDATION_SKIPPED_APO
+            or sanitize_value(lig.get("type")) == "none"
+            or sanitize_value(lig.get("name")) == "Apo"
+            or sanitize_value((lig.get("role") or {}).get("value")) == "Apo (no ligand)"
+        ):
+            continue
+        # A dual-use molecule (e.g. palmitate, cholesterol) is presented to the
+        # model as an incidental-candidate; the model judges whether it is a real
+        # functional ligand here or merely a structural lipid / covalent PTM. When
+        # the model's verdict is explicitly negative, leave the row out so an
+        # incidental molecule (e.g. a palmitoylation site in rhodopsin) is not
+        # recorded as a bound ligand. Gate on the model's verdict only: a missing
+        # or null field means "not assessed" and must not trigger the skip.
+        prc = lig.get("pharmacological_role_check")
+        if isinstance(prc, dict) and prc.get("is_functional_ligand") is False:
             continue
         smiles = lig.get("SMILES_stereo") or lig.get("SMILES") or ""
         lig_chain = sanitize_value(lig.get("chain_id"))
@@ -122,6 +173,10 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
                 if is_empty_key(lig.get("pubchem_id"))
                 else sanitize_value(lig.get("pubchem_id")),
                 "Role": sanitize_value((lig.get("role") or {}).get("value")),
+                # A dual-role ligand the model split per site carries a site_ref
+                # (e.g. orthosteric / allosteric); blank for an ordinary ligand.
+                # This keeps the per-site rows distinct rather than duplicate.
+                "Site": sanitize_value(lig.get("site_ref")),
                 "Title": sanitize_value(lig.get("name")),
                 "Type": sanitize_value(lig.get("type")),
                 "Date": sanitize_value(s_info.get("release_date")),
@@ -129,6 +184,7 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
                 "SMILES": sanitize_value(smiles),
                 "InChIKey": sanitize_value(lig.get("InChIKey")),
                 "Sequence": sanitize_value(lig.get("Sequence")),
+                "is_endogenous": sanitize_value(lig.get("is_endogenous")),
             }
         )
 
@@ -136,9 +192,9 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
     partners = data.get("signaling_partners") or {}
     if partners.get("g_protein"):
         gp = partners["g_protein"]
-        alpha_chain = sanitize_value((gp.get("alpha_subunit") or {}).get("chain_id"))
-        beta_chain = sanitize_value((gp.get("beta_subunit") or {}).get("chain_id"))
-        gamma_chain = sanitize_value((gp.get("gamma_subunit") or {}).get("chain_id"))
+        alpha_chain = _primary_chain((gp.get("alpha_subunit") or {}).get("chain_id"))
+        beta_chain = _primary_chain((gp.get("beta_subunit") or {}).get("chain_id"))
+        gamma_chain = _primary_chain((gp.get("gamma_subunit") or {}).get("chain_id"))
         rows_map["g_proteins.csv"].append(
             {
                 "PDB": pdb_id,
@@ -189,6 +245,10 @@ def transform_for_csv(pdb_id: str, data: dict) -> dict[str, list[dict[str, str]]
 def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
     """Append rows to the appropriate CSV files, creating them with headers if needed.
 
+    A file with no rows for this batch is still created header-only, so the
+    downstream build never hits a missing file (e.g. grk/ramp when a batch has no
+    such entities). Files use LF line endings to match the consumed data.
+
     Performs a header migration check: if an existing file has outdated headers
     (e.g. missing ``label_asym_id`` columns), a CsvSchemaMismatchError is raised
     to prevent silent column misalignment.
@@ -199,28 +259,41 @@ def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
     csv_dir = cfg.csv_output_dir
     csv_dir.mkdir(parents=True, exist_ok=True)
 
-    # Pre-flight: validate all schemas before writing anything to avoid
-    # partial writes (e.g. structures.csv written but ligands.csv rejected).
-    for filename, rows in csv_data_map.items():
-        if not rows:
-            continue
+    # Pre-flight: validate the schema of every existing target file before
+    # writing anything, to avoid partial writes (e.g. structures.csv written but
+    # ligands.csv rejected). Checked even for empty inputs so a stale header is
+    # caught rather than silently left behind.
+    for filename in csv_data_map:
         filepath = csv_dir / filename
+        if not filepath.exists():
+            continue
         expected_fields = CSV_SCHEMA[filename]
-        if filepath.exists():
-            with open(filepath, encoding="utf-8") as f:
-                existing_header = f.readline().strip().split("\t")
-            if existing_header != list(expected_fields):
-                raise CsvSchemaMismatchError(
-                    filename=filename,
-                    expected_fields=expected_fields,
-                    found_fields=existing_header,
-                )
+        with open(filepath, encoding="utf-8") as f:
+            existing_header = f.readline().strip().split("\t")
+        if existing_header != list(expected_fields):
+            raise CsvSchemaMismatchError(
+                filename=filename,
+                expected_fields=expected_fields,
+                found_fields=existing_header,
+            )
 
     for filename, rows in csv_data_map.items():
-        if not rows:
-            continue
         filepath = csv_dir / filename
         expected_fields = CSV_SCHEMA[filename]
+
+        # No rows for this file: still ensure a header-only file exists so the
+        # downstream build never sees a missing file. Existing files are left
+        # untouched (don't clobber data written for another PDB in this run).
+        if not rows:
+            if not filepath.exists():
+                tmp_path = filepath.with_suffix(filepath.suffix + ".tmp")
+                with open(tmp_path, "w", newline="", encoding="utf-8") as f:
+                    csv.DictWriter(
+                        f, fieldnames=expected_fields, delimiter="\t", lineterminator="\n"
+                    ).writeheader()
+                os.replace(tmp_path, filepath)
+            continue
+
         pdb_col = expected_fields[0]  # first column is the PDB id in every schema
         incoming_pdbs = {r.get(pdb_col) for r in rows}
 
@@ -238,7 +311,9 @@ def append_to_csvs(csv_data_map: dict[str, list[dict[str, str]]]) -> None:
 
         tmp_path = filepath.with_suffix(filepath.suffix + ".tmp")
         with open(tmp_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=expected_fields, delimiter="\t")
+            writer = csv.DictWriter(
+                f, fieldnames=expected_fields, delimiter="\t", lineterminator="\n"
+            )
             writer.writeheader()
             writer.writerows(kept)
             writer.writerows(rows)

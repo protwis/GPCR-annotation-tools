@@ -1,6 +1,6 @@
 [
     {
-        "path": "ligands[None].role.value",
+        "path": "ligands[__keyless__:apo].role.value",
         "best_run_value": "Apo (no ligand)",
         "majority_vote_value": "Agonist",
         "all_votes": {
@@ -9,7 +9,7 @@
         }
     },
     {
-        "path": "ligands[None].type",
+        "path": "ligands[__keyless__:apo].type",
         "best_run_value": "none",
         "majority_vote_value": "small-molecule",
         "all_votes": {

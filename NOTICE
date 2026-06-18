@@ -1,0 +1,37 @@
+GPCR Annotation Tools
+
+The project's own source code is licensed under Apache-2.0 (see LICENSE).
+
+This product bundles third-party reference DATA under `src/gpcr_tools/data/`, each
+licensed separately from the Apache-2.0 source code. These data files retain their
+respective licenses; any redistribution must preserve the attribution below and
+comply with the share-alike / database terms.
+
+--------------------------------------------------------------------------------
+1. src/gpcr_tools/data/gpcrdb_generic_numbers.json.gz
+--------------------------------------------------------------------------------
+A residue generic-numbering and segment table derived from GPCRdb.
+
+Source:      GPCRdb -- https://gpcrdb.org
+License:     Creative Commons Attribution 4.0 International (CC BY 4.0)
+             https://creativecommons.org/licenses/by/4.0/
+Attribution: GPCRdb (https://gpcrdb.org). The generic residue-numbering scheme is
+             from Isberg et al., "Generic GPCR residue numbers - aligning topology
+             maps while minding the gaps", Trends in Pharmacological Sciences, 2015.
+
+--------------------------------------------------------------------------------
+2. src/gpcr_tools/data/gtopdb_endogenous_ligands.json.gz
+--------------------------------------------------------------------------------
+A flat set of endogenous-ligand InChIKeys and PubChem CIDs derived from the
+IUPHAR/BPS Guide to PHARMACOLOGY (GtoPdb), version 2026.1.
+
+Source:      IUPHAR/BPS Guide to PHARMACOLOGY -- https://www.guidetopharmacology.org
+License:     The GtoPdb database is licensed under the Open Data Commons Open
+             Database License (ODbL, https://opendatacommons.org/licenses/odbl/);
+             its contents are licensed under the Creative Commons
+             Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0,
+             https://creativecommons.org/licenses/by-sa/4.0/).
+Attribution: IUPHAR/BPS Guide to PHARMACOLOGY (https://www.guidetopharmacology.org).
+
+To rebuild this artifact from the current GtoPdb release, run
+`python3 scripts/build_endogenous_table.py`.

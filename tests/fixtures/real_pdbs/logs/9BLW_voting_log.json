@@ -1,6 +1,6 @@
 [
     {
-        "path": "auxiliary_proteins[Nanobody-35].type.evidence.source",
+        "path": "auxiliary_proteins[nanobody 35|ch:n].type.evidence.source",
         "best_run_value": "Paper",
         "majority_vote_value": "PDB Metadata",
         "all_votes": {
@@ -10,7 +10,7 @@
         }
     },
     {
-        "path": "ligands[None].name",
+        "path": "ligands[__keyless__:cagrilintide backbone].name",
         "best_run_value": "Cagrilintide backbone",
         "majority_vote_value": "Cagrilintide backbone (non-acylated)",
         "all_votes": {

@@ -21,10 +21,14 @@ from gpcr_tools.csv_generator.data_loader import (
     update_processed_log,
 )
 from gpcr_tools.csv_generator.exceptions import CsvSchemaMismatchError
-from gpcr_tools.csv_generator.review_engine import review_toplevel_blocks
+from gpcr_tools.csv_generator.review_engine import (
+    has_gating_controversy,
+    review_toplevel_blocks,
+)
 from gpcr_tools.csv_generator.ui import (
     console,
     create_display_copy,
+    display_critical_warnings_summary,
     display_dashboard_header,
     display_oligomer_analysis_panel,
     display_pdb_footer,
@@ -65,10 +69,16 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                     border_style="yellow",
                 )
             )
-            if Confirm.ask(
-                f"Re-review these {len(skipped_pdbs)} skipped PDB(s) this session?",
-                default=False,
-            ):
+            try:
+                rereview_skipped = Confirm.ask(
+                    f"Re-review these {len(skipped_pdbs)} skipped PDB(s) this session?",
+                    default=False,
+                )
+            except EOFError:
+                # stdin closed before answering: fall back to the safe default
+                # (do not re-review) instead of crashing.
+                rereview_skipped = False
+            if rereview_skipped:
                 pending_pdbs.extend(skipped_pdbs)
                 pending_pdbs.sort()
                 console.print(
@@ -111,6 +121,9 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
                 "algo_conflicts"
             )
             if has_crit_issues:
+                # Surface the gating findings on the Initial Summary so the curator
+                # sees *why* this PDB is gated without first entering review mode.
+                display_critical_warnings_summary(validation_data)
                 console.print(
                     Panel(
                         "This PDB has VALIDATION ERRORS or ALGORITHM CONFLICTS.\n"
@@ -123,7 +136,10 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
             choices = ["r", "s", "f"]
             prompt_txt = "Select mode ([bold]r[/]eview, [bold]s[/]kip, [bold]f[/]ix issues only"
 
-            if not has_crit_issues and not controversies:
+            # Minority-omission advisories stay in `controversies` (so review mode
+            # still shows them) but must not block accept-all -- only gating
+            # controversies (near-ties / real disagreements) do.
+            if not has_crit_issues and not has_gating_controversy(controversies):
                 choices.insert(0, "a")
                 prompt_txt += ", [bold]a[/]ccept all"
 
@@ -191,6 +207,14 @@ def main(target_pdb: str | None = None, auto_accept: bool = False) -> None:
 
     except KeyboardInterrupt:
         console.print("\n[yellow]Exiting...[/yellow]")
+    except EOFError:
+        # stdin closed / exhausted (e.g. piped input ran out, or a
+        # non-interactive context). Exit cleanly instead of dumping a raw
+        # EOFError traceback. Unsaved work simply reappears as pending.
+        console.print(
+            "\n[yellow]No more input (stdin closed). Exiting; "
+            "any unsaved PDBs remain pending.[/yellow]"
+        )
 
 
 def _run_auto_accept(target_pdb: str | None) -> None:

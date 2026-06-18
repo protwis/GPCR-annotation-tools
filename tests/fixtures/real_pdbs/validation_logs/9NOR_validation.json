@@ -10,7 +10,7 @@
     "algo_conflicts": [
         "HALLUCINATION ALERT: AI found 'gnat3_human' but Algorithm found NO G-protein in source PDB."
     ],
-    "algo_notes": [],
+    "detector_notes": [],
     "chimera_score": 0,
     "chimera_status": "no_g_protein_found"
 }

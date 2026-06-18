@@ -1,7 +1,7 @@
 """End-to-end pipeline orchestration.
 
-Runs the stages in dependency order -- fetch -> fetch-papers -> annotate ->
-aggregate -- with prerequisite checks between them.  Stops before the
+Runs the stages in dependency order -- fetch -> fetch-papers -> detect ->
+annotate -> aggregate -- with prerequisite checks between them.  Stops before the
 interactive ``curate`` step.  Each stage logs what it does; a dry run prints the
 planned sequence without executing anything.
 """
@@ -38,17 +38,30 @@ def run_pipeline(
     cfg = get_config()
     runs = num_runs if num_runs is not None else GEMINI_DEFAULT_RUNS
 
+    # Fail fast on a stale / missing storage contract BEFORE any expensive
+    # stage runs (the AI annotate stage in particular). Previously only the
+    # interactive curate step validated the contract, so a mismatch surfaced
+    # only after the costly work had already completed.
+    if not dry_run:
+        from gpcr_tools.workspace import validate_contract
+
+        validate_contract(cfg)
+
     stages = ["fetch"]
     if not skip_fetch_papers:
         stages.append("fetch-papers")
-    stages += ["annotate", "aggregate"]
+    stages += ["detect", "annotate", "aggregate"]
 
     if dry_run:
         target = pdb_id or "all targets (targets.txt / auto-discovery)"
         # In batch mode the pipeline submits the batch and stops; aggregate is a
         # later, separate step — so don't list it in the planned sequence.
         planned = stages[:-1] if batch else stages
-        suffix = "  (batch: stops after annotate; aggregate runs later)" if batch else ""
+        suffix = (
+            "  (batch: detect runs; stops after annotate submission; aggregate runs later)"
+            if batch
+            else ""
+        )
         logger.info("[pipeline] dry run -- would run: %s%s", " -> ".join(planned), suffix)
         logger.info(
             "[pipeline] target=%s, annotate mode=%s, runs=%d",
@@ -75,7 +88,13 @@ def run_pipeline(
 
         run_fetch_papers(pdb_id=pdb_id, targets_file=None, auto_only=True, force=False)
 
-    # 3. annotate ----------------------------------------------------------
+    # 3. detect ------------------------------------------------------------
+    logger.info("[pipeline] stage: detect")
+    from gpcr_tools.detector.stage import run_detect_stage
+
+    run_detect_stage(pdb_id=pdb_id, skip_api_checks=skip_api_checks)
+
+    # 4. annotate ----------------------------------------------------------
     logger.info("[pipeline] stage: annotate (%s)", "batch" if batch else "single")
     from gpcr_tools.annotator.runner import run_annotation_stage
 
@@ -92,7 +111,7 @@ def run_pipeline(
         )
         return
 
-    # 4. aggregate ---------------------------------------------------------
+    # 5. aggregate ---------------------------------------------------------
     logger.info("[pipeline] stage: aggregate")
     # Aggregate only the requested PDB when one was given — mirroring the
     # standalone `aggregate <PDB>` command — instead of sweeping every pending

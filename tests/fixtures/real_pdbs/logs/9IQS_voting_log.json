@@ -1,6 +1,6 @@
 [
     {
-        "path": "auxiliary_proteins[Soluble cytochrome b562].type.value",
+        "path": "auxiliary_proteins[soluble cytochrome b562|ch:b].type.value",
         "best_run_value": "Other",
         "majority_vote_value": "Fusion protein",
         "all_votes": {
@@ -9,7 +9,7 @@
         }
     },
     {
-        "path": "ligands[None].type",
+        "path": "ligands[__keyless__:muscarinic toxin 3].type",
         "best_run_value": "peptide",
         "majority_vote_value": "protein",
         "all_votes": {

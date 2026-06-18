@@ -103,7 +103,7 @@ def _write_contract(workspace: Path) -> None:
         contract_file.write_text(
             json.dumps(
                 {
-                    "storage_contract_version": 1,
+                    "storage_contract_version": 2,
                     "created_by": "gpcr-tools-test",
                     "created_at_utc": "2026-01-01T00:00:00+00:00",
                 }

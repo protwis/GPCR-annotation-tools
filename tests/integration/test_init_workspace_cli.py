@@ -35,7 +35,7 @@ class TestInitWorkspaceCLI:
         contract = tmp_path / "contract" / "storage_contract.json"
         assert contract.exists()
         data = json.loads(contract.read_text())
-        assert data["storage_contract_version"] == 1
+        assert data["storage_contract_version"] == 2
         assert data["created_by"] == "gpcr-tools"
 
         required_dirs = [
@@ -45,6 +45,7 @@ class TestInitWorkspaceCLI:
             "enriched",
             "papers",
             "ai_results",
+            "detect",
             "aggregated",
             "aggregated/logs",
             "aggregated/validation_logs",

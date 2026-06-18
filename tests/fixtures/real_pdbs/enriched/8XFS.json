@@ -1,0 +1,5032 @@
+{
+  "data": {
+    "entry": {
+      "rcsb_id": "8XFS",
+      "entry": {
+        "id": "8XFS"
+      },
+      "database_2": [
+        {
+          "database_id": "PDB",
+          "pdbx_database_accession": "pdb_00008xfs"
+        },
+        {
+          "database_id": "WWPDB",
+          "pdbx_database_accession": null
+        },
+        {
+          "database_id": "EMDB",
+          "pdbx_database_accession": null
+        }
+      ],
+      "rcsb_entry_container_identifiers": {
+        "entity_ids": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "pubmed_id": 39753551,
+        "emdb_ids": [
+          "EMD-38308"
+        ],
+        "assembly_ids": [
+          "1"
+        ]
+      },
+      "rcsb_associated_holdings": {
+        "rcsb_repository_holdings_current_entry_container_identifiers": {
+          "assembly_ids": [
+            "1"
+          ]
+        },
+        "rcsb_repository_holdings_current": {
+          "repository_content_types": [
+            "FASTA sequence",
+            "entry mmCIF",
+            "entry PDBML",
+            "entry PDB",
+            "assembly mmCIF",
+            "assembly PDB",
+            "validation report",
+            "validation data mmCIF",
+            "validation slider image"
+          ]
+        }
+      },
+      "rcsb_comp_model_provenance": null,
+      "pdbx_database_status": {
+        "pdb_format_compatible": "Y"
+      },
+      "struct": {
+        "title": "LGR4-RSPO2-ZNRF3 RING domain (1:2:2)"
+      },
+      "rcsb_ma_qa_metric_global": null,
+      "rcsb_primary_citation": {
+        "id": "primary",
+        "pdbx_database_id_DOI": "10.1038/s41467-024-55431-3"
+      },
+      "pubmed": {
+        "rcsb_pubmed_container_identifiers": {
+          "pubmed_id": 39753551
+        },
+        "rcsb_pubmed_central_id": "PMC11698847",
+        "rcsb_pubmed_doi": "10.1038/s41467-024-55431-3",
+        "rcsb_pubmed_abstract_text": "WNT/β-catenin signaling plays key roles in development and cancer <sup>1,2 </sup>. ZNRF3/RNF43 modulates Frizzleds through ubiquitination, dampening WNT/β-catenin signaling. Conversely, RSPO1-4 binding to LGR4-6 and ZNRF3/RNF43 enhances WNT/β-catenin signaling <sup>3-5 </sup>. Here, we elucidate the overall landscape of architectures in multiple LGR4, RSPO2, and ZNRF3 assemblies, showcasing varying stoichiometries and arrangements. These structures reveal that LGR4 and RSPO2 capture distinct states of ZNRF3. The intrinsic heterogeneity of the LGR4-RSPO2-ZNRF3 assembly is influenced by LGR4 content. Particularly, in the assembly complex with a 2:2:2 ratio, two LGR4 protomers induce and stabilize the inactive state of ZNRF3, characterized by a wide inward-open conformation of two transmembrane helices (TM helices). This specific assembly promotes a stable complex, facilitating LGR4-induced endocytosis of ZNRF3. In contrast, the active dimeric ZNRF3, bound by a single LGR4, adopts a coiled-coil TM helices conformation and dimerization of RING domains. Our findings unveil how LGR4 content mediates diverse assemblies, leading to conformational rearrangements in ZNRF3 to regulate WNT/β-catenin signaling, and provide a structural foundation for drug development targeting Wnt-driven cancers.",
+        "rcsb_pubmed_affiliation_info": [
+          "State Key Laboratory of Drug Research, Shanghai Institute of Materia Medica, Chinese Academy of Sciences, Shanghai, China.",
+          "Center for Cognitive Technology, Shenzhen Institute of Advanced Technology, Chinese Academy of Sciences, Shenzhen, Guangdong, China.",
+          "Department of Endocrine and Metabolic Diseases, Shanghai Institute of Endocrine and Metabolic Diseases, Ruijin Hospital, Shanghai Jiao Tong University School of Medicine, Shanghai, China.",
+          "Shanghai National Clinical Research Center for Metabolic Diseases, Key Laboratory for Endocrine and Metabolic Diseases of the National Health Commission of the PR China, Shanghai National Center for Translational Medicine, Shanghai, China.",
+          "Shanghai Kailuo Biotechnology Co. Ltd, Shanghai, China.",
+          "Center for Cognitive Technology, Shenzhen Institute of Advanced Technology, Chinese Academy of Sciences, Shenzhen, Guangdong, China. zn.wang1@siat.ac.cn.",
+          "Department of Pharmacy, National Cancer Center/National Clinical Research Center for Cancer/Cancer Hospital, Chinese Academy of Medical Sciences and Peking Union Medical College, Beijing, China. daiyuanyuan@cicams.ac.cn.",
+          "National Cancer Center/National Clinical Research Center for Cancer/Cancer Hospital of Chinese Academy of Medical Sciences, Langfang Campus, Langfang, China. daiyuanyuan@cicams.ac.cn.",
+          "State Key Laboratory of Drug Research, Shanghai Institute of Materia Medica, Chinese Academy of Sciences, Shanghai, China. gengyong@simm.ac.cn.",
+          "University of Chinese Academy of Sciences, Beijing, China. gengyong@simm.ac.cn."
+        ]
+      },
+      "pdbx_deposit_group": null,
+      "rcsb_external_references": [
+        {
+          "id": "EMD-38308",
+          "type": "EM DATA RESOURCE",
+          "link": "https://www.emdataresource.org/EMD-38308"
+        }
+      ],
+      "pdbx_database_PDB_obs_spr": null,
+      "struct_keywords": {
+        "pdbx_keywords": "MEMBRANE PROTEIN",
+        "text": "lgr4, znrf3 RING domain, 1:2:2, MEMBRANE PROTEIN"
+      },
+      "exptl": [
+        {
+          "method": "ELECTRON MICROSCOPY"
+        }
+      ],
+      "cell": null,
+      "symmetry": null,
+      "software": null,
+      "rcsb_accession_info": {
+        "deposit_date": "2023-12-14T00:00:00Z",
+        "initial_release_date": "2024-12-04T00:00:00Z",
+        "major_revision": 1,
+        "minor_revision": 1
+      },
+      "pdbx_audit_revision_history": [
+        {
+          "ordinal": 1,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 0,
+          "revision_date": "2024-12-04T00:00:00Z"
+        },
+        {
+          "ordinal": 2,
+          "data_content_type": "Structure model",
+          "major_revision": 1,
+          "minor_revision": 1,
+          "revision_date": "2025-06-18T00:00:00Z"
+        }
+      ],
+      "pdbx_audit_revision_details": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 1,
+          "data_content_type": "Structure model",
+          "type": "Initial release",
+          "description": null
+        }
+      ],
+      "pdbx_audit_revision_group": [
+        {
+          "ordinal": 1,
+          "revision_ordinal": 2,
+          "data_content_type": "Structure model",
+          "group": "Data collection"
+        },
+        {
+          "ordinal": 2,
+          "revision_ordinal": 2,
+          "data_content_type": "Structure model",
+          "group": "Database references"
+        }
+      ],
+      "pdbx_database_related": [
+        {
+          "content_type": "associated EM volume",
+          "db_id": "EMD-38308",
+          "details": "LGR4-RSPO2-ZNRF3 RING domain (1:2:2)",
+          "db_name": "EMDB"
+        }
+      ],
+      "audit_author": [
+        {
+          "name": "Lu, W."
+        },
+        {
+          "name": "Yong, G."
+        }
+      ],
+      "pdbx_audit_support": [
+        {
+          "funding_organization": "Not funded",
+          "country": "China",
+          "grant_number": null,
+          "ordinal": 1
+        }
+      ],
+      "pdbx_initial_refinement_model": null,
+      "refine": null,
+      "pdbx_vrpt_summary_diffraction": null,
+      "pdbx_nmr_ensemble": null,
+      "em_experiment": {
+        "aggregation_state": "PARTICLE",
+        "reconstruction_method": "SINGLE PARTICLE"
+      },
+      "em_3d_reconstruction": [
+        {
+          "resolution": 3.2
+        }
+      ],
+      "em_software": [
+        {
+          "category": "PARTICLE SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "IMAGE ACQUISITION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MASKING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CTF CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LAYERLINE INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "DIFFRACTION INDEXING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL FITTING",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MODEL REFINEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "OTHER",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "INITIAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "FINAL EULER ASSIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CLASSIFICATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "RECONSTRUCTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "VOLUME SELECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SERIES ALIGNMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "MOLECULAR REPLACEMENT",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "LATTICE DISTORTION CORRECTION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "SYMMETRY DETERMINATION",
+          "name": null,
+          "version": null
+        },
+        {
+          "category": "CRYSTALLOGRAPHY MERGING",
+          "name": null,
+          "version": null
+        }
+      ],
+      "citation": [
+        {
+          "id": "primary",
+          "title": "Structural insights into the LGR4-RSPO2-ZNRF3 complexes regulating WNT/ beta-catenin signaling.",
+          "rcsb_journal_abbrev": "Nat Commun",
+          "rcsb_authors": [
+            "Wang, L.",
+            "Hu, F.",
+            "Cui, Q.",
+            "Qiao, H.",
+            "Li, L.",
+            "Geng, T.",
+            "Li, Y.",
+            "Sun, Z.",
+            "Zhou, S.",
+            "Lan, Z.",
+            "Guo, S.",
+            "Hu, Y.",
+            "Wang, J.",
+            "Yang, Q.",
+            "Wang, Z.",
+            "Dai, Y.",
+            "Geng, Y."
+          ],
+          "year": 2025,
+          "journal_volume": "16",
+          "page_first": "362",
+          "page_last": "362",
+          "pdbx_database_id_PubMed": 39753551,
+          "pdbx_database_id_DOI": "10.1038/s41467-024-55431-3"
+        }
+      ],
+      "ihm_entry_collection_mapping": null,
+      "rcsb_entry_info": {
+        "structure_determination_methodology": "experimental",
+        "ihm_multi_scale_flag": null,
+        "ihm_multi_state_flag": null,
+        "ihm_ordered_state_flag": null,
+        "deposited_model_count": 1,
+        "representative_model": null,
+        "molecular_weight": 164.81,
+        "deposited_atom_count": 10983,
+        "deposited_polymer_monomer_count": 1479,
+        "deposited_modeled_polymer_monomer_count": 1419,
+        "deposited_unmodeled_polymer_monomer_count": 60,
+        "polymer_entity_count_protein": 4,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0
+      },
+      "rcsb_entry_group_membership": null,
+      "rcsb_binding_affinity": null,
+      "branched_entities": null,
+      "polymer_entities": [
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "D",
+                "asym_id": "F",
+                "entry_id": "8XFS",
+                "entity_id": "4"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "F"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "F"
+                  }
+                }
+              ]
+            },
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "B",
+                "asym_id": "D",
+                "entry_id": "8XFS",
+                "entity_id": "4"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "ECOD",
+                  "annotation_id": "e8xfsB01"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "D"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "D"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "8XFS",
+            "entity_id": "4",
+            "asym_ids": [
+              "D",
+              "F"
+            ],
+            "auth_asym_ids": [
+              "B",
+              "D"
+            ],
+            "uniprot_ids": [
+              "Q6UXX9"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q6UXX9"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q6UXX9",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000147655"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "Q6UXX9"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "rspo2_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "R-spondin-2",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "mpstruc",
+              "annotation_lineage": [
+                {
+                  "name": "LGR4 complex with RSPO2-ZNRF3 delta RING (1:2:2)",
+                  "depth": 2
+                },
+                {
+                  "name": "G Protein-Coupled Receptors: Class A",
+                  "depth": 1
+                },
+                {
+                  "name": "TRANSMEMBRANE PROTEINS: ALPHA-HELICAL",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "PDBTM",
+              "annotation_lineage": [
+                {
+                  "name": "Generic PDBTM",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of odontogenesis of dentin-containing tooth",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of odontogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "odontogenesis of dentin-containing tooth",
+                  "depth": null
+                },
+                {
+                  "name": "odontogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of odontogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of odontogenesis of dentin-containing tooth",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of anatomical structure morphogenesis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "ossification",
+                  "depth": null
+                },
+                {
+                  "name": "cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "osteoblast differentiation",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "lung growth",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "developmental growth",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "growth",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "respiratory tube development",
+                  "depth": null
+                },
+                {
+                  "name": "organ growth",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "lung development",
+                  "depth": null
+                },
+                {
+                  "name": "respiratory system development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "trachea cartilage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "connective tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "trachea cartilage development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "trachea morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "tissue morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "skeletal system development",
+                  "depth": null
+                },
+                {
+                  "name": "trachea development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "cartilage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "respiratory system development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "cartilage development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "limb development",
+                  "depth": null
+                },
+                {
+                  "name": "appendage development",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic forelimb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic limb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic appendage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryo development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "forelimb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "appendage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "limb morphogenesis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "ossification",
+                  "depth": null
+                },
+                {
+                  "name": "bone mineralization",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "biomineral tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell surface",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "branching morphogenesis of an epithelial tube",
+                  "depth": null
+                },
+                {
+                  "name": "respiratory tube development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "lung morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "lung development",
+                  "depth": null
+                },
+                {
+                  "name": "respiratory system development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "tissue morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of a branching structure",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial tube branching involved in lung morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of a branching epithelium",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "embryonic hindlimb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "limb development",
+                  "depth": null
+                },
+                {
+                  "name": "appendage development",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic limb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "hindlimb morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryonic appendage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "embryo development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "appendage morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "limb morphogenesis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Thrombospondin type-1 (TSP1) repeat",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "BMP receptor binding",
+                  "depth": null
+                },
+                {
+                  "name": "receptor serine/threonine kinase binding",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane receptor protein serine/threonine kinase binding",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "limb development",
+                  "depth": null
+                },
+                {
+                  "name": "appendage development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signaling",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "R-spondin, Fu-CRD domain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "extracellular region",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Thrombospondin type-1 repeat superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "R-spondin domain-containing protein",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signaling",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Furin-like repeat",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Growth factor receptor cysteine-rich domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "extracellular space",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "dopaminergic neuron differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "cellular developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "nervous system development",
+                  "depth": null
+                },
+                {
+                  "name": "generation of neurons",
+                  "depth": null
+                },
+                {
+                  "name": "neurogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "neuron differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "heparin binding",
+                  "depth": null
+                },
+                {
+                  "name": "glycosaminoglycan binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "carbohydrate derivative binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "sulfur compound binding",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "Q6UXX9",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "7790_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "6686_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4752_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "5304_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "6291_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "6824_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "KGCLSCSKDNGCSRCQQKLFFFLRREGMRQYGECLHSCPSGYYGHRAPDMNRCARCRIENCDSCFSKDFCTKCKVGFYLHRGRCFDECPDGFAPLDETMEC",
+            "rcsb_sample_sequence_length": 101,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "Rspo2",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "F",
+                "asym_id": "C",
+                "entry_id": "8XFS",
+                "entity_id": "3"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "ECOD",
+                  "annotation_id": "e8xfsF01"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "C"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "C"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "C"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "C"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "8XFS",
+            "entity_id": "3",
+            "asym_ids": [
+              "C"
+            ],
+            "auth_asym_ids": [
+              "F"
+            ],
+            "uniprot_ids": null,
+            "reference_sequence_identifiers": null
+          },
+          "uniprots": null,
+          "rcsb_polymer_entity": {
+            "pdbx_description": "nanobody Nb52",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": null,
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "1229_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "2447_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "16655_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "761_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "11360_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "802_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "SLRLSCAASGYTYSPYCMGWFRQAPGKAREGVATVDLDGSTIYADSVKGRFTISQDNAKNTLYLQMNSLKPEDTAMYYCASRTRAGVTCGLNWAIFSYWGQGTQVT",
+            "rcsb_sample_sequence_length": 106,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Camelus bactrianus",
+              "ncbi_scientific_name": "Camelus bactrianus",
+              "rcsb_gene_name": null
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Escherichia coli"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "E",
+                "asym_id": "E",
+                "entry_id": "8XFS",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": null,
+              "rcsb_polymer_struct_conn": null
+            },
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "C",
+                "asym_id": "B",
+                "entry_id": "8XFS",
+                "entity_id": "2"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "ECOD",
+                  "annotation_id": "e8xfsC01"
+                }
+              ],
+              "rcsb_polymer_struct_conn": null
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "8XFS",
+            "entity_id": "2",
+            "asym_ids": [
+              "B",
+              "E"
+            ],
+            "auth_asym_ids": [
+              "C",
+              "E"
+            ],
+            "uniprot_ids": [
+              "Q9ULT6"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q9ULT6"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q9ULT6",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000183579"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "Q9ULT6"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "znrf3_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "E3 ubiquitin-protein ligase ZNRF3",
+            "rcsb_ec_lineage": [
+              {
+                "id": "2"
+              },
+              {
+                "id": "2.3"
+              },
+              {
+                "id": "2.3.2"
+              },
+              {
+                "id": "2.3.2.27"
+              }
+            ],
+            "pdbx_ec": "2.3.2.27",
+            "rcsb_enzyme_class_combined": [
+              {
+                "ec": "2.3.2.27",
+                "provenance_source": "PDB Primary Data"
+              }
+            ]
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "mpstruc",
+              "annotation_lineage": [
+                {
+                  "name": "LGR4 complex with RSPO2-ZNRF3 delta RING (1:2:2)",
+                  "depth": 2
+                },
+                {
+                  "name": "G Protein-Coupled Receptors: Class A",
+                  "depth": 1
+                },
+                {
+                  "name": "TRANSMEMBRANE PROTEINS: ALPHA-HELICAL",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "PDBTM",
+              "annotation_lineage": [
+                {
+                  "name": "Generic PDBTM",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "protein catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "modification-dependent macromolecule catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "modification-dependent protein catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-dependent protein catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "protein metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "ZNRF3/Arkadia E3 ubiquitin-protein ligases",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "limb development",
+                  "depth": null
+                },
+                {
+                  "name": "appendage development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "stem cell proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of Wnt signaling pathway, planar cell polarity pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway, planar cell polarity pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of non-canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "non-canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Zinc finger, RING/FYVE/PHD-type",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "receptor catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "receptor metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt receptor catabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "ZNRF-3, ectodomain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "aminoacyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-like protein transferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity, acting on a protein",
+                  "depth": null
+                },
+                {
+                  "name": "acyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "transferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-protein transferase activity",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "primary metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "protein ubiquitination",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule modification",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "protein metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "post-translational protein modification",
+                  "depth": null
+                },
+                {
+                  "name": "protein modification process",
+                  "depth": null
+                },
+                {
+                  "name": "protein modification by small protein conjugation",
+                  "depth": null
+                },
+                {
+                  "name": "protein modification by small protein conjugation or removal",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Zinc finger, RING-type",
+                  "depth": 1
+                },
+                {
+                  "name": "E3 ubiquitin-protein ligase ZNRF3, zinc finger, RING-type",
+                  "depth": 2
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cation binding",
+                  "depth": null
+                },
+                {
+                  "name": "transition metal ion binding",
+                  "depth": null
+                },
+                {
+                  "name": "zinc ion binding",
+                  "depth": null
+                },
+                {
+                  "name": "ion binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "metal ion binding",
+                  "depth": null
+                },
+                {
+                  "name": "small molecule binding",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Zinc finger, RING-type",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "aminoacyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-like protein transferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity, acting on a protein",
+                  "depth": null
+                },
+                {
+                  "name": "acyltransferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-like protein ligase activity",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin protein ligase activity",
+                  "depth": null
+                },
+                {
+                  "name": "transferase activity",
+                  "depth": null
+                },
+                {
+                  "name": "catalytic activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                },
+                {
+                  "name": "ubiquitin-protein transferase activity",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "protein binding",
+                  "depth": null
+                },
+                {
+                  "name": "binding",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor binding",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor binding",
+                  "depth": null
+                },
+                {
+                  "name": "frizzled binding",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "non-canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of non-canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of non-canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "7494_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "20608_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "9856_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "5970_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "Q9ULT6",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "6397_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "14353_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "KETAFVEVVLFESSPSGDYTTYTTGLTGRFSRAGATLSAEGEIVQMHPLGLCNNNDEEDLYEYGWVGVVKLEQPELDPKPCLTVLGKAKRAVQRGATAVIFDVSENPEAIDQLNQGSEDPLKRPVVYVKGADAIKLMNIVNKQKVARARIQHRPPRQPTEYFDMGIFLAFFVVVSLVCLILLVKIKLKQR",
+            "rcsb_sample_sequence_length": 190,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "ZNRF3",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "KIAA1133",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "RNF203",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        },
+        {
+          "polymer_entity_instances": [
+            {
+              "rcsb_polymer_entity_instance_container_identifiers": {
+                "auth_asym_id": "A",
+                "asym_id": "A",
+                "entry_id": "8XFS",
+                "entity_id": "1"
+              },
+              "rcsb_polymer_instance_annotation": [
+                {
+                  "type": "ECOD",
+                  "annotation_id": "e8xfsA01"
+                }
+              ],
+              "rcsb_polymer_struct_conn": [
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                },
+                {
+                  "role": null,
+                  "connect_type": "disulfide bridge",
+                  "connect_partner": {
+                    "label_asym_id": "A"
+                  },
+                  "connect_target": {
+                    "label_asym_id": "A"
+                  }
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_container_identifiers": {
+            "entry_id": "8XFS",
+            "entity_id": "1",
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "uniprot_ids": [
+              "Q9BXB1"
+            ],
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "Q9BXB1"
+              }
+            ]
+          },
+          "uniprots": [
+            {
+              "rcsb_id": "Q9BXB1",
+              "rcsb_uniprot_protein": {
+                "source_organism": {
+                  "scientific_name": "Homo sapiens"
+                }
+              },
+              "rcsb_uniprot_external_reference": [
+                {
+                  "reference_name": "GTEX",
+                  "reference_id": "ENSG00000205213"
+                },
+                {
+                  "reference_name": "PHAROS",
+                  "reference_id": "Q9BXB1"
+                }
+              ],
+              "gpcrdb_entry_name_slug": "lgr4_human"
+            }
+          ],
+          "rcsb_polymer_entity": {
+            "pdbx_description": "Leucine-rich repeat-containing G-protein coupled receptor 4",
+            "rcsb_ec_lineage": null,
+            "pdbx_ec": null,
+            "rcsb_enzyme_class_combined": null
+          },
+          "rcsb_polymer_entity_annotation": [
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "Pfam",
+              "annotation_lineage": null
+            },
+            {
+              "type": "mpstruc",
+              "annotation_lineage": [
+                {
+                  "name": "LGR4 complex with RSPO2-ZNRF3 delta RING (1:2:2)",
+                  "depth": 2
+                },
+                {
+                  "name": "G Protein-Coupled Receptors: Class A",
+                  "depth": 1
+                },
+                {
+                  "name": "TRANSMEMBRANE PROTEINS: ALPHA-HELICAL",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "PDBTM",
+              "annotation_lineage": [
+                {
+                  "name": "Generic PDBTM",
+                  "depth": 0
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "tissue remodeling",
+                  "depth": null
+                },
+                {
+                  "name": "bone remodeling",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "cell population proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "renal system development",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial cell proliferation involved in renal tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "tissue morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial cell proliferation",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "ossification",
+                  "depth": null
+                },
+                {
+                  "name": "cell differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "osteoblast differentiation",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Leucine-rich repeat N-terminal domain",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to biotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "pattern recognition receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "toll-like receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "response to biotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "immune response-activating signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "innate immune response-activating signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "immune response",
+                  "depth": null
+                },
+                {
+                  "name": "response to other organism",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of innate immune response",
+                  "depth": null
+                },
+                {
+                  "name": "response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "defense response to other organism",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of pattern recognition receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of defense response",
+                  "depth": null
+                },
+                {
+                  "name": "activation of innate immune response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of toll-like receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "activation of immune response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of defense response",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to biotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological process involved in interspecies interaction between organisms",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "immune response-regulating signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "innate immune response",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "response to external biotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of innate immune response",
+                  "depth": null
+                },
+                {
+                  "name": "defense response",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "defense response to symbiont",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of toll-like receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "spermatogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "sexual reproduction",
+                  "depth": null
+                },
+                {
+                  "name": "reproductive process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal reproductive process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process involved in reproduction",
+                  "depth": null
+                },
+                {
+                  "name": "male gamete generation",
+                  "depth": null
+                },
+                {
+                  "name": "gamete generation",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "ossification",
+                  "depth": null
+                },
+                {
+                  "name": "bone mineralization",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "biomineral tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "G protein-coupled receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "mesonephric epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "kidney epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "branching morphogenesis of an epithelial tube",
+                  "depth": null
+                },
+                {
+                  "name": "nephron tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of kidney development",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of branching involved in ureteric bud morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of morphogenesis of a branching structure",
+                  "depth": null
+                },
+                {
+                  "name": "epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "mesonephric tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "nephron morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron epithelium morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "nephron tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "renal system development",
+                  "depth": null
+                },
+                {
+                  "name": "ureteric bud morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "branching involved in ureteric bud morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "ureteric bud development",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "mesonephros development",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "tissue morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "kidney morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of a branching structure",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of branching involved in ureteric bud morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "mesonephric tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "kidney development",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of a branching epithelium",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Leucine-rich repeat, typical subtype",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "digestive system development",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "digestive tract development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cell periphery",
+                  "depth": null
+                },
+                {
+                  "name": "cellular anatomical structure",
+                  "depth": null
+                },
+                {
+                  "name": "cellular_component",
+                  "depth": null
+                },
+                {
+                  "name": "plasma membrane",
+                  "depth": null
+                },
+                {
+                  "name": "membrane",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "biological process involved in interspecies interaction between organisms",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "immune response",
+                  "depth": null
+                },
+                {
+                  "name": "response to other organism",
+                  "depth": null
+                },
+                {
+                  "name": "defense response",
+                  "depth": null
+                },
+                {
+                  "name": "defense response to symbiont",
+                  "depth": null
+                },
+                {
+                  "name": "response to external stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "response to biotic stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "immune system process",
+                  "depth": null
+                },
+                {
+                  "name": "defense response to other organism",
+                  "depth": null
+                },
+                {
+                  "name": "response to stress",
+                  "depth": null
+                },
+                {
+                  "name": "innate immune response",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "response to external biotic stimulus",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "G protein-coupled receptor, rhodopsin-like",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "epidermis development",
+                  "depth": null
+                },
+                {
+                  "name": "molting cycle process",
+                  "depth": null
+                },
+                {
+                  "name": "hair cycle",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "skin development",
+                  "depth": null
+                },
+                {
+                  "name": "skin epidermis development",
+                  "depth": null
+                },
+                {
+                  "name": "hair follicle development",
+                  "depth": null
+                },
+                {
+                  "name": "molting cycle",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "hair cycle process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "genitalia development",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "reproductive system development",
+                  "depth": null
+                },
+                {
+                  "name": "reproductive process",
+                  "depth": null
+                },
+                {
+                  "name": "sex differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process involved in reproduction",
+                  "depth": null
+                },
+                {
+                  "name": "male sex differentiation",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "male genitalia development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "reproductive structure development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Glycoprotein hormone receptor family",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal-level homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "homeostatic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "homeostasis of number of cells",
+                  "depth": null
+                },
+                {
+                  "name": "intestinal stem cell homeostasis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "GPCR, rhodopsin-like, 7TM",
+                  "depth": 1
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "rhythmic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "circadian regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "circadian rhythm",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cytokine production",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of gene expression",
+                  "depth": null
+                },
+                {
+                  "name": "biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of macromolecule biosynthetic process",
+                  "depth": null
+                },
+                {
+                  "name": "metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "macromolecule metabolic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of metabolic process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Leucine-rich repeat",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "kidney epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "nephron morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron epithelium morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "nephron tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "renal system development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "metanephros development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephros morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron tubule morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "epithelial tube morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "nephron development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                },
+                {
+                  "name": "nephron epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "epithelium development",
+                  "depth": null
+                },
+                {
+                  "name": "tube development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "morphogenesis of an epithelium",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "tissue development",
+                  "depth": null
+                },
+                {
+                  "name": "kidney morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "tissue morphogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric tubule development",
+                  "depth": null
+                },
+                {
+                  "name": "kidney development",
+                  "depth": null
+                },
+                {
+                  "name": "renal tubule morphogenesis",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "InterPro",
+              "annotation_lineage": [
+                {
+                  "name": "Leucine-rich repeat domain superfamily",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "cellular response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "signaling",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "signal transduction",
+                  "depth": null
+                },
+                {
+                  "name": "Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of canonical Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of signaling",
+                  "depth": null
+                },
+                {
+                  "name": "cell surface receptor signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of Wnt signaling pathway",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of response to stimulus",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cell communication",
+                  "depth": null
+                },
+                {
+                  "name": "cellular process",
+                  "depth": null
+                },
+                {
+                  "name": "positive regulation of signaling",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "protein-hormone receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of cold-induced thermogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "homeostatic process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of biological process",
+                  "depth": null
+                },
+                {
+                  "name": "biological regulation",
+                  "depth": null
+                },
+                {
+                  "name": "adaptive thermogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal-level homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of cold-induced thermogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "cold-induced thermogenesis",
+                  "depth": null
+                },
+                {
+                  "name": "temperature homeostasis",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "regulation of multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "negative regulation of multicellular organismal process",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "developmental process",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organismal process",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric glomerulus development",
+                  "depth": null
+                },
+                {
+                  "name": "animal organ development",
+                  "depth": null
+                },
+                {
+                  "name": "renal system development",
+                  "depth": null
+                },
+                {
+                  "name": "glomerulus development",
+                  "depth": null
+                },
+                {
+                  "name": "multicellular organism development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephros development",
+                  "depth": null
+                },
+                {
+                  "name": "anatomical structure development",
+                  "depth": null
+                },
+                {
+                  "name": "biological_process",
+                  "depth": null
+                },
+                {
+                  "name": "nephron development",
+                  "depth": null
+                },
+                {
+                  "name": "kidney development",
+                  "depth": null
+                },
+                {
+                  "name": "metanephric nephron development",
+                  "depth": null
+                },
+                {
+                  "name": "system development",
+                  "depth": null
+                }
+              ]
+            },
+            {
+              "type": "GO",
+              "annotation_lineage": [
+                {
+                  "name": "molecular transducer activity",
+                  "depth": null
+                },
+                {
+                  "name": "transmembrane signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "signaling receptor activity",
+                  "depth": null
+                },
+                {
+                  "name": "molecular_function",
+                  "depth": null
+                }
+              ]
+            }
+          ],
+          "rcsb_polymer_entity_group_membership": [
+            {
+              "group_id": "4552_30",
+              "similarity_cutoff": 30.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "374282_100",
+              "similarity_cutoff": 100.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "4327_95",
+              "similarity_cutoff": 95.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3979_90",
+              "similarity_cutoff": 90.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "Q9BXB1",
+              "similarity_cutoff": null,
+              "aggregation_method": "matching_uniprot_accession"
+            },
+            {
+              "group_id": "4897_70",
+              "similarity_cutoff": 70.0,
+              "aggregation_method": "sequence_identity"
+            },
+            {
+              "group_id": "3705_50",
+              "similarity_cutoff": 50.0,
+              "aggregation_method": "sequence_identity"
+            }
+          ],
+          "entity_poly": {
+            "type": "polypeptide(L)",
+            "rcsb_entity_polymer_type": "Protein",
+            "pdbx_seq_one_letter_code_can": "APCSCDGDRRVDCSGKGLTAVPEGLSAFTQALDISMNNITQLPEDAFANFPFLEELQLAGNDLSFIHPKALSGLKELKVLTLQNNQLKTVPSEAIRGLSALQSLRLDANHITSVPEDSFEGLVQLRHLWLDDNSLTEVPVHPLSNLPTLQALTLALNKISSIPDFAFTNLSSLVVLHLHNNKIRSLSQHCFDGLDNLETLDLNYNNLGEFPQAIKALPSLKELGFHSNSISVIPDGAFDGNPLLRTIHLYDNPLSFVGNSAFHNLSDLHSLVIRGASMVQQFPNLTGTVHLESLTLTGTKISSIPNNLCQEQKMLRTLDLSYNNIRDLPSFNGCHALEEISLQRNQIYQIKEGTFQGLISLRILDLSRNLIHEIHSRAFATLGPITNLDVSFNELTSFPTEGLNGLNQLKLVGNFKLKEALAAKDFVNLRSLSVPYAYQCCAFWGCDSYANLNTEDNSLQDHSVAQEKGTADAANVTSTLENEEHSQIIIHCTPSTGAFKPCEYLLGSWMIRLTVWFIFLVALFFNLLVILTTFASCTSLPSSKLFIGLISVSNLFMGIYTGILTFLDAVSWGRFAEFGIWWETGSGCKVAGFLAVFSSESAIFLLMLATVERSLSAKDIMKNGKSNHLKQFRVAALLAFLGATVAGCFPLFHRGEYSASPLCLPFPTGETPSLGFTVTLVLLNSLAFLLMAVIYTKLYCNLEKEDLSENSQSSMIKHVAWLIFTNCIFFCPVAFFSFAPLITAISISPEIMKSVTLIFFPLPACLNPVLYVFFNPKFKEDWKLLKRRVTK",
+            "rcsb_sample_sequence_length": 791,
+            "rcsb_mutation_count": 0
+          },
+          "rcsb_entity_source_organism": [
+            {
+              "scientific_name": "Homo sapiens",
+              "ncbi_scientific_name": "Homo sapiens",
+              "rcsb_gene_name": [
+                {
+                  "value": "LGR4",
+                  "provenance_source": "Primary Data"
+                },
+                {
+                  "value": "GPR48",
+                  "provenance_source": "Primary Data"
+                }
+              ]
+            }
+          ],
+          "rcsb_entity_host_organism": [
+            {
+              "ncbi_scientific_name": "Homo sapiens"
+            }
+          ],
+          "prd": null,
+          "chem_comp_nstd_monomers": null
+        }
+      ],
+      "nonpolymer_entities": null,
+      "assemblies": [
+        {
+          "rcsb_assembly_container_identifiers": {
+            "assembly_id": "1"
+          },
+          "pdbx_struct_assembly": {
+            "rcsb_details": "author_and_software_defined_assembly",
+            "method_details": null,
+            "rcsb_candidate_assembly": "Y"
+          },
+          "pdbx_struct_assembly_auth_evidence": null,
+          "rcsb_struct_symmetry": [
+            {
+              "kind": "Global Symmetry",
+              "type": "Asymmetric",
+              "symbol": "C1",
+              "oligomeric_state": "Hetero 6-mer",
+              "stoichiometry": [
+                "A2",
+                "B2",
+                "C1",
+                "D1"
+              ]
+            },
+            {
+              "kind": "Local Symmetry",
+              "type": "Cyclic",
+              "symbol": "C2",
+              "oligomeric_state": "Hetero 4-mer",
+              "stoichiometry": [
+                "A2",
+                "B2"
+              ]
+            }
+          ],
+          "rcsb_assembly_info": {
+            "modeled_polymer_monomer_count": 1419
+          }
+        }
+      ],
+      "sibling_pdbs": [
+        "8XFP",
+        "8XFT",
+        "8Y69"
+      ]
+    }
+  }
+}

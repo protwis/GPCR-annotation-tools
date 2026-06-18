@@ -127,7 +127,7 @@ def load_pdb_data(
         except Exception:
             pass
 
-    validation_data: dict = {"critical_warnings": [], "algo_conflicts": []}
+    validation_data: dict = {"critical_warnings": [], "algo_conflicts": [], "detector_notes": []}
     if val_path.exists():
         try:
             with open(val_path, encoding="utf-8") as f:

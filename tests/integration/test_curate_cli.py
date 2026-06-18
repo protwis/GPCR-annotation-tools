@@ -183,3 +183,42 @@ class TestStartupFailures:
 
         with pytest.raises(SystemExit):
             main(auto_accept=True)
+
+
+# -- non-interactive EOF robustness ---------------------------------------
+
+
+class TestInteractiveEofRobustness:
+    """An exhausted / closed stdin during interactive curation must exit
+    gracefully, not crash with a raw EOFError traceback.
+    """
+
+    def test_eof_at_mode_prompt_exits_gracefully(self, initialized_workspace, monkeypatch, capsys):
+        import io
+
+        from gpcr_tools.csv_generator.app import main
+
+        # Empty stream -> the first interactive Prompt.ask hits EOF immediately.
+        monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+
+        # Must NOT raise EOFError (or any exception): the loop catches it.
+        main(target_pdb="TEST1")
+
+        out = capsys.readouterr().out
+        # A clear message was shown rather than a traceback (matches the exact
+        # phrase emitted by the EOF handler, not a loose either/or).
+        assert "no more input (stdin closed)" in out.lower()
+
+    def test_eof_does_not_write_csv(self, initialized_workspace, monkeypatch):
+        import io
+
+        from gpcr_tools.csv_generator.app import main
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+        main(target_pdb="TEST1")
+
+        # Nothing was completed: the PDB stays pending (no processed log entry).
+        cfg = get_config()
+        if cfg.processed_log_file.exists():
+            log = json.loads(cfg.processed_log_file.read_text())
+            assert log.get("TEST1", {}).get("status") != "completed"

@@ -52,8 +52,23 @@ class JsonCache:
         """Check if *key* is in the cache."""
         return key in self._data
 
-    def set(self, key: str, value: Any) -> None:
-        """Store *value* for *key* and mark cache dirty."""
+    def set(self, key: str, value: Any, *, allow_none: bool = False) -> None:
+        """Store *value* for *key* and mark cache dirty.
+
+        Caching ``None`` is opt-in. This cache is keyed by content identity
+        (InChIKey / CID / comp_id / accession), shared across runs and immune to
+        ``--force``, so a ``None`` written by accident — e.g. a caller that
+        forgets to gate the write under a confirmed HTTP 200 — would freeze a
+        transient outage as a permanent negative for that key. To make that
+        mistake impossible by construction, a ``None`` value is dropped unless
+        the caller explicitly passes ``allow_none=True`` to mark it a confirmed
+        negative (a 200 response that genuinely has no value). Only ``None`` is
+        guarded; ``[]`` / ``{}`` are real confirmed-empty results and store
+        normally, so existing callers that cache them are unaffected.
+        """
+        if value is None and not allow_none:
+            logger.debug("Skipping cache write of None for key %r (allow_none not set)", key)
+            return
         self._data[key] = value
         self._dirty = True
 

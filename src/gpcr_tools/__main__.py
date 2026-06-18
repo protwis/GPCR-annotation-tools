@@ -92,6 +92,16 @@ def cli() -> None:
         help="Skip watch mode for paywalled papers (for CI/scripting).",
     )
     fp_parser.add_argument(
+        "--watch-only",
+        action="store_true",
+        default=False,
+        help=(
+            "Skip the auto-download retry and go straight to watch mode for the "
+            "papers already marked paywalled in the download log. Watches ALL "
+            "paywalled entries; any pdb_id / --targets argument is ignored."
+        ),
+    )
+    fp_parser.add_argument(
         "--force",
         action="store_true",
         default=False,
@@ -154,6 +164,25 @@ def cli() -> None:
         help="Use Gemini Batch API instead of single calls.",
     )
     ann_parser.add_argument(
+        "--temperature",
+        type=float,
+        default=None,
+        metavar="T",
+        help=(
+            "Sampling temperature for generation. Omit to use the model's "
+            "default (no override sent, in either single or batch mode)."
+        ),
+    )
+    ann_parser.add_argument(
+        "--thinking-level",
+        choices=["minimal", "low", "medium", "high"],
+        default=None,
+        help=(
+            "Reasoning depth for generation. Omit to use the model's default "
+            "(high; no override sent, in either single or batch mode)."
+        ),
+    )
+    ann_parser.add_argument(
         "--check-batch",
         action="store_true",
         default=False,
@@ -164,6 +193,31 @@ def cli() -> None:
         action="store_true",
         default=False,
         help="Re-process raw JSONL output files.",
+    )
+
+    # detect -----------------------------------------------------------
+    detect_parser = subparsers.add_parser(
+        "detect",
+        help="Pre-annotation structural detection: flag hard cases before annotate.",
+    )
+    detect_parser.add_argument(
+        "pdb_id",
+        nargs="?",
+        default=None,
+        help="Optional: detect on a specific PDB ID instead of all enriched.",
+    )
+    detect_parser.add_argument(
+        "--skip-api-checks",
+        action="store_true",
+        default=False,
+        help="Skip sequence-based detectors that need UniProt reference fetches.",
+    )
+    detect_parser.add_argument(
+        "--force",
+        action="store_true",
+        default=False,
+        help="Recompute every detect output, including ones already complete "
+        "(default tops up: skip complete outputs, redo only missing or degraded ones).",
     )
 
     # aggregate --------------------------------------------------------
@@ -183,11 +237,24 @@ def cli() -> None:
         default=False,
         help="Skip UniProt/PubChem/chimera API validation calls.",
     )
-    agg_parser.add_argument(
+    # --force (reprocess everything) and --retry-unavailable (reprocess only the
+    # API-abstention subset) are mutually exclusive scopes.
+    agg_scope = agg_parser.add_mutually_exclusive_group()
+    agg_scope.add_argument(
         "--force",
         action="store_true",
         default=False,
         help="Re-process PDBs already in the aggregate log.",
+    )
+    agg_scope.add_argument(
+        "--retry-unavailable",
+        action="store_true",
+        default=False,
+        help=(
+            "Re-aggregate only PDBs whose last run recorded a transient API "
+            "failure ([API_UNAVAILABLE]); cached results are reused, so only the "
+            "failed lookups are retried. Incompatible with --skip-api-checks."
+        ),
     )
 
     # csv-generator (kept temporarily for backward compat) -------------
@@ -205,7 +272,7 @@ def cli() -> None:
     # pipeline ---------------------------------------------------------
     pipe_parser = subparsers.add_parser(
         "pipeline",
-        help="Run fetch -> fetch-papers -> annotate -> aggregate in dependency order.",
+        help="Run fetch -> fetch-papers -> detect -> annotate -> aggregate in dependency order.",
     )
     pipe_parser.add_argument(
         "pdb_id",
@@ -244,6 +311,16 @@ def cli() -> None:
         help="Skip UniProt/PubChem/chimera validation in the aggregate stage.",
     )
 
+    # migrate-papers ---------------------------------------------------
+    subparsers.add_parser(
+        "migrate-papers",
+        help=(
+            "One-time, idempotent consolidation of per-PDB paper PDFs into "
+            "DOI-named canonical files (safe to re-run; never deletes a source "
+            "until its canonical exists and validates)."
+        ),
+    )
+
     # report -----------------------------------------------------------
     report_parser = subparsers.add_parser(
         "report",
@@ -251,11 +328,12 @@ def cli() -> None:
     )
     report_parser.add_argument(
         "kind",
-        choices=["pdf-coverage", "full-audit", "tail-analysis"],
+        choices=["pdf-coverage", "full-audit", "tail-analysis", "run-manifest"],
         help=(
             "pdf-coverage: paper-PDF outcomes; "
             "full-audit: validation warnings + chimera conflicts across PDBs; "
-            "tail-analysis: G-protein chimera score distribution."
+            "tail-analysis: G-protein chimera score distribution; "
+            "run-manifest: write a full run record (output/run_manifest.{json,md})."
         ),
     )
 
@@ -276,12 +354,19 @@ def cli() -> None:
         )
 
     elif args.command == "fetch-papers":
+        if args.auto_only and args.watch_only:
+            print(
+                "Error: --auto-only and --watch-only are mutually exclusive.",
+                file=sys.stderr,
+            )
+            sys.exit(2)
         from gpcr_tools.papers.runner import run_fetch_papers
 
         run_fetch_papers(
             pdb_id=args.pdb_id,
             targets_file=args.targets,
             auto_only=args.auto_only,
+            watch_only=args.watch_only,
             force=args.force,
         )
 
@@ -305,6 +390,8 @@ def cli() -> None:
                     model=args.model,
                     num_runs=args.runs,
                     batch=args.batch,
+                    temperature=args.temperature,
+                    thinking_level=args.thinking_level,
                 )
             except FileNotFoundError as exc:
                 print(f"Error: {exc}", file=sys.stderr)
@@ -326,8 +413,25 @@ def cli() -> None:
 
         main(target_pdb=args.pdb_id, auto_accept=False)
 
+    elif args.command == "detect":
+        from gpcr_tools.detector.stage import run_detect_stage
+
+        summary = run_detect_stage(
+            args.pdb_id, skip_api_checks=args.skip_api_checks, force=args.force
+        )
+        total = sum(summary.values())
+        print(f"Detect complete: {len(summary)} PDB(s), {total} signal(s).")
+
     elif args.command == "aggregate":
         from gpcr_tools.aggregator.runner import aggregate_all, aggregate_pdb
+
+        if args.retry_unavailable and args.skip_api_checks:
+            print(
+                "Error: --retry-unavailable cannot be combined with --skip-api-checks "
+                "(the retry re-runs the API checks that --skip-api-checks disables).",
+                file=sys.stderr,
+            )
+            sys.exit(2)
 
         if args.pdb_id:
             result = aggregate_pdb(
@@ -343,6 +447,7 @@ def cli() -> None:
             results = aggregate_all(
                 skip_api_checks=args.skip_api_checks,
                 force=args.force,
+                retry_unavailable=args.retry_unavailable,
             )
             ok = sum(1 for r in results if r.success)
             fail = sum(1 for r in results if not r.success)
@@ -368,6 +473,16 @@ def cli() -> None:
             skip_api_checks=args.skip_api_checks,
         )
 
+    elif args.command == "migrate-papers":
+        from gpcr_tools.papers.migrate import migrate_papers_to_doi_storage
+
+        migration = migrate_papers_to_doi_storage()
+        print(
+            f"Paper migration complete: {migration.consolidated} consolidated, "
+            f"{migration.redundant_removed} redundant removed, "
+            f"{migration.no_doi_kept} no-DOI kept, {migration.skipped_invalid} invalid skipped."
+        )
+
     elif args.command == "report":
         from gpcr_tools import reports
 
@@ -375,6 +490,7 @@ def cli() -> None:
             "pdf-coverage": reports.report_pdf_coverage,
             "full-audit": reports.report_full_audit,
             "tail-analysis": reports.report_tail_analysis,
+            "run-manifest": reports.report_run_manifest,
         }
         print(report_funcs[args.kind]())
 

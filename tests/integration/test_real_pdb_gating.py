@@ -112,8 +112,8 @@ class TestBlockedByControversyOnly:
         assert has_crit is False
         assert len(controversies) == 2
         assert set(controversies.keys()) == {
-            "auxiliary_proteins[Nanobody-35].type.evidence.source",
-            "ligands[None].name",
+            "auxiliary_proteins[nanobody 35|ch:n].type.evidence.source",
+            "ligands[__keyless__:cagrilintide backbone].name",
         }
 
 

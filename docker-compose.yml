@@ -1,6 +1,12 @@
 services:
   gpcr-tools:
-    build: .
+    build:
+      context: .
+      # Bake the commit into provenance. For a real hash locally:
+      #   GIT_SHA=$(git rev-parse --short HEAD) docker compose build gpcr-tools
+      # Defaults to "unknown" for a plain build.
+      args:
+        GIT_SHA: ${GIT_SHA:-unknown}
     volumes:
       - ./workspace:/workspace
     environment:

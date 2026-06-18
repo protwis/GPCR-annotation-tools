@@ -45,5 +45,12 @@ RUN pip install --no-cache-dir "$(ls /tmp/*.whl)[annotate,papers]" \
 
 ENV GPCR_WORKSPACE=/workspace
 
+# Bake the source commit into the image so each annotation's provenance can name
+# the exact code that produced it. The .git directory and git binary are absent
+# here, so this is the only way the runtime can know its version. Defaults to
+# "unknown" when built without --build-arg GIT_SHA=...
+ARG GIT_SHA=unknown
+ENV GPCR_CODE_VERSION=$GIT_SHA
+
 ENTRYPOINT ["gpcr-tools"]
 CMD ["curate"]

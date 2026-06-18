@@ -15,9 +15,13 @@ from gpcr_tools.config import (
     ALERT_HALLUCINATION,
     ALERT_MISSED_PROTOMER,
     ALERT_MULTI_COPY_LIGAND,
+    ALERT_NO_GPCR,
+    ALERT_OLIGOMER_DISAGREEMENT,
     ALERT_SUSPICIOUS_7TM,
+    ALERT_TM_DATA_UNAVAILABLE,
     TM_STATUS_INCOMPLETE,
     VALIDATION_FATAL_KEYWORDS,
+    ensure_alert_prefix,
 )
 from gpcr_tools.csv_generator.ui import console
 
@@ -48,10 +52,21 @@ def inject_oligomer_alerts(oligo: dict, validation_data: dict) -> None:
 
     for alert in oligo.get("alerts") or []:
         atype = alert.get("type") or ""
-        if atype in (ALERT_HALLUCINATION, ALERT_MISSED_PROTOMER, ALERT_SUSPICIOUS_7TM):
-            warnings.append(
-                f"OLIGOMER ALERT at 'receptor_info': [{atype}] {alert.get('message') or ''}"
-            )
+        if atype in (
+            ALERT_HALLUCINATION,
+            ALERT_MISSED_PROTOMER,
+            ALERT_SUSPICIOUS_7TM,
+            ALERT_NO_GPCR,
+            ALERT_TM_DATA_UNAVAILABLE,
+            ALERT_OLIGOMER_DISAGREEMENT,
+        ):
+            # The "at 'receptor_info'" prefix is a routing anchor so this alert
+            # buckets under the receptor block during review. ensure_alert_prefix
+            # keeps the message's own "[TYPE]" label present exactly once --
+            # current validator messages already carry it (re-prepending would
+            # duplicate it), while older recorded data needs it added.
+            message = ensure_alert_prefix(atype, alert.get("message"))
+            warnings.append(f"OLIGOMER ALERT at 'receptor_info': {message}")
         elif atype == ALERT_MULTI_COPY_LIGAND:
             # Already carries its own 'ligands[...]' path, so it buckets with the
             # ligand block during review rather than under receptor_info.
@@ -103,6 +118,30 @@ def display_validation_alert(path: str, validation_data: dict) -> bool:
         )
         return True
     return False
+
+
+def display_detector_notes(validation_data: dict) -> None:
+    """Render advisory algorithm notes once, as a non-gating info panel.
+
+    Unlike critical warnings / algo conflicts, these notes do not block review or
+    disable accept-all -- they are informational (e.g. a crystallization-fusion
+    note, an alpha5 alignment hint). Surfacing them keeps the curator aware of
+    what the detectors observed without gating the workflow.
+    """
+    notes = validation_data.get("detector_notes") or []
+    if not notes:
+        return
+    note_text = Text()
+    for note in notes:
+        note_text.append(f"• {note}\n", style="cyan")
+    console.print(
+        Panel(
+            note_text,
+            title="[bold cyan]DETECTOR NOTES (informational)[/]",
+            border_style="cyan",
+            box=box.ROUNDED,
+        )
+    )
 
 
 # ── Validation Entry Extraction ─────────────────────────────────────────

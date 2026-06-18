@@ -3,6 +3,7 @@
 These tests cover the pure data transformation layer — no UI, no user interaction.
 """
 
+import copy
 import csv
 from dataclasses import replace
 from unittest.mock import patch
@@ -36,9 +37,14 @@ class TestGpcrdbColumnContract:
             "Note",
             "Date",
         )
-        assert "label_asym_id" in CSV_SCHEMA["structures.csv"][8:]
+        # Our extra columns are appended after the positional contract, never inserted.
+        assert {"label_asym_id", "Partner_UniProt", "Partner_ChainID"} <= set(
+            CSV_SCHEMA["structures.csv"][8:]
+        )
 
     def test_ligands_core_columns(self):
+        # The downstream build reads the leading 9 columns positionally; "Site"
+        # (and the chemistry columns) are appended after, never inserted.
         assert CSV_SCHEMA["ligands.csv"][:9] == (
             "PDB",
             "ChainID",
@@ -50,7 +56,7 @@ class TestGpcrdbColumnContract:
             "Date",
             "In structure",
         )
-        assert {"label_asym_id", "SMILES", "InChIKey", "Sequence"} <= set(
+        assert {"label_asym_id", "SMILES", "InChIKey", "Sequence", "is_endogenous", "Site"} <= set(
             CSV_SCHEMA["ligands.csv"][9:]
         )
 
@@ -110,6 +116,26 @@ class TestTransformForCSV:
         assert row["State"] == "Active"
         assert row["ChainID"] == "R"
         assert row["Date"] == "2025-01-15"
+        # A monomer has no partner protomer.
+        assert row["Partner_UniProt"] == ""
+        assert row["Partner_ChainID"] == ""
+
+    def test_heterodimer_partner_columns(self, sample_pdb_data):
+        # GABA-B: primary GABBR2 (B); the partner GABBR1 (A) is recorded, not dropped.
+        data = copy.deepcopy(sample_pdb_data)
+        data["receptor_info"] = {"uniprot_entry_name": "gabr2_human", "chain_id": "B"}
+        data["oligomer_analysis"] = {
+            "all_gpcr_chains": [
+                {"chain_id": "A", "slug": "gabr1_human"},
+                {"chain_id": "B", "slug": "gabr2_human"},
+            ],
+            "primary_protomer_suggestion": {"chain_id": "B", "reason": "coupling"},
+        }
+        row = transform_for_csv("TEST1", data)["structures.csv"][0]
+        assert row["Receptor_UniProt"] == "gabr2_human"
+        assert row["ChainID"] == "B"
+        assert row["Partner_UniProt"] == "gabr1_human"
+        assert row["Partner_ChainID"] == "A"
 
     def test_ligands_csv_row(self, sample_pdb_data):
         result = transform_for_csv("TEST1", sample_pdb_data)
@@ -122,6 +148,14 @@ class TestTransformForCSV:
         assert row["Role"] == "Agonist"
         assert row["ChainID"] == "A"
         assert row["InChIKey"] == "OIRDTQYFTABQOQ-KQYNXXCUSA-N"
+        # An ordinary ligand has no dual-role site_ref, so the Site column is blank.
+        assert row["Site"] == ""
+
+    def test_site_ref_populates_site_column(self, sample_pdb_data):
+        data = copy.deepcopy(sample_pdb_data)
+        data["ligands"][0]["site_ref"] = "allosteric"
+        row = transform_for_csv("TEST1", data)["ligands.csv"][0]
+        assert row["Site"] == "allosteric"
 
     def test_smiles_stereo_priority(self, sample_pdb_data):
         """SMILES_stereo should take priority over SMILES."""
@@ -139,6 +173,33 @@ class TestTransformForCSV:
         assert row["Alpha_ChainID"] == "G"
         assert row["Beta_UniProt"] == "gbb1_human"
         assert row["Gamma_UniProt"] == "gbg2_human"
+
+    def test_g_protein_chain_collapses_multivalue(self, sample_pdb_data):
+        # Redundant complexes in the asymmetric unit give a multi-chain subunit
+        # value ("C, D"); it collapses to the primary complex's chain.
+        data = copy.deepcopy(sample_pdb_data)
+        data["signaling_partners"]["g_protein"]["alpha_subunit"]["chain_id"] = "C, D"
+        row = transform_for_csv("TEST1", data)["g_proteins.csv"][0]
+        assert row["Alpha_ChainID"] == "C"
+        # The label column follows the collapsed single chain (not "C, D").
+        assert row["Alpha_label_asym_id"] == "C"
+
+    def test_apo_placeholder_ligand_skipped(self, sample_pdb_data):
+        # An apo / "no ligand" placeholder must not become a ligand row.
+        data = copy.deepcopy(sample_pdb_data)
+        data["ligands"].append(
+            {
+                "name": "Apo",
+                "chem_comp_id": "",
+                "chain_id": "None",
+                "type": "none",
+                "role": {"value": "Apo (no ligand)"},
+                "site_ref": "orthosteric",
+            }
+        )
+        names = [r["Name"] for r in transform_for_csv("TEST1", data)["ligands.csv"]]
+        assert "Apo" not in names
+        assert "Adenosine" in names
 
     def test_nanobody_dispatch(self, sample_pdb_data):
         result = transform_for_csv("TEST1", sample_pdb_data)
@@ -246,6 +307,21 @@ class TestAppendToCSVs:
         assert rows[0][0] == "PDB"  # header
         assert rows[1][0] == "TEST1"  # data
 
+    def test_files_use_lf_line_endings(self, tmp_path, monkeypatch, sample_pdb_data):
+        """Output uses LF, not CRLF, to match the consumed annotation data."""
+        monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
+        from gpcr_tools.config import reset_config
+
+        reset_config()
+
+        csv_dir = tmp_path / "csv_out"
+        with _mock_config_with_csv_dir(csv_dir):
+            append_to_csvs(transform_for_csv("TEST1", sample_pdb_data))
+
+        raw = (csv_dir / "structures.csv").read_bytes()
+        assert b"\r\n" not in raw
+        assert b"\n" in raw
+
     def test_append_no_duplicate_header(self, tmp_path, monkeypatch, sample_pdb_data):
         """Test that appending to an existing file does NOT duplicate the header."""
         monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
@@ -271,8 +347,9 @@ class TestAppendToCSVs:
         assert rows[1][0] == "TEST1"
         assert rows[2][0] == "TEST2"
 
-    def test_empty_csv_data_no_file_created(self, tmp_path, monkeypatch):
-        """If all CSV data is empty, no files should be created."""
+    def test_empty_csv_data_creates_header_only_files(self, tmp_path, monkeypatch):
+        """A batch with no rows for a file still emits a header-only file, so the
+        downstream build never hits a missing file (e.g. grk/ramp)."""
         monkeypatch.setenv("GPCR_WORKSPACE", str(tmp_path))
         from gpcr_tools.config import reset_config
 
@@ -285,8 +362,14 @@ class TestAppendToCSVs:
             empty_data = {fname: [] for fname in CSV_SCHEMA}
             append_to_csvs(empty_data)
 
-        csv_files = list(csv_dir.glob("*.csv")) if csv_dir.exists() else []
-        assert len(csv_files) == 0
+            # Every schema file exists, header-only (one line, the header).
+            for fname, expected_fields in CSV_SCHEMA.items():
+                fpath = csv_dir / fname
+                assert fpath.exists(), f"{fname} not created"
+                lines = fpath.read_text(encoding="utf-8").splitlines()
+                assert lines == ["\t".join(expected_fields)]
+            # The header-only write path also uses LF, not CRLF.
+            assert b"\r\n" not in (csv_dir / "grk.csv").read_bytes()
 
     def test_mismatched_headers_raises_error(self, tmp_path, monkeypatch, sample_pdb_data):
         """Existing CSV with outdated headers → CsvSchemaMismatchError raised."""
@@ -399,6 +482,67 @@ class TestGhostLigandExport:
         ]
         rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
         assert {r["Name"] for r in rows} == {"Matched", "NoStatus"}
+
+
+class TestNonFunctionalLigandExport:
+    """A dual-use molecule the model judged to be a non-functional, incidental
+    species (e.g. a structural lipid or covalent PTM such as palmitate in
+    rhodopsin) must not be recorded as a bound ligand. The skip gates on the
+    model's explicit negative verdict only — a missing or null check is unaffected."""
+
+    def test_non_functional_ligand_excluded(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Retinal",
+                "chem_comp_id": "RET",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+            },
+            {
+                "name": "Palmitate",
+                "chem_comp_id": "PLM",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Cofactor"},
+                "pharmacological_role_check": {
+                    "is_functional_ligand": False,
+                    "evidence": "Covalent palmitoylation site, not a bound ligand.",
+                },
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Retinal"]
+
+    def test_functional_ligand_kept(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Sphingosine-1-phosphate",
+                "chem_comp_id": "S1P",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+                "pharmacological_role_check": {
+                    "is_functional_ligand": True,
+                    "evidence": "Endogenous agonist of the S1P receptor.",
+                },
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Sphingosine-1-phosphate"]
+
+    def test_ligand_without_role_check_unaffected(self, sample_pdb_data):
+        sample_pdb_data["ligands"] = [
+            {
+                "name": "Adenosine",
+                "chem_comp_id": "ADN",
+                "chain_id": "A",
+                "validation_status": VALIDATION_MATCHED_SMALL_MOLECULE,
+                "role": {"value": "Agonist"},
+            },
+        ]
+        rows = transform_for_csv("TEST1", sample_pdb_data)["ligands.csv"]
+        assert [r["Name"] for r in rows] == ["Adenosine"]
 
 
 class TestLigandLabelAsymId:

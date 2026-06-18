@@ -33,6 +33,7 @@ from gpcr_tools.csv_generator.ui import (
 )
 from gpcr_tools.csv_generator.validation_display import (
     analyze_validation_impact,
+    display_detector_notes,
     display_validation_alert,
     get_relevant_validation_warnings,
 )
@@ -107,6 +108,19 @@ def coerce_type(original: Any, new_str: str) -> Any:
 
 
 # ── Controversy Detection ───────────────────────────────────────────────
+
+
+def has_gating_controversy(controversies: dict) -> bool:
+    """Whether any controversy should disable the one-click accept-all gate.
+
+    Minority-omission advisories (records tagged ``gating=False``: an entity some
+    runs reported but the chosen run omitted) are surfaced to the curator for
+    review but are advisory only -- they do not block accept-all. Every other
+    controversy (a near-tie / genuine disagreement) still gates. The advisory
+    records remain in the controversy map so they stay visible during review;
+    this helper only excludes them from the accept-all gating decision.
+    """
+    return any(c.get("gating", True) for c in controversies.values())
 
 
 def has_downstream_controversy(path_prefix: str, controversies: dict) -> bool:
@@ -587,6 +601,9 @@ def review_toplevel_blocks(
     """Review each top-level block with appropriate context and UI."""
     verified_paths = get_verified_paths(main_data)
     final_data: dict = {}
+
+    # Advisory detector notes, shown once up front (non-gating).
+    display_detector_notes(validation_data)
 
     for key in TOPLEVEL_BLOCK_KEYS:
         if key not in main_data:

@@ -75,7 +75,7 @@ def real_aggregate_workspace(
     (contract_dir / "storage_contract.json").write_text(
         json.dumps(
             {
-                "storage_contract_version": 1,
+                "storage_contract_version": 2,
                 "created_by": "test",
                 "created_at_utc": "2026-01-01T00:00:00+00:00",
             }
@@ -108,6 +108,37 @@ def _run_aggregate(pdb_id: str) -> Any:
     with patch(
         "gpcr_tools.validator.oligomer.scan_all_chains_7tm",
         return_value=({}, None),
+    ):
+        return aggregate_pdb(pdb_id, skip_api_checks=True)
+
+
+def _run_aggregate_tm_complete(pdb_id: str) -> Any:
+    """Run aggregate_pdb with every GPCR chain scanned as a COMPLETE 7TM receptor.
+
+    Unlike ``_run_aggregate`` (which returns an empty 7TM scan, leaving the
+    receptor count transmembrane-unverified so the receptor-level cross-check
+    stays silent), this builds a populated scan from the enriched GPCR roster and
+    a non-empty GraphQL entry. That makes ``tm_data_available`` true, so the
+    AI-vs-classifier oligomeric cross-check is genuinely exercised end to end
+    rather than skipped as untrusted.
+    """
+    from gpcr_tools.aggregator.runner import aggregate_pdb
+    from gpcr_tools.config import TM_STATUS_COMPLETE
+    from gpcr_tools.validator.oligomer import _build_gpcr_roster
+
+    enriched = json.loads((FIXTURE_ENRICHED / f"{pdb_id}.json").read_text())
+    entry = (enriched.get("data") or {}).get("entry") or {}
+    roster = _build_gpcr_roster(entry)
+    tm_roster = {
+        chain: {"resolved_tms": 7, "total_tms": 7, "status": TM_STATUS_COMPLETE} for chain in roster
+    }
+    # A non-empty GraphQL entry signals a successful fetch (tm_data_available),
+    # so the cross-check treats the receptor count as verified.
+    graphql_entry = {"polymer_entities": []}
+
+    with patch(
+        "gpcr_tools.validator.oligomer.scan_all_chains_7tm",
+        return_value=(tm_roster, graphql_entry),
     ):
         return aggregate_pdb(pdb_id, skip_api_checks=True)
 
@@ -157,7 +188,7 @@ class TestRealPdbAggregate:
 
         assert "critical_warnings" in report
         assert "algo_conflicts" in report
-        assert "algo_notes" in report
+        assert "detector_notes" in report
         assert "chimera_score" in report
         assert "chimera_status" in report
         assert "timestamp" in report
@@ -325,3 +356,79 @@ class TestAggregateAll:
         log_data = json.loads(log_path.read_text())
         for pdb_id in REAL_PDB_IDS:
             assert pdb_id in log_data, f"{pdb_id} missing from aggregate log"
+
+
+# ---------------------------------------------------------------------------
+# Receptor oligomeric-state cross-check, end to end through a real run
+# ---------------------------------------------------------------------------
+
+
+class TestOligomericStateCrossCheckEndToEnd:
+    """The ``receptor_info.oligomeric_state`` field, populated in real AI-run
+    fixtures, flows through aggregate -> ``analyze_oligomer`` -> the receptor-level
+    cross-check and AGREES with the deterministic classifier, so no
+    ``ALERT_OLIGOMER_DISAGREEMENT`` is raised and nothing routes to a curator.
+
+    These two PDBs are the only canonical fixtures populated with
+    ``oligomeric_state`` (the field is REQUIRED by the schema; the rest predate
+    it). They exercise the agreement path with a verified 7TM count, proving a
+    real run reaches the tripwire -- not just synthetic input. (No genuine Class C
+    homo-dimer exists in the canonical set, so the multi-receptor agreement case
+    is the obligate sweet-taste hetero-dimer; see fixture choice below.)
+    """
+
+    def _oligomer_block(self, result: Any) -> dict[str, Any]:
+        assert result.success is True, f"aggregate failed: {result.error}"
+        assert result.aggregated_path is not None
+        data = json.loads(result.aggregated_path.read_text())
+        # The populated, voted field must survive aggregation into the output.
+        oligo_state = (data.get("receptor_info") or {}).get("oligomeric_state") or {}
+        assert oligo_state.get("value"), "oligomeric_state did not reach the aggregated output"
+        return data["oligomer_analysis"]
+
+    def _has_disagreement(self, oligo: dict[str, Any]) -> bool:
+        from gpcr_tools.config import ALERT_OLIGOMER_DISAGREEMENT
+
+        return any(a["type"] == ALERT_OLIGOMER_DISAGREEMENT for a in oligo.get("alerts") or [])
+
+    def test_monomer_fixture_agrees_no_route(
+        self,
+        real_aggregate_workspace: Path,
+    ) -> None:
+        # 9AS1: a single 5-HT2A receptor + Gq heterotrimer. AI 'monomer',
+        # classifier MONOMER -> AGREE, so no disagreement alert and not gated.
+        from gpcr_tools.config import ALERT_OLIGOMER_DISAGREEMENT, OLIGOMER_MONOMER
+        from gpcr_tools.csv_generator.validation_display import inject_oligomer_alerts
+
+        oligo = self._oligomer_block(_run_aggregate_tm_complete("9AS1"))
+        assert oligo["classification"] == OLIGOMER_MONOMER
+        assert oligo["tm_data_available"] is True
+        assert oligo["receptor_count"] == 1
+        assert not self._has_disagreement(oligo)
+
+        # The tripwire injection path must not gate (no critical_warning).
+        validation_data: dict[str, Any] = {}
+        inject_oligomer_alerts(oligo, validation_data)
+        warnings = validation_data.get("critical_warnings") or []
+        assert not any(ALERT_OLIGOMER_DISAGREEMENT in w for w in warnings)
+
+    def test_dimer_fixture_agrees_no_route(
+        self,
+        real_aggregate_workspace: Path,
+    ) -> None:
+        # 9NOR: the sweet-taste receptor, an obligate Class C hetero-dimer of
+        # TAS1R2 + TAS1R3. AI 'hetero-dimer', classifier HETEROMER (2 receptor
+        # chains) -> AGREE, so no disagreement alert and not gated.
+        from gpcr_tools.config import ALERT_OLIGOMER_DISAGREEMENT, OLIGOMER_HETEROMER
+        from gpcr_tools.csv_generator.validation_display import inject_oligomer_alerts
+
+        oligo = self._oligomer_block(_run_aggregate_tm_complete("9NOR"))
+        assert oligo["classification"] == OLIGOMER_HETEROMER
+        assert oligo["tm_data_available"] is True
+        assert oligo["receptor_count"] == 2
+        assert not self._has_disagreement(oligo)
+
+        validation_data: dict[str, Any] = {}
+        inject_oligomer_alerts(oligo, validation_data)
+        warnings = validation_data.get("critical_warnings") or []
+        assert not any(ALERT_OLIGOMER_DISAGREEMENT in w for w in warnings)

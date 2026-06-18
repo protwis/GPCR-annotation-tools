@@ -49,9 +49,15 @@ class TestInjectOligomerAlerts:
         assert "HALLUCINATION" in warnings[0]
 
     def test_hallucination_alert(self):
+        # Real validator messages already carry a "[TYPE] at '...'" prefix.
         oligo = {
             "chain_id_override": {"applied": False},
-            "alerts": [{"type": "HALLUCINATION", "message": "Chain G not in GPCR roster"}],
+            "alerts": [
+                {
+                    "type": "HALLUCINATION",
+                    "message": "[HALLUCINATION] at 'oligomer_analysis': Chain G not in GPCR roster",
+                }
+            ],
             "all_gpcr_chains": [],
         }
         validation_data: dict = {}
@@ -60,11 +66,19 @@ class TestInjectOligomerAlerts:
         assert len(warnings) == 1
         assert "[HALLUCINATION]" in warnings[0]
         assert "receptor_info" in warnings[0]
+        # The type prefix must appear exactly once, never doubled.
+        assert warnings[0].count("[HALLUCINATION]") == 1
+        assert "[HALLUCINATION] [HALLUCINATION]" not in warnings[0]
 
     def test_missed_protomer_alert(self):
         oligo = {
             "chain_id_override": {"applied": False},
-            "alerts": [{"type": "MISSED_PROTOMER", "message": "Missed chain B"}],
+            "alerts": [
+                {
+                    "type": "MISSED_PROTOMER",
+                    "message": "[MISSED_PROTOMER] at 'oligomer_analysis': Missed chain B",
+                }
+            ],
             "all_gpcr_chains": [],
         }
         validation_data: dict = {}
@@ -72,6 +86,7 @@ class TestInjectOligomerAlerts:
         warnings = validation_data["critical_warnings"]
         assert len(warnings) == 1
         assert "[MISSED_PROTOMER]" in warnings[0]
+        assert warnings[0].count("[MISSED_PROTOMER]") == 1
 
     def test_incomplete_7tm(self):
         oligo = {
@@ -104,7 +119,12 @@ class TestInjectOligomerAlerts:
         """New warnings are appended, not replacing existing ones."""
         oligo = {
             "chain_id_override": {"applied": False},
-            "alerts": [{"type": "HALLUCINATION", "message": "bad chain"}],
+            "alerts": [
+                {
+                    "type": "HALLUCINATION",
+                    "message": "[HALLUCINATION] at 'oligomer_analysis': bad chain",
+                }
+            ],
             "all_gpcr_chains": [],
         }
         validation_data = {"critical_warnings": ["existing warning"]}
@@ -113,6 +133,7 @@ class TestInjectOligomerAlerts:
         assert len(warnings) == 2
         assert warnings[0] == "existing warning"
         assert "[HALLUCINATION]" in warnings[1]
+        assert warnings[1].count("[HALLUCINATION]") == 1
 
     def test_multiple_alerts_combined(self):
         """Override + MISSED_PROTOMER + INCOMPLETE_7TM → 3 warnings."""
@@ -124,7 +145,10 @@ class TestInjectOligomerAlerts:
                 "trigger": "7TM_UPGRADE",
             },
             "alerts": [
-                {"type": "MISSED_PROTOMER", "message": "Missed B"},
+                {
+                    "type": "MISSED_PROTOMER",
+                    "message": "[MISSED_PROTOMER] at 'oligomer_analysis': Missed B",
+                },
             ],
             "all_gpcr_chains": [
                 {"chain_id": "A", "7tm_status": "COMPLETE"},
@@ -137,6 +161,7 @@ class TestInjectOligomerAlerts:
         assert len(warnings) == 3
         assert any("CHAIN_ID CORRECTED" in w for w in warnings)
         assert any("[MISSED_PROTOMER]" in w for w in warnings)
+        assert all(w.count("[MISSED_PROTOMER]") <= 1 for w in warnings)
         assert any("INCOMPLETE 7TM" in w for w in warnings)
 
 

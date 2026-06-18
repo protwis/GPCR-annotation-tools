@@ -22,11 +22,38 @@ class TestJsonCacheBasics:
         assert cache.get("key1") == "value1"
         assert cache.has("key1")
 
-    def test_set_none_value(self, tmp_path: Path) -> None:
+    def test_set_none_without_allow_none_is_dropped(self, tmp_path: Path) -> None:
+        # None-caching is opt-in: a None written without allow_none (e.g. an
+        # accidental transient result) must never be stored, so it cannot freeze
+        # a blip as a permanent negative in this --force-immune cross-run cache.
         cache = JsonCache(tmp_path / "cache.json")
         cache.set("key1", None)
+        assert not cache.has("key1")
+        assert cache.get("key1") is None
+
+    def test_set_none_with_allow_none_is_stored(self, tmp_path: Path) -> None:
+        # A confirmed negative (a 200 response with genuinely no value) opts in.
+        cache = JsonCache(tmp_path / "cache.json")
+        cache.set("key1", None, allow_none=True)
         assert cache.has("key1")
         assert cache.get("key1") is None
+
+    def test_set_empty_collections_always_stored(self, tmp_path: Path) -> None:
+        # [] / {} are real confirmed-empty results, not the guarded None, so the
+        # guard leaves them alone and existing callers that cache them still work.
+        cache = JsonCache(tmp_path / "cache.json")
+        cache.set("empty_list", [])
+        cache.set("empty_dict", {})
+        assert cache.has("empty_list")
+        assert cache.get("empty_list") == []
+        assert cache.has("empty_dict")
+        assert cache.get("empty_dict") == {}
+
+    def test_real_value_always_stored(self, tmp_path: Path) -> None:
+        cache = JsonCache(tmp_path / "cache.json")
+        cache.set("key1", "value1")
+        assert cache.has("key1")
+        assert cache.get("key1") == "value1"
 
 
 class TestJsonCachePersistence:

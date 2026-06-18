@@ -423,9 +423,6 @@ query structure($id: String!) {
         asym_ids
         nonpolymer_comp_id
       }
-      rcsb_nonpolymer_entity_annotation {
-        type
-      }
       nonpolymer_entity_instances {
         rcsb_nonpolymer_entity_instance_container_identifiers {
           auth_seq_id
@@ -438,8 +435,6 @@ query structure($id: String!) {
           ranking_model_fit
           ranking_model_geometry
           average_occupancy
-          is_subject_of_investigation
-          is_subject_of_investigation_provenance
         }
       }
       rcsb_nonpolymer_entity {
@@ -451,6 +446,7 @@ query structure($id: String!) {
           formula_weight
           name
           formula
+          type
         }
         pdbx_reference_molecule {
           prd_id
@@ -575,17 +571,33 @@ def _query_graphql(
         response.raise_for_status()
         data: dict[str, Any] = response.json()
 
-        # A GraphQL error with no usable entry is a hard failure. But RCSB can
-        # return HTTP 200 with BOTH a populated entry AND a non-fatal errors[]
-        # (partial data); keep the entry in that case rather than discarding a
-        # perfectly usable structure.
+        # A top-level GraphQL errors[] means at least one sub-resolver failed.
+        # Two distinct cases:
+        #   (a) errors + null entry  -> the id resolved to nothing (e.g. a bad
+        #       id reported via errors); a hard failure, no record to keep.
+        #   (b) errors + populated entry -> a PARTIAL response: a sub-resolver
+        #       timed out or errored, so the entry is missing fields it would
+        #       normally carry. Persisting it would freeze that partial metadata
+        #       as a complete record (the existence-based resume skip never
+        #       re-downloads it). Treat the partial like a transient failure:
+        #       return None so NO raw record is written, and the next run
+        #       re-fetches — the common case is a transient sub-resolver blip
+        #       that clears on retry. Trade-off: a structure that is
+        #       PERSISTENTLY partial upstream stays un-fetched (and visibly so)
+        #       rather than being silently frozen as truth.
         errors = data.get("errors")
         if errors:
             error_msg = errors[0].get("message") or "Unknown GraphQL error"
             if (data.get("data") or {}).get("entry") is None:
                 logger.error("[%s] GraphQL error: %s", pdb_id, error_msg)
                 return None
-            logger.warning("[%s] GraphQL returned partial data with errors: %s", pdb_id, error_msg)
+            logger.warning(
+                "[%s] GraphQL returned a PARTIAL entry (errors present); not "
+                "persisting — will re-fetch next run: %s",
+                pdb_id,
+                error_msg,
+            )
+            return None
 
         return data
     except requests.exceptions.RequestException as exc:

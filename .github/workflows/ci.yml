@@ -62,7 +62,15 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Build Docker image
-        run: docker build -t gpcr-tools:smoke .
+        run: docker build --build-arg GIT_SHA="$(git rev-parse --short HEAD)" -t gpcr-tools:smoke .
+
+      - name: Smoke – baked code version
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          BAKED=$(docker run --rm --entrypoint python gpcr-tools:smoke \
+            -c "from gpcr_tools.code_version import get_code_version; print(get_code_version())")
+          echo "Resolved in image: $BAKED (expected $SHA)"
+          test "$BAKED" = "$SHA"
 
       - name: Smoke – init-workspace
         run: |
@@ -78,10 +86,10 @@ jobs:
 
           # Verify contract content
           VERSION=$(python3 -c "import json; print(json.load(open('$WORKSPACE/contract/storage_contract.json'))['storage_contract_version'])")
-          test "$VERSION" = "1"
+          test "$VERSION" = "2"
 
           # Required directories must exist
-          for dir in raw enriched papers ai_results aggregated output output/csv output/audit cache state state/pipeline_runs tmp; do
+          for dir in raw enriched papers ai_results detect aggregated output output/csv output/audit cache state state/pipeline_runs tmp; do
             test -d "$WORKSPACE/$dir" || { echo "Missing directory: $dir"; exit 1; }
           done
 

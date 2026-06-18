@@ -30,7 +30,9 @@ def _load_and_inject(pdb_id: str) -> tuple[dict, dict, dict]:
 # Expected non-empty CSV files per fixture, from PoC verification.
 EXPECTED_CSV_FILES: dict[str, set[str]] = {
     "5G53": {"structures.csv", "ligands.csv", "g_proteins.csv"},
-    "8TII": {"structures.csv", "ligands.csv", "arrestins.csv", "nanobodies.csv", "antibodies.csv"},
+    # No ligands.csv: this entry's only ligand annotation is an apo (no-ligand)
+    # placeholder, which is not exported as a ligand interaction.
+    "8TII": {"structures.csv", "arrestins.csv", "nanobodies.csv", "antibodies.csv"},
     "9AS1": {"structures.csv", "ligands.csv", "g_proteins.csv", "arrestins.csv"},
     "9BLW": {"structures.csv", "ligands.csv", "g_proteins.csv", "nanobodies.csv", "ramp.csv"},
     "9EJZ": {"structures.csv", "ligands.csv", "g_proteins.csv", "nanobodies.csv", "scfv.csv"},
@@ -50,7 +52,8 @@ EXPECTED_CSV_FILES: dict[str, set[str]] = {
     # No ligands.csv: this entry's only annotated ligands are not modelled in
     # the structure (the paper's sweeteners), so they are excluded from export.
     "9NOR": {"structures.csv", "g_proteins.csv"},
-    "9O38": {"structures.csv", "ligands.csv", "g_proteins.csv", "nanobodies.csv"},
+    # No ligands.csv: only ligand annotation is an apo (no-ligand) placeholder.
+    "9O38": {"structures.csv", "g_proteins.csv", "nanobodies.csv"},
 }
 
 
@@ -109,8 +112,8 @@ class TestLoaderSidecarPrecision:
 
         _, controversies, _ = load_pdb_data("9BLW")
         assert set(controversies.keys()) == {
-            "auxiliary_proteins[Nanobody-35].type.evidence.source",
-            "ligands[None].name",
+            "auxiliary_proteins[nanobody 35|ch:n].type.evidence.source",
+            "ligands[__keyless__:cagrilintide backbone].name",
         }
 
     def test_9iqs_controversy_keys(self, real_pdb_workspace: Path) -> None:
@@ -118,8 +121,8 @@ class TestLoaderSidecarPrecision:
 
         _, controversies, _ = load_pdb_data("9IQS")
         assert set(controversies.keys()) == {
-            "auxiliary_proteins[Soluble cytochrome b562].type.value",
-            "ligands[None].type",
+            "auxiliary_proteins[soluble cytochrome b562|ch:b].type.value",
+            "ligands[__keyless__:muscarinic toxin 3].type",
         }
 
     def test_9o38_controversy_keys(self, real_pdb_workspace: Path) -> None:
@@ -127,8 +130,8 @@ class TestLoaderSidecarPrecision:
 
         _, controversies, _ = load_pdb_data("9O38")
         assert set(controversies.keys()) == {
-            "ligands[None].role.value",
-            "ligands[None].type",
+            "ligands[__keyless__:apo].role.value",
+            "ligands[__keyless__:apo].type",
         }
 
     def test_9nor_ghost_ligand_warnings(self, real_pdb_workspace: Path) -> None:
@@ -177,13 +180,31 @@ class TestLoaderSidecarPrecision:
         assert "UNIPROT_CLASH" in warning_text
         assert "gpr3_human" in warning_text
 
-    def test_9o38_algo_conflict_tiebreaker(self, real_pdb_workspace: Path) -> None:
-        from gpcr_tools.csv_generator.data_loader import load_pdb_data
+    def test_9o38_transducin_alpha5_resolves_family_not_subtype(self) -> None:
+        # 9O38 carries a transducin/gustducin alpha5, the receptor-coupling
+        # determinant. Its sequence cannot tell the three transducins apart, so
+        # the call must stop at the Gi/o family and route the subtype to review
+        # rather than force one member.
+        import json
 
-        _, _, validation_data = load_pdb_data("9O38")
-        conflicts = validation_data.get("algo_conflicts", [])
-        assert len(conflicts) == 1
-        assert "TIE-BREAKER OVERRIDE" in conflicts[0]
+        from gpcr_tools.config import CHIMERA_SUBTYPE_INSEPARABLE_SET
+        from gpcr_tools.validator.cache import SequenceCache
+        from gpcr_tools.validator.chimera import get_chimera_analysis
+        from tests.conftest import REAL_PDB_DIR
+
+        raw = json.loads((REAL_PDB_DIR / "enriched" / "9O38.json").read_text())
+        entry = (raw.get("data") or {}).get("entry") or raw
+        cache = SequenceCache(REAL_PDB_DIR / "cache" / "uniprot_sequence_cache.json")
+        result = get_chimera_analysis("9O38", entry, cache)
+
+        assert result["family"] == "Gi/o"
+        assert result["subtype"] is None
+        assert result["subtype_resolution"] == CHIMERA_SUBTYPE_INSEPARABLE_SET
+        assert set(result["candidate_set"]) == {
+            "gnat1_human",
+            "gnat2_human",
+            "gnat3_human",
+        }
 
 
 # ── RP-2.3: Focused Transform Tests ─────────────────────────────────────
@@ -402,9 +423,9 @@ class TestBatchCSVIntegrity:
 
         for filename, expected_fields in CSV_SCHEMA.items():
             filepath = csv_dir / filename
-            if not filepath.exists():
-                assert filename == "grk.csv", f"Unexpected missing CSV: {filename}"
-                continue
+            # Every schema file is emitted (header-only when it has no rows), so
+            # none should be missing after a batch.
+            assert filepath.exists(), f"Unexpected missing CSV: {filename}"
 
             with open(filepath, encoding="utf-8") as f:
                 reader = csv_mod.DictReader(f, delimiter="\t")
@@ -444,9 +465,10 @@ class TestBatchCSVIntegrity:
 
         assert len(lines) == 10, f"Expected 1 header + 9 data = 10, got {len(lines)}"
 
-    def test_grk_csv_not_created(self, real_pdb_workspace: Path) -> None:
-        """Confirm grk.csv is never created by the current fixture set."""
-        from gpcr_tools.config import get_config
+    def test_grk_csv_created_header_only(self, real_pdb_workspace: Path) -> None:
+        """grk.csv has no rows across the fixture set, but is still emitted
+        header-only so the downstream build never hits a missing file."""
+        from gpcr_tools.config import CSV_SCHEMA, get_config
         from gpcr_tools.csv_generator.csv_writer import append_to_csvs, transform_for_csv
 
         all_csv_data: dict[str, list[dict[str, str]]] = {}
@@ -459,4 +481,6 @@ class TestBatchCSVIntegrity:
         append_to_csvs(all_csv_data)
 
         cfg = get_config()
-        assert not (cfg.csv_output_dir / "grk.csv").exists()
+        grk = cfg.csv_output_dir / "grk.csv"
+        assert grk.exists()
+        assert grk.read_text(encoding="utf-8").splitlines() == ["\t".join(CSV_SCHEMA["grk.csv"])]
